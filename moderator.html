@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hata Avı — Moderatör</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
+  :root {
+    --bg:#0d0d0d;--surface:#141414;--card:#1a1a1a;--border:#2a2a2a;
+    --accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;
+    --text:#f0f0f0;--muted:#888;
+    --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;}
+  .header{background:var(--surface);border-bottom:2px solid var(--accent);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;}
+  .htitle{font-family:var(--display);font-size:1.8rem;letter-spacing:2px;color:var(--accent);}
+  .hsub{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:1px;}
+  .badge{font-family:var(--mono);font-size:.7rem;padding:4px 12px;border-radius:20px;letter-spacing:1px;}
+  .badge-mod{background:rgba(245,197,24,.15);color:var(--accent);border:1px solid rgba(245,197,24,.3);}
+  .main{display:grid;grid-template-columns:1fr 380px;min-height:calc(100vh - 60px);}
+
+  /* LEFT */
+  .left{padding:28px;border-right:1px solid var(--border);overflow-y:auto;}
+  .section-title{font-family:var(--display);font-size:1.1rem;letter-spacing:2px;color:var(--accent);margin-bottom:14px;}
+  .round-info{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+  .diff-badge{font-family:var(--mono);font-size:.68rem;padding:4px 10px;border-radius:4px;letter-spacing:1px;}
+  .diff-easy{background:rgba(61,214,140,.12);color:var(--accent3);border:1px solid rgba(61,214,140,.3);}
+  .diff-mid{background:rgba(245,197,24,.12);color:var(--accent);border:1px solid rgba(245,197,24,.3);}
+  .diff-hard{background:rgba(232,64,64,.12);color:var(--accent2);border:1px solid rgba(232,64,64,.3);}
+
+  .q-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:18px;}
+  .q-title{font-family:var(--display);font-size:1.3rem;letter-spacing:1px;margin-bottom:8px;}
+  .q-text{font-family:var(--mono);font-size:.78rem;color:var(--accent);padding:10px 14px;background:rgba(245,197,24,.06);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;margin-bottom:14px;}
+  .steps-list{display:flex;flex-direction:column;gap:6px;}
+  .step-row{display:flex;gap:10px;padding:8px 12px;border-radius:4px;border:1px solid var(--border);font-family:var(--mono);font-size:.78rem;align-items:center;}
+  .step-row.is-wrong{border-color:var(--accent2);background:rgba(232,64,64,.08);}
+  .step-num{color:var(--muted);width:20px;flex-shrink:0;}
+  .step-txt{flex:1;line-height:1.4;}
+  .wrong-tag{font-size:.6rem;padding:2px 8px;background:var(--accent2);color:#fff;border-radius:3px;letter-spacing:1px;}
+
+  .ctrl-row{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+  .btn{font-family:var(--display);letter-spacing:2px;padding:10px 24px;border:none;cursor:pointer;border-radius:4px;transition:all .2s;font-size:.95rem;}
+  .btn-primary{background:var(--accent);color:#000;}
+  .btn-primary:hover{background:#ffd43b;transform:translateY(-2px);}
+  .btn-primary:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none;}
+  .btn-danger{background:var(--accent2);color:#fff;}
+  .btn-danger:hover{background:#ff6b6b;}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:.72rem;letter-spacing:1px;}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+
+  .round-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+  .rnav-btn{font-family:var(--mono);font-size:.65rem;padding:5px 10px;background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:4px;cursor:pointer;transition:all .2s;}
+  .rnav-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.07);}
+  .rnav-btn.done{border-color:var(--accent3);color:var(--accent3);}
+
+  .timer-ctrl{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:18px;}
+  .timer-disp{font-family:var(--display);font-size:2.4rem;color:var(--accent2);letter-spacing:4px;min-width:70px;}
+  .timer-disp.running{color:var(--accent3);}
+  .timer-label{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+
+  /* RIGHT: LEADERBOARD */
+  .right{background:var(--surface);padding:22px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;}
+  .lb-title{font-family:var(--display);font-size:1.3rem;letter-spacing:2px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:10px;}
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .stat-box{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center;}
+  .stat-val{font-family:var(--display);font-size:1.5rem;color:var(--accent);letter-spacing:1px;}
+  .stat-lbl{font-family:var(--mono);font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+
+  .answers-live{display:flex;flex-direction:column;gap:6px;}
+  .ans-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--card);border-radius:6px;border:1px solid var(--border);animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateX(10px);}to{opacity:1;transform:translateX(0);}}
+  .ans-row.correct{border-color:var(--accent3);background:rgba(61,214,140,.06);}
+  .ans-row.wrong{border-color:var(--accent2);background:rgba(232,64,64,.06);}
+  .ans-name{font-family:var(--mono);font-size:.78rem;flex:1;}
+  .ans-time{font-family:var(--display);font-size:1rem;color:var(--muted);letter-spacing:1px;margin:0 8px;}
+  .ans-result{font-size:.85rem;}
+
+  .lb-list{display:flex;flex-direction:column;gap:7px;}
+  .lb-row{display:flex;align-items:center;gap:8px;padding:9px 13px;background:var(--card);border-radius:6px;border:1px solid var(--border);transition:all .3s;animation:fadeIn .3s ease;}
+  .lb-row.r1{border-color:var(--accent);background:rgba(245,197,24,.07);}
+  .lb-row.r2{border-color:#aaa;}
+  .lb-row.r3{border-color:#cd7f32;}
+  .lb-rank{font-family:var(--display);font-size:1.1rem;width:26px;color:var(--muted);}
+  .lb-row.r1 .lb-rank{color:var(--accent);}
+  .lb-name{flex:1;font-family:var(--mono);font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lb-score{font-family:var(--display);font-size:1.2rem;color:var(--accent3);letter-spacing:1px;}
+  .lb-detail{font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-left:6px;}
+
+  .sec-lbl{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+
+  .qr-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center;}
+  .qr-box img{width:140px;height:140px;border-radius:4px;}
+  .qr-url{font-family:var(--mono);font-size:.65rem;color:var(--accent);margin-top:8px;word-break:break-all;}
+
+  .status-dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);display:inline-block;margin-right:6px;animation:blink 1.5s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+  .empty-state{font-family:var(--mono);font-size:.73rem;color:var(--muted);text-align:center;padding:20px;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <div class="htitle">🔍 HATA AVI — MODERATÖR</div>
+    <div class="hsub">MATEMATİK EKSENİNDE YAPAY ZEKA BULUŞMALARI</div>
+  </div>
+  <span class="badge badge-mod">⚙️ MODERATÖR PANELİ</span>
+</div>
+
+<div class="main">
+  <!-- LEFT -->
+  <div class="left">
+    <div class="section-title">TUR YÖNETİMİ</div>
+
+    <div class="round-nav" id="roundNav"></div>
+
+    <div class="timer-ctrl">
+      <div>
+        <div class="timer-label">Süre Sayacı</div>
+        <div class="timer-disp" id="timerDisp">90</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <button class="btn btn-primary" id="timerStartBtn" onclick="startTimer()">▶ BAŞLAT</button>
+        <button class="btn btn-ghost" onclick="resetTimer()">↺ SIFIRLA</button>
+      </div>
+      <div style="margin-left:auto;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:right;">
+        <span class="status-dot"></span>Canlı bağlantı<br>
+        <span id="connCount" style="color:var(--accent3);">0</span> katılımcı bağlı
+      </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+      <div class="q-title" id="qTitle">Yükleniyor...</div>
+      <div class="q-text" id="qText"></div>
+      <div class="steps-list" id="stepsList"></div>
+    </div>
+
+    <div class="ctrl-row">
+      <button class="btn btn-primary" id="publishBtn" onclick="publishRound()">📡 TURU YAYINLA</button>
+      <button class="btn btn-primary" id="revealBtn" onclick="revealAnswer()" disabled>✅ CEVABI GÖSTER</button>
+      <button class="btn btn-ghost" onclick="nextRound()">SONRAKİ TUR →</button>
+    </div>
+    <div style="font-family:var(--mono);font-size:.68rem;color:var(--muted);margin-top:8px;" id="statusMsg">Turu yayınlamak için "Turu Yayınla" butonuna basın.</div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="lb-title">📊 CANLI SONUÇLAR</div>
+
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-val" id="sCevap">0</div><div class="stat-lbl">Cevap</div></div>
+      <div class="stat-box"><div class="stat-val" id="sDoğru">0</div><div class="stat-lbl">Doğru</div></div>
+      <div class="stat-box"><div class="stat-val" id="sOran">—</div><div class="stat-lbl">Başarı</div></div>
+    </div>
+
+    <div class="sec-lbl">Bu Tura Gelen Cevaplar</div>
+    <div class="answers-live" id="answersLive">
+      <div class="empty-state">Henüz cevap gelmedi</div>
+    </div>
+
+    <div class="sec-lbl">Genel Sıralama</div>
+    <div class="lb-list" id="lbList">
+      <div class="empty-state">Katılımcı bekleniyor...</div>
+    </div>
+
+    <div class="sec-lbl">Katılımcı Linki</div>
+    <div class="qr-box">
+      <div id="qrImg"></div>
+      <div class="qr-url" id="joinUrl">Yükleniyor...</div>
+      <div style="font-family:var(--mono);font-size:.62rem;color:var(--muted);margin-top:6px;">Katılımcılar bu linki açsın</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, push, remove, update, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAPbvuN7IA6e78-fym8nF6m5gW1fUPf7lw",
+  authDomain: "hata-avi.firebaseapp.com",
+  databaseURL: "https://hata-avi-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "hata-avi",
+  storageBucket: "hata-avi.firebasestorage.app",
+  messagingSenderId: "725079545594",
+  appId: "1:725079545594:web:040eb5d99bf55567a81b43"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const rounds = [
+  { title:"⭐ Hatalı Kare Alma İşlemi", diff:"easy",
+    q:"(a + b)² ifadesini açın, a=3 ve b=4 için hesaplayın",
+    steps:[
+      {label:"Problem", math:"(a + b)²  ile  a=3, b=4"},
+      {label:"Adım 1 — Formül Açılımı", math:"(a + b)² = a² + b²"},
+      {label:"Adım 2 — Sayılar Yerleştirilir", math:"= 3² + 4² = 9 + 16"},
+      {label:"Adım 3 — Toplam", math:"= 25"},
+    ], wrong:1,
+    hint:"(a+b)² açılımında kaç terim olmalı? Çift çarpımı unutmayın.",
+    explain:"Adım 1'de hata! (a+b)² = a² + 2ab + b² olmalı. YZ orta terimi (2ab=24) atladı. Doğru: 9+24+16=49"},
+
+  { title:"🧠 Hatalı Mantık Çıkarımı", diff:"easy",
+    q:"Öncül 1: 'Tüm kareler dikdörtgendir.' — Öncül 2: 'ABCD bir dikdörtgendir.' — YZ ne sonuç çıkardı?",
+    steps:[
+      {label:"Öncül 1", math:"∀x: Kare(x) → Dikdörtgen(x)"},
+      {label:"Öncül 2", math:"Dikdörtgen(ABCD)"},
+      {label:"Adım — Dönüşüm (YZ)", math:"∀x: Dikdörtgen(x) → Kare(x)  [Öncül 1 tersine çevrildi]"},
+      {label:"Sonuç (YZ)", math:"∴ ABCD bir karedir."},
+    ], wrong:2,
+    hint:"'Tüm A'lar B'dir' önermesi tersine çevrilebilir mi?",
+    explain:"Adım 3'te hata — Affirming the Consequent yanılgısı! 'Tüm kareler dikdörtgendir' tersine çevrilemez. Her dikdörtgen kare değildir."},
+
+  { title:"⭐⭐ Hatalı Türev Çözümü", diff:"mid",
+    q:"f(x) = x³ · ln(x) fonksiyonunun türevini bulun",
+    steps:[
+      {label:"Problem", math:"f(x) = x³ · ln(x)"},
+      {label:"Adım 1 — Çarpım Kuralı", math:"f′(x) = (x³)′ · ln(x) + x³ · (ln x)′"},
+      {label:"Adım 2 — Türevler", math:"(x³)′ = 3x²  ve  (ln x)′ = 1/x"},
+      {label:"Adım 3 — Yerine Koyma", math:"f′(x) = 3x² · ln(x) + x³ · x"},
+      {label:"Adım 4 — Sadeleştirme", math:"f′(x) = 3x² ln(x) + x⁴"},
+    ], wrong:3,
+    hint:"x³ · (1/x) sadeleştirince ne olur?",
+    explain:"Adım 3'te hata! x³·(1/x)=x² olmalı. Doğru: f′(x)=3x²ln(x)+x²"},
+
+  { title:"⭐⭐ Hatalı Matris Çarpımı", diff:"mid",
+    q:"A·B = ?   A=[[2,1],[0,3]]  B=[[1,4],[2,0]]",
+    steps:[
+      {label:"Problem", math:"A·B = [[2,1],[0,3]] · [[1,4],[2,0]]"},
+      {label:"Adım 1 — c₁₁", math:"c₁₁ = 2·1 + 1·2 = 4  ✓"},
+      {label:"Adım 2 — c₁₂", math:"c₁₂ = 2·4 + 1·0 = 9"},
+      {label:"Adım 3 — c₂₁", math:"c₂₁ = 0·1 + 3·2 = 6  ✓"},
+      {label:"Adım 4 — c₂₂", math:"c₂₂ = 0·4 + 3·0 = 0  ✓"},
+      {label:"Sonuç", math:"A·B = [[4,9],[6,0]]"},
+    ], wrong:2,
+    hint:"B'nin 2. sütunu [4,0]'dır. c₁₂ = 2·4 + 1·0 = ?",
+    explain:"Adım 2'de hata! c₁₂=8 olmalı. Doğru: A·B=[[4,8],[6,0]]"},
+
+  { title:"⭐⭐⭐ Hatalı Limit Hesabı", diff:"hard",
+    q:"lim(x→0) [sin(x) / x] = ?",
+    steps:[
+      {label:"Problem", math:"lim(x→0) sin(x)/x"},
+      {label:"Adım 1 — Yerine Koyma", math:"0/0 → belirsiz form"},
+      {label:"Adım 2 — L'Hôpital", math:"lim sin′(x)/x′ = lim sin′(x)/1"},
+      {label:"Adım 3 — Türev", math:"sin′(x) = −cos(x)  →  lim(−cos x)"},
+      {label:"Adım 4 — Sonuç", math:"= −cos(0) = −1"},
+    ], wrong:3,
+    hint:"sin(x)'in türevi +mı −mı?",
+    explain:"Adım 3'te hata! sin′(x)=+cos(x). Doğru sonuç: lim(x→0) sin(x)/x = 1"},
+
+  { title:"⭐⭐⭐⭐ Hatalı Koşullu Olasılık", diff:"hard",
+    q:"Hastalık: %1 yaygın. Test: %99 doğru. Pozitif test → hasta olma ihtimali?",
+    steps:[
+      {label:"Veriler", math:"P(H)=0.01, P(+|H)=0.99, P(+|¬H)=0.01"},
+      {label:"Adım 1 — YZ Cevabı", math:"Test %99 doğru → hasta olma ihtimali ≈ %99"},
+      {label:"Adım 2 — Bayes", math:"P(H|+) = P(+|H)·P(H) / P(+)"},
+      {label:"Adım 3 — P(+)", math:"P(+) = 0.99·0.01 + 0.01·0.99 = 0.0198"},
+      {label:"Adım 4 — Sonuç", math:"P(H|+) = 0.0099/0.0198 = 0.50 → sadece %50!"},
+    ], wrong:1,
+    hint:"Hastalığın toplumsal sıklığı (base rate) hesaba katıldı mı?",
+    explain:"Adım 1'de hata — Base Rate Neglect! Hastalık nadir olduğu için gerçek ihtimal sadece ~%50. YZ taban oranı göz ardı etti."},
+];
+
+let curRound = 0;
+let timerVal = 90;
+let timerInt = null;
+let timerRunning = false;
+let roundDone = Array(rounds.length).fill(false);
+
+// JOIN URL
+const joinUrl = window.location.href.replace('moderator.html','katilimci.html');
+document.getElementById('joinUrl').textContent = joinUrl;
+// QR
+const qrEl = document.getElementById('qrImg');
+qrEl.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(joinUrl)}" alt="QR">`;
+
+function renderRound() {
+  const r = rounds[curRound];
+  document.getElementById('qTitle').textContent = r.title;
+  document.getElementById('qText').textContent = r.q;
+  const sl = document.getElementById('stepsList');
+  sl.innerHTML = '';
+  r.steps.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'step-row' + (i === r.wrong ? ' is-wrong' : '');
+    d.innerHTML = `<span class="step-num">${i+1}</span><span class="step-txt"><b style="font-size:.6rem;color:var(--muted);display:block;margin-bottom:2px;">${s.label}</b>${s.math}</span>${i===r.wrong?'<span class="wrong-tag">HATA BURADA</span>':''}`;
+    sl.appendChild(d);
+  });
+  renderNav();
+  document.getElementById('revealBtn').disabled = true;
+  document.getElementById('publishBtn').disabled = false;
+  document.getElementById('statusMsg').textContent = 'Turu yayınlamak için "Turu Yayınla" butonuna basın.';
+}
+
+function renderNav() {
+  const nav = document.getElementById('roundNav');
+  nav.innerHTML = '';
+  const diff = ['🟢','🟢','🟡','🟡','🔴','🔴'];
+  rounds.forEach((r, i) => {
+    const b = document.createElement('button');
+    b.className = 'rnav-btn' + (i===curRound?' active':'') + (roundDone[i]?' done':'');
+    b.textContent = `${diff[i]} TUR ${i+1}`;
+    b.onclick = () => { curRound = i; renderRound(); };
+    nav.appendChild(b);
+  });
+}
+
+window.publishRound = async function() {
+  const r = rounds[curRound];
+  await set(ref(db, 'game/currentRound'), {
+    index: curRound,
+    title: r.title,
+    q: r.q,
+    steps: r.steps,
+    diff: r.diff,
+    revealed: false,
+    timerStart: Date.now(),
+  });
+  await remove(ref(db, 'game/answers/' + curRound));
+  document.getElementById('statusMsg').textContent = '✅ Tur yayınlandı! Katılımcılar cevap verebilir.';
+  document.getElementById('revealBtn').disabled = false;
+  document.getElementById('publishBtn').disabled = true;
+};
+
+window.revealAnswer = async function() {
+  const r = rounds[curRound];
+  await update(ref(db, 'game/currentRound'), {
+    revealed: true,
+    wrongStep: r.wrong,
+    explain: r.explain,
+  });
+  roundDone[curRound] = true;
+  renderNav();
+  document.getElementById('statusMsg').textContent = '🔍 Cevap gösterildi!';
+  document.getElementById('revealBtn').disabled = true;
+};
+
+window.nextRound = function() {
+  if (curRound < rounds.length - 1) { curRound++; renderRound(); }
+};
+
+// TIMER
+window.startTimer = function() {
+  if (timerRunning) return;
+  timerRunning = true;
+  document.getElementById('timerDisp').classList.add('running');
+  document.getElementById('timerStartBtn').textContent = '⏸ ÇALIŞIYOR';
+  document.getElementById('timerStartBtn').disabled = true;
+  set(ref(db, 'game/timer'), { value: timerVal, running: true, ts: Date.now() });
+  timerInt = setInterval(() => {
+    timerVal--;
+    document.getElementById('timerDisp').textContent = timerVal;
+    set(ref(db, 'game/timer'), { value: timerVal, running: timerVal > 0, ts: Date.now() });
+    if (timerVal <= 0) { clearInterval(timerInt); timerRunning = false; document.getElementById('timerDisp').classList.remove('running'); }
+  }, 1000);
+};
+
+window.resetTimer = function() {
+  clearInterval(timerInt); timerRunning = false; timerVal = 90;
+  document.getElementById('timerDisp').textContent = '90';
+  document.getElementById('timerDisp').classList.remove('running');
+  document.getElementById('timerStartBtn').textContent = '▶ BAŞLAT';
+  document.getElementById('timerStartBtn').disabled = false;
+  set(ref(db, 'game/timer'), { value: 90, running: false, ts: Date.now() });
+};
+
+// LISTEN: answers
+onValue(ref(db, 'game/answers'), snap => {
+  const allAnswers = snap.val() || {};
+  const curAns = allAnswers[curRound] || {};
+  const entries = Object.values(curAns);
+  const total = entries.length;
+  const correct = entries.filter(e => e.correct).length;
+
+  document.getElementById('sCevap').textContent = total;
+  document.getElementById('sDoğru').textContent = correct;
+  document.getElementById('sOran').textContent = total ? Math.round(correct/total*100)+'%' : '—';
+
+  const al = document.getElementById('answersLive');
+  if (!total) { al.innerHTML = '<div class="empty-state">Henüz cevap gelmedi</div>'; }
+  else {
+    const sorted = entries.sort((a,b) => a.elapsed - b.elapsed);
+    al.innerHTML = '';
+    sorted.forEach(e => {
+      const d = document.createElement('div');
+      d.className = 'ans-row ' + (e.correct ? 'correct' : 'wrong');
+      d.innerHTML = `<span class="ans-name">${e.name}</span><span class="ans-time">${e.elapsed}s</span><span class="ans-result">${e.correct ? '✅' : '❌'}</span>`;
+      al.appendChild(d);
+    });
+  }
+
+  // rebuild leaderboard from all rounds
+  const scores = {};
+  Object.values(allAnswers).forEach(roundAns => {
+    Object.values(roundAns || {}).forEach(e => {
+      if (!scores[e.name]) scores[e.name] = { name: e.name, score: 0, correct: 0, total: 0 };
+      scores[e.name].total++;
+      if (e.correct) { scores[e.name].correct++; scores[e.name].score += (e.hintUsed ? 5 : 10); }
+    });
+  });
+  const lb = Object.values(scores).sort((a,b) => b.score - a.score);
+  const lbEl = document.getElementById('lbList');
+  if (!lb.length) { lbEl.innerHTML = '<div class="empty-state">Katılımcı bekleniyor...</div>'; return; }
+  lbEl.innerHTML = '';
+  lb.forEach((p, i) => {
+    const row = document.createElement('div');
+    row.className = 'lb-row' + (i===0?' r1':i===1?' r2':i===2?' r3':'');
+    row.innerHTML = `<div class="lb-rank">${i===0?'👑':i+1}</div><div class="lb-name">${p.name}</div><div class="lb-score">${p.score}</div><div class="lb-detail">${p.correct}/${p.total}</div>`;
+    lbEl.appendChild(row);
+  });
+});
+
+// LISTEN: connections
+onValue(ref(db, 'game/connections'), snap => {
+  const c = snap.val() || {};
+  document.getElementById('connCount').textContent = Object.keys(c).length;
+});
+
+renderRound();
+</script>
+</body>
+</html>
