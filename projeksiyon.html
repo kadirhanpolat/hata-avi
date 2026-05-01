@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hata Avı — Projeksiyon</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
+  :root{--bg:#0a0a0a;--surface:#111;--card:#161616;--border:#222;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--text:#f0f0f0;--muted:#555;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;overflow:hidden;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);}
+
+  /* ── LOBBY (before game starts) ── */
+  #lobbyScreen{width:100%;height:100vh;display:flex;flex-direction:column;}
+  .lobby-header{background:var(--surface);border-bottom:2px solid var(--accent);padding:20px 48px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .lobby-title{font-family:var(--display);font-size:3rem;letter-spacing:4px;color:var(--accent);}
+  .lobby-sub{font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:2px;margin-top:2px;}
+  .lobby-badge{font-family:var(--mono);font-size:.8rem;padding:6px 16px;border-radius:20px;background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.25);color:var(--accent3);}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--accent3);display:inline-block;margin-right:7px;animation:blink 1.5s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+  .lobby-body{flex:1;display:grid;grid-template-columns:1fr 420px;overflow:hidden;}
+  .lobby-left{padding:40px 48px;display:flex;flex-direction:column;justify-content:center;align-items:center;border-right:1px solid var(--border);}
+  .qr-section{text-align:center;}
+  .qr-label{font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;}
+  .qr-box{background:white;padding:16px;border-radius:12px;display:inline-block;margin-bottom:16px;}
+  .qr-box img{width:220px;height:220px;display:block;}
+  .qr-url{font-family:var(--mono);font-size:.85rem;color:var(--accent);letter-spacing:1px;}
+  .join-instruction{margin-top:32px;font-family:var(--display);font-size:2rem;letter-spacing:3px;color:var(--muted);text-align:center;}
+  .join-instruction span{color:var(--accent);}
+
+  .lobby-right{padding:24px 28px;overflow:hidden;display:flex;flex-direction:column;}
+  .join-feed-title{font-family:var(--display);font-size:1.4rem;letter-spacing:3px;color:var(--accent);margin-bottom:16px;flex-shrink:0;}
+  .join-count{font-family:var(--display);font-size:1rem;color:var(--accent3);letter-spacing:2px;margin-bottom:12px;flex-shrink:0;}
+  .join-feed{flex:1;overflow:hidden;display:flex;flex-direction:column;gap:8px;justify-content:flex-end;}
+  .join-item{padding:10px 16px;border-radius:8px;font-family:var(--mono);font-size:.88rem;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:10px;transition:all .5s;}
+  .join-item.newest{border-color:var(--accent);background:rgba(245,197,24,.08);animation:newJoin .6s ease;}
+  @keyframes newJoin{0%{transform:translateX(30px);opacity:0;border-color:var(--accent);}40%{transform:translateX(-4px);}100%{transform:translateX(0);opacity:1;}}
+  .join-avatar{font-size:1.2rem;}
+  .join-name{flex:1;color:var(--text);}
+  .join-new-badge{font-size:.55rem;font-family:var(--mono);padding:2px 7px;background:var(--accent);color:#000;border-radius:3px;letter-spacing:.5px;animation:badgeFade 2s forwards;}
+  @keyframes badgeFade{0%,70%{opacity:1;}100%{opacity:0;}}
+
+  /* ── GAME SCREEN ── */
+  #gameScreen{width:100%;height:100vh;display:none;flex-direction:column;}
+  .game-header{background:var(--surface);border-bottom:2px solid var(--accent);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .game-title{font-family:var(--display);font-size:2rem;letter-spacing:3px;color:var(--accent);}
+  .game-round{font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:2px;}
+  .timer-wrap{display:flex;align-items:center;gap:16px;}
+  .timer-num{font-family:var(--display);font-size:3.5rem;color:var(--accent2);letter-spacing:6px;min-width:100px;text-align:center;transition:color .3s;}
+  .timer-num.ok{color:var(--accent3);}
+  .timer-num.urgent{color:var(--accent2);animation:tpulse .4s infinite alternate;}
+  @keyframes tpulse{from{opacity:1;transform:scale(1);}to{opacity:.6;transform:scale(1.05);}}
+  .ans-counter{font-family:var(--mono);font-size:.75rem;color:var(--muted);text-align:right;letter-spacing:1px;}
+  .ans-counter span{color:var(--accent3);font-family:var(--display);font-size:1.2rem;}
+
+  .progress-wrap{height:4px;background:var(--border);flex-shrink:0;}
+  .progress-fill{height:100%;background:var(--accent);transition:width 1s linear;}
+
+  .game-body{flex:1;display:grid;grid-template-columns:1fr 360px;overflow:hidden;}
+  .question-panel{padding:32px 40px;overflow-y:auto;display:flex;flex-direction:column;gap:20px;border-right:1px solid var(--border);}
+  .q-diff{font-family:var(--mono);font-size:.7rem;letter-spacing:1px;margin-bottom:2px;}
+  .q-title-big{font-family:var(--display);font-size:2rem;letter-spacing:2px;color:var(--text);line-height:1.1;}
+  .q-box{background:rgba(245,197,24,.06);border-left:4px solid var(--accent);padding:14px 20px;font-family:var(--mono);font-size:1rem;color:var(--accent);border-radius:0 6px 6px 0;line-height:1.6;}
+  .steps-big{display:flex;flex-direction:column;gap:8px;}
+  .step-big{display:flex;gap:14px;padding:12px 16px;border-radius:6px;border:1px solid var(--border);background:var(--card);transition:all .5s;}
+  .step-big.highlight{border-color:var(--accent2);background:rgba(232,64,64,.1);animation:wrongPulse 1s ease;}
+  @keyframes wrongPulse{0%{transform:scale(1);}30%{transform:scale(1.015);}100%{transform:scale(1);}}
+  .step-big-num{font-family:var(--display);font-size:2rem;color:var(--border);width:32px;flex-shrink:0;}
+  .step-big.highlight .step-big-num{color:var(--accent2);}
+  .step-big-content{flex:1;}
+  .step-big-lbl{font-family:var(--mono);font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+  .step-big-math{font-family:var(--mono);font-size:1.05rem;color:var(--text);line-height:1.5;}
+  .wrong-badge{font-size:.65rem;padding:3px 10px;background:var(--accent2);color:#fff;border-radius:4px;letter-spacing:.5px;margin-left:8px;white-space:nowrap;}
+
+  /* Reveal overlay */
+  .reveal-banner{display:none;background:rgba(61,214,140,.08);border:2px solid var(--accent3);border-radius:10px;padding:16px 22px;}
+  .reveal-banner.visible{display:block;animation:slideIn .4s ease;}
+  @keyframes slideIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+  .reveal-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent3);margin-bottom:6px;}
+  .reveal-text{font-family:var(--mono);font-size:.8rem;color:var(--muted);line-height:1.7;}
+
+  /* Right: live answers + leaderboard */
+  .side-panel{padding:20px 24px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;}
+  .side-title{font-family:var(--display);font-size:1.1rem;letter-spacing:2px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:8px;}
+  .live-answers{display:flex;flex-direction:column;gap:5px;max-height:220px;overflow:hidden;}
+  .la-row{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:5px;background:var(--card);border:1px solid var(--border);font-family:var(--mono);font-size:.75rem;animation:laIn .3s ease;}
+  @keyframes laIn{from{opacity:0;transform:translateX(12px);}to{opacity:1;transform:translateX(0);}}
+  .la-row.ok{border-color:var(--accent3);background:rgba(61,214,140,.05);}
+  .la-row.fail{border-color:var(--accent2);background:rgba(232,64,64,.05);}
+  .la-name{flex:1;}
+  .la-time{font-family:var(--display);font-size:.95rem;color:var(--muted);letter-spacing:1px;}
+  .lb-rows{display:flex;flex-direction:column;gap:5px;}
+  .lb-row{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card);border-radius:5px;border:1px solid var(--border);transition:all .4s;}
+  .lb-row.r1{border-color:var(--accent);background:rgba(245,197,24,.07);}
+  .lb-row.r2{border-color:#999;}
+  .lb-row.r3{border-color:#cd7f32;}
+  .lb-rank{font-family:var(--display);font-size:1.1rem;width:26px;color:var(--muted);}
+  .lb-row.r1 .lb-rank{color:var(--accent);}
+  .lb-name{flex:1;font-family:var(--mono);font-size:.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lb-score{font-family:var(--display);font-size:1.15rem;color:var(--accent3);letter-spacing:1px;}
+  .empty{font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;padding:14px;}
+</style>
+</head>
+<body>
+
+<!-- LOBBY -->
+<div id="lobbyScreen">
+  <div class="lobby-header">
+    <div>
+      <div class="lobby-title">🔍 HATA AVI</div>
+      <div class="lobby-sub">MATEMATİK EKSENİNDE YAPAY ZEKA BULUŞMALARI</div>
+    </div>
+    <div class="lobby-badge"><span class="dot"></span><span id="lobbyCount">0</span> katılımcı bağlandı</div>
+  </div>
+  <div class="lobby-body">
+    <div class="lobby-left">
+      <div class="qr-section">
+        <div class="qr-label">Telefonunuzdan katılın</div>
+        <div class="qr-box"><img id="qrImg" src="" alt="QR"></div>
+        <div class="qr-url" id="qrUrl">Yükleniyor...</div>
+      </div>
+      <div class="join-instruction">QR'ı okutun veya<br><span id="shortUrl">adresi girin</span></div>
+      <div id="pinArea" style="margin-top:24px;text-align:center;display:none;">
+        <div style="font-family:var(--mono);font-size:.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Giriş Parolası</div>
+        <div id="projPin" style="font-family:'Bebas Neue',sans-serif;font-size:5rem;letter-spacing:20px;color:var(--accent);line-height:1;">——</div>
+      </div>
+    </div>
+    <div class="lobby-right">
+      <div class="join-feed-title">👥 KATILIMCILAR</div>
+      <div class="join-count"><span id="feedCount">0</span> kişi hazır</div>
+      <div class="join-feed" id="joinFeed"></div>
+    </div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div id="gameScreen" style="display:none;flex-direction:column;">
+  <div class="game-header">
+    <div>
+      <div class="game-round" id="gRoundLabel">TUR 1 / 6</div>
+      <div class="game-title" id="gTitle">—</div>
+    </div>
+    <div class="timer-wrap">
+      <div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:1px;text-align:center;margin-bottom:2px;">SÜRE</div>
+        <div class="timer-num" id="gTimer">—</div>
+      </div>
+      <div class="ans-counter">
+        <span id="gAnsCount">0</span><br>
+        <span style="font-size:.6rem;">cevap</span>
+      </div>
+    </div>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="gProgress" style="width:100%"></div></div>
+
+  <div class="game-body">
+    <div class="question-panel">
+      <div>
+        <div class="q-diff" id="gDiff"></div>
+        <div class="q-title-big" id="gTitleBig">—</div>
+      </div>
+      <div class="q-box" id="gQ"></div>
+      <div class="steps-big" id="gStepsBig"></div>
+      <div class="reveal-banner" id="revealBanner">
+        <div class="reveal-title">✅ CEVAP</div>
+        <div class="reveal-text" id="revealText"></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="side-title">⚡ CANLI CEVAPLAR</div>
+      <div class="live-answers" id="liveAnswers"><div class="empty">Bekleniyor...</div></div>
+      <div class="side-title">🏆 SIRALAMA</div>
+      <div class="lb-rows" id="lbRows"><div class="empty">—</div></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAPbvuN7IA6e78-fym8nF6m5gW1fUPf7lw",
+  authDomain: "hata-avi.firebaseapp.com",
+  databaseURL: "https://hata-avi-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "hata-avi",
+  storageBucket: "hata-avi.firebasestorage.app",
+  messagingSenderId: "725079545594",
+  appId: "1:725079545594:web:040eb5d99bf55567a81b43"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const DIFF_MAP={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🔴 ÇOK ZOR'};
+
+// QR & URL
+const joinUrl = window.location.href.replace('projeksiyon.html','').replace('projeksiyon.html','');
+const fullUrl = joinUrl.endsWith('/') ? joinUrl : joinUrl + '/';
+document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&bgcolor=ffffff&color=000000&data=${encodeURIComponent(fullUrl)}`;
+document.getElementById('qrUrl').textContent = fullUrl;
+// short display
+try {
+  const u = new URL(fullUrl);
+  document.getElementById('shortUrl').textContent = u.hostname + u.pathname;
+} catch(e) { document.getElementById('shortUrl').textContent = fullUrl; }
+
+// ── PIN display ──
+onValue(ref(db,'game/pin'), snap => {
+  const p = snap.val();
+  const area = document.getElementById('pinArea');
+  const el = document.getElementById('projPin');
+  if (p) { el.textContent = p; area.style.display = 'block'; }
+  else { area.style.display = 'none'; el.textContent = '——'; }
+});
+
+// ── LOBBY MUSIC ──
+const lobbyAudio = new Audio('lobby.mp3');
+lobbyAudio.loop = true; lobbyAudio.volume = 0.5;
+const playLobby = () => lobbyAudio.play().catch(() => {
+  const nudge = document.createElement('div');
+  nudge.id = 'audioNudge';
+  nudge.style.cssText = 'position:fixed;bottom:24px;right:24px;background:rgba(245,197,24,.15);border:1px solid rgba(245,197,24,.4);color:#f5c518;font-family:IBM Plex Mono,monospace;font-size:.7rem;padding:10px 16px;border-radius:8px;cursor:pointer;z-index:999;letter-spacing:1px;';
+  nudge.textContent = '🎵 MÜZİĞİ BAŞLAT';
+  nudge.onclick = () => { lobbyAudio.play(); nudge.remove(); };
+  document.body.appendChild(nudge);
+});
+document.addEventListener('click', () => { if(lobbyAudio.paused) lobbyAudio.play().catch(()=>{}); }, {once:true});
+playLobby();
+function stopLobbyMusic() { lobbyAudio.pause(); lobbyAudio.currentTime=0; const n=document.getElementById('audioNudge'); if(n) n.remove(); }
+
+// ── LOBBY: connections → join feed ──
+let knownConnections = new Set();
+let connectionNames = {};
+
+onValue(ref(db,'game/connections'), snap => {
+  const conns = snap.val() || {};
+  const ids = Object.keys(conns);
+  const count = ids.length;
+  document.getElementById('lobbyCount').textContent = count;
+  document.getElementById('feedCount').textContent = count;
+
+  // find new ones
+  ids.forEach(id => {
+    if (!knownConnections.has(id)) {
+      knownConnections.add(id);
+      connectionNames[id] = conns[id].name || '?';
+      addToFeed(conns[id].name || '?');
+    }
+  });
+});
+
+const AVATARS = ['🧑‍💻','👨‍🎓','👩‍🎓','🧑‍🏫','👨‍🔬','👩‍🔬','🧑‍🎓','👤'];
+function addToFeed(name) {
+  const feed = document.getElementById('joinFeed');
+  // remove 'newest' from previous
+  document.querySelectorAll('.join-item.newest').forEach(el => {
+    el.classList.remove('newest');
+    const badge = el.querySelector('.join-new-badge');
+    if (badge) badge.remove();
+  });
+  const item = document.createElement('div');
+  item.className = 'join-item newest';
+  const avatar = AVATARS[Math.floor(Math.random()*AVATARS.length)];
+  item.innerHTML = `<span class="join-avatar">${avatar}</span><span class="join-name">${name}</span><span class="join-new-badge">YENİ</span>`;
+  feed.appendChild(item);
+  // keep max 12 items
+  while (feed.children.length > 12) feed.removeChild(feed.firstChild);
+  // scroll to bottom
+  feed.scrollTop = feed.scrollHeight;
+}
+
+// ── GAME: round ──
+let currentRoundIndex = -1;
+let roundDuration = 90;
+
+onValue(ref(db,'game/currentRound'), snap => {
+  const round = snap.val();
+  if (!round) return;
+
+  // Switch lobby → game
+  document.getElementById('lobbyScreen').style.display = 'none';
+  document.getElementById('gameScreen').style.display = 'flex';
+  stopLobbyMusic();
+
+  roundDuration = round.duration || 90;
+
+  if (round.index !== currentRoundIndex) {
+    currentRoundIndex = round.index;
+    document.getElementById('revealBanner').className = 'reveal-banner';
+    document.getElementById('gProgress').style.width = '100%';
+
+    document.getElementById('gRoundLabel').textContent = `TUR ${round.index+1} / 6`;
+    document.getElementById('gTitle').textContent = round.title || '';
+    document.getElementById('gTitleBig').textContent = round.title || '';
+    document.getElementById('gDiff').textContent = DIFF_MAP[round.diff] || '';
+    document.getElementById('gQ').textContent = round.q || '';
+
+    const sb = document.getElementById('gStepsBig'); sb.innerHTML = '';
+    (round.steps||[]).forEach((s,i) => {
+      const d = document.createElement('div');
+      d.className = 'step-big'; d.id = 'step-proj-'+i;
+      d.innerHTML = `<div class="step-big-num">${i+1}</div><div class="step-big-content"><div class="step-big-lbl">${s.label}</div><div class="step-big-math">${s.math}</div></div>`;
+      sb.appendChild(d);
+    });
+  }
+
+  if (round.revealed) {
+    // highlight wrong step
+    document.querySelectorAll('.step-big').forEach((el,i) => {
+      if (i === round.wrongStep) {
+        el.classList.add('highlight');
+        el.innerHTML += `<span class="wrong-badge">⚠️ HATA BURADA</span>`;
+      }
+    });
+    document.getElementById('revealBanner').className = 'reveal-banner visible';
+    document.getElementById('revealText').textContent = round.explain || '';
+  }
+});
+
+// ── Timer ──
+onValue(ref(db,'game/timer'), snap => {
+  const t = snap.val(); if (!t) return;
+  const el = document.getElementById('gTimer');
+  const pb = document.getElementById('gProgress');
+  if (t.value > 0) {
+    el.textContent = t.value;
+    el.className = 'timer-num' + (t.running ? (t.value<=10?' urgent':' ok') : '');
+    const pct = Math.max(0, Math.min(100, t.value / roundDuration * 100));
+    pb.style.width = pct + '%';
+    pb.style.background = t.value<=10 ? 'var(--accent2)' : 'var(--accent)';
+  } else {
+    el.textContent = '✓'; el.className = 'timer-num';
+    pb.style.width = '0%';
+  }
+});
+
+// ── Answers ──
+onValue(ref(db,'game/answers'), snap => {
+  const all = snap.val() || {};
+  const curAns = all[currentRoundIndex] || {};
+  const entries = Object.values(curAns);
+  document.getElementById('gAnsCount').textContent = entries.length;
+
+  const la = document.getElementById('liveAnswers');
+  if (!entries.length) { la.innerHTML = '<div class="empty">Bekleniyor...</div>'; }
+  else {
+    la.innerHTML = '';
+    [...entries].sort((a,b)=>a.elapsed-b.elapsed).slice(0,8).forEach(e => {
+      const d = document.createElement('div');
+      d.className = 'la-row ' + (e.correct?'ok':'fail');
+      d.innerHTML = `<span class="la-name">${e.name}</span><span class="la-time">${e.elapsed}s</span><span>${e.correct?'✅':'❌'}</span>`;
+      la.appendChild(d);
+    });
+  }
+
+  // leaderboard
+  const scores = {};
+  Object.values(all).forEach(ra => Object.values(ra||{}).forEach(e => {
+    if (!scores[e.name]) scores[e.name] = {name:e.name,score:0,correct:0,total:0};
+    scores[e.name].total++;
+    if (e.correct) { scores[e.name].correct++; scores[e.name].score+=(e.hintUsed?5:10); }
+  }));
+  const lb = Object.values(scores).sort((a,b)=>b.score-a.score);
+  const lbEl = document.getElementById('lbRows');
+  if (!lb.length) { lbEl.innerHTML = '<div class="empty">—</div>'; return; }
+  lbEl.innerHTML = '';
+  lb.slice(0,8).forEach((p,i) => {
+    const row = document.createElement('div');
+    row.className = 'lb-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');
+    row.innerHTML = `<div class="lb-rank">${i===0?'👑':i+1}</div><div class="lb-name">${p.name}</div><div class="lb-score">${p.score}</div>`;
+    lbEl.appendChild(row);
+  });
+});
+</script>
+</body>
+</html>
