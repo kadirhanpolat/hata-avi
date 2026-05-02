@@ -5,80 +5,95 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Hata Avı</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
-  :root{--bg:#0d0d0d;--surface:#141414;--card:#1a1a1a;--border:#2a2a2a;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--text:#f0f0f0;--muted:#777;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;
-    --c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;--c4:#a855f7;--c5:#f97316;}
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;max-width:500px;margin:0 auto;display:flex;flex-direction:column;}
-  .header{background:var(--surface);border-bottom:2px solid var(--accent);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-  .htitle{font-family:var(--display);font-size:1.3rem;letter-spacing:2px;color:var(--accent);}
-  .hright{display:flex;align-items:center;gap:10px;}
-  .timer-pill{font-family:var(--display);font-size:1.2rem;padding:3px 12px;border-radius:20px;letter-spacing:3px;min-width:54px;text-align:center;background:var(--card);border:1px solid var(--border);color:var(--muted);transition:all .3s;}
-  .timer-pill.active{background:rgba(232,64,64,.15);border-color:var(--accent2);color:var(--accent2);}
-  .timer-pill.urgent{animation:tpulse .5s infinite alternate;}
-  @keyframes tpulse{from{color:var(--accent2);}to{color:#ff6b6b;}}
-  .timer-pill.done{background:var(--card);color:var(--muted);}
-  .my-score{font-family:var(--display);font-size:.95rem;color:var(--accent3);letter-spacing:1px;}
-  .prog-wrap{height:3px;background:var(--border);flex-shrink:0;}
-  .prog-fill{height:100%;background:var(--accent);transition:width 1s linear;}
-  .screen{flex:1;padding:16px;display:flex;flex-direction:column;}
-  /* JOIN */
-  .join-hero{text-align:center;padding:28px 16px 20px;}
-  .join-icon{font-size:3rem;margin-bottom:10px;}
-  .join-title{font-family:var(--display);font-size:2rem;letter-spacing:3px;color:var(--accent);margin-bottom:5px;}
-  .join-sub{font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.7;}
-  .join-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
-  .inp{width:100%;background:var(--surface);border:2px solid var(--border);color:var(--text);padding:13px 14px;font-family:var(--mono);font-size:.95rem;border-radius:8px;outline:none;transition:border-color .2s;text-align:center;letter-spacing:1px;}
-  .inp:focus{border-color:var(--accent);}
-  .inp::placeholder{color:var(--muted);}
-  .pin-inp{letter-spacing:8px;font-size:1.3rem;margin-top:10px;}
-  .pin-error{font-family:var(--mono);font-size:.65rem;color:var(--accent2);text-align:center;margin-top:7px;min-height:16px;}
-  .btn-join{width:100%;margin-top:12px;font-family:var(--display);font-size:1.1rem;letter-spacing:3px;padding:13px;border:none;cursor:pointer;border-radius:8px;background:var(--accent);color:#000;transition:all .2s;}
-  .btn-join:active{transform:scale(.97);}
-  /* WAIT */
-  .wait-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;}
-  .wait-icon{font-size:2.8rem;animation:bounce 1.8s infinite;}
-  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-  .wait-title{font-family:var(--display);font-size:1.7rem;letter-spacing:3px;color:var(--accent);}
-  .wait-msg{font-family:var(--mono);font-size:.7rem;color:var(--muted);line-height:1.8;}
-  .player-chip{background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);color:var(--accent);font-family:var(--mono);font-size:.78rem;padding:6px 16px;border-radius:20px;}
-  /* GAME */
-  .game-wrap{flex:1;display:flex;flex-direction:column;gap:10px;}
-  .round-bar{display:flex;align-items:center;justify-content:space-between;}
-  .round-badge{font-family:var(--mono);font-size:.6rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;}
-  .diff-badge{font-family:var(--mono);font-size:.58rem;padding:3px 8px;border-radius:3px;}
-  .diff-easy{background:rgba(61,214,140,.1);color:var(--accent3);}
-  .diff-mid{background:rgba(245,197,24,.1);color:var(--accent);}
-  .diff-hard{background:rgba(232,64,64,.1);color:var(--accent2);}
-  .diff-vhard{background:rgba(168,85,247,.1);color:#a855f7;}
-  .instruction{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;line-height:1.6;}
-  .instruction strong{color:var(--accent);}
-  /* KAHOOT BUTTONS */
-  .kahoot-grid{display:grid;gap:8px;flex:1;}
-  .kahoot-grid.g2{grid-template-columns:1fr 1fr;}
-  .kahoot-grid.g3{grid-template-columns:1fr 1fr 1fr;}
-  .kbtn{border:none;border-radius:12px;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:all .18s;position:relative;min-height:80px;}
-  .kbtn:active:not(:disabled){transform:scale(.93);}
-  .kbtn:disabled{cursor:not-allowed;}
-  .kbtn.selected{box-shadow:0 0 0 4px rgba(255,255,255,.9);}
-  .kbtn.reveal-correct{box-shadow:0 0 0 4px white;animation:correctPop .5s ease;}
-  @keyframes correctPop{0%{transform:scale(1);}40%{transform:scale(1.07);}100%{transform:scale(1);}}
-  .kbtn.reveal-wrong{filter:brightness(.3);}
-  .kbtn-sym{font-size:2.8rem;line-height:1;color:#fff;/* ALL symbols always white */}
-  /* Result */
-  .result-card{background:var(--card);border-radius:10px;padding:16px;display:none;animation:slu .35s ease;}
-  .result-card.visible{display:block;}
-  @keyframes slu{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-  .result-card.ok{border-left:4px solid var(--accent3);}
-  .result-card.fail{border-left:4px solid var(--accent2);}
-  .res-emoji{font-size:1.8rem;margin-bottom:5px;}
-  .res-title{font-family:var(--display);font-size:1.3rem;letter-spacing:2px;margin-bottom:3px;}
-  .res-pts{font-family:var(--display);font-size:2rem;letter-spacing:2px;margin-bottom:8px;}
-  .res-pts.plus{color:var(--accent3);}
-  .res-pts.zero{color:var(--muted);}
-  .res-exp{font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.7;}
-  .wait-next{font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center;padding:12px;animation:blink 1.8s infinite;}
-  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
+:root{--bg:#0d0d0d;--surface:#141414;--card:#1a1a1a;--border:#2a2a2a;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--purple:#a855f7;--text:#f0f0f0;--muted:#777;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;
+--c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;--c4:#a855f7;--c5:#f97316;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;max-width:500px;margin:0 auto;display:flex;flex-direction:column;}
+.header{background:var(--surface);border-bottom:2px solid var(--accent);padding:10px 15px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.htitle{font-family:var(--display);font-size:1.25rem;letter-spacing:2px;color:var(--accent);}
+.hright{display:flex;align-items:center;gap:8px;}
+.timer-pill{font-family:var(--display);font-size:1.15rem;padding:3px 11px;border-radius:20px;letter-spacing:3px;min-width:50px;text-align:center;background:var(--card);border:1px solid var(--border);color:var(--muted);transition:all .3s;}
+.timer-pill.active{background:rgba(232,64,64,.15);border-color:var(--accent2);color:var(--accent2);}
+.timer-pill.urgent{animation:tpulse .5s infinite alternate;}
+@keyframes tpulse{from{color:var(--accent2);}to{color:#ff6b6b;}}
+.timer-pill.done{background:var(--card);color:var(--muted);}
+.my-score{font-family:var(--display);font-size:.9rem;color:var(--accent3);letter-spacing:1px;}
+.prog-wrap{height:3px;background:var(--border);flex-shrink:0;}
+.prog-fill{height:100%;background:var(--accent);transition:width 1s linear;}
+.screen{flex:1;padding:14px;display:flex;flex-direction:column;}
+
+/* JOIN */
+.join-hero{text-align:center;padding:24px 14px 18px;}
+.join-icon{font-size:2.8rem;margin-bottom:9px;}
+.join-title{font-family:var(--display);font-size:1.9rem;letter-spacing:3px;color:var(--accent);margin-bottom:4px;}
+.join-sub{font-family:var(--mono);font-size:.65rem;color:var(--muted);line-height:1.7;}
+.join-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;}
+.inp{width:100%;background:var(--surface);border:2px solid var(--border);color:var(--text);padding:12px 13px;font-family:var(--mono);font-size:.9rem;border-radius:8px;outline:none;transition:border-color .2s;text-align:center;letter-spacing:1px;}
+.inp:focus{border-color:var(--accent);}
+.inp::placeholder{color:var(--muted);}
+.pin-inp{letter-spacing:8px;font-size:1.25rem;margin-top:9px;}
+.pin-error{font-family:var(--mono);font-size:.62rem;color:var(--accent2);text-align:center;margin-top:6px;min-height:15px;}
+.btn-join{width:100%;margin-top:11px;font-family:var(--display);font-size:1.05rem;letter-spacing:3px;padding:12px;border:none;cursor:pointer;border-radius:8px;background:var(--accent);color:#000;transition:all .2s;}
+.btn-join:active{transform:scale(.97);}
+
+/* WAIT */
+.wait-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;}
+.wait-icon{font-size:2.6rem;animation:bounce 1.8s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+.wait-title{font-family:var(--display);font-size:1.6rem;letter-spacing:3px;color:var(--accent);}
+.wait-msg{font-family:var(--mono);font-size:.67rem;color:var(--muted);line-height:1.8;}
+.player-chip{background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);color:var(--accent);font-family:var(--mono);font-size:.75rem;padding:5px 15px;border-radius:20px;}
+
+/* GAME */
+.game-wrap{flex:1;display:flex;flex-direction:column;gap:9px;}
+.round-bar{display:flex;align-items:center;justify-content:space-between;}
+.round-badge{font-family:var(--mono);font-size:.58rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;}
+.diff-badge{font-family:var(--mono);font-size:.56rem;padding:2px 7px;border-radius:3px;}
+.d-easy{background:rgba(61,214,140,.1);color:var(--accent3);}
+.d-mid{background:rgba(245,197,24,.1);color:var(--accent);}
+.d-hard{background:rgba(232,64,64,.1);color:var(--accent2);}
+.d-vhard{background:rgba(168,85,247,.1);color:var(--purple);}
+.instruction{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center;line-height:1.6;}
+.instruction strong{color:var(--accent);}
+
+/* KAHOOT BUTTONS — symbols always WHITE */
+.kahoot-grid{display:grid;gap:7px;flex:1;}
+.kahoot-grid.g2{grid-template-columns:1fr 1fr;}
+.kahoot-grid.g3{grid-template-columns:1fr 1fr 1fr;}
+.kbtn{border:none;border-radius:12px;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;position:relative;min-height:76px;}
+.kbtn:active:not(:disabled){transform:scale(.93);}
+.kbtn:disabled{cursor:not-allowed;}
+.kbtn.selected{box-shadow:0 0 0 4px rgba(255,255,255,.9);}
+.kbtn.reveal-correct{box-shadow:0 0 0 4px white;animation:cpop .5s ease;}
+@keyframes cpop{0%{transform:scale(1);}40%{transform:scale(1.07);}100%{transform:scale(1);}}
+.kbtn.reveal-wrong{filter:brightness(.28);}
+.kbtn.reveal-ai{box-shadow:0 0 0 3px var(--purple);animation:aipop .5s ease 0.3s;}
+@keyframes aipop{0%{transform:scale(1);}40%{transform:scale(1.04);}100%{transform:scale(1);}}
+/* Symbol: ALWAYS WHITE */
+.kbtn-sym{font-size:2.6rem;line-height:1;color:#fff !important;}
+
+/* RESULT */
+.result-card{background:var(--card);border-radius:10px;padding:14px;display:none;animation:slu .35s ease;}
+.result-card.visible{display:block;}
+@keyframes slu{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
+.result-card.ok{border-left:4px solid var(--accent3);}
+.result-card.fail{border-left:4px solid var(--accent2);}
+.res-emoji{font-size:1.7rem;margin-bottom:4px;}
+.res-title{font-family:var(--display);font-size:1.25rem;letter-spacing:2px;margin-bottom:3px;}
+.res-pts{font-family:var(--display);font-size:1.8rem;letter-spacing:2px;margin-bottom:7px;}
+.res-pts.plus{color:var(--accent3);}.res-pts.zero{color:var(--muted);}
+.res-exp{font-family:var(--mono);font-size:.65rem;color:var(--muted);line-height:1.7;}
+
+/* AI WRONG reveal on phone */
+.ai-reveal-phone{display:none;background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.25);border-radius:8px;padding:10px 12px;margin-top:8px;animation:slu .4s ease;}
+.ai-reveal-phone.visible{display:block;}
+.air-title{font-family:var(--display);font-size:.95rem;letter-spacing:1px;color:var(--purple);margin-bottom:4px;}
+.air-body{font-family:var(--mono);font-size:.63rem;color:var(--muted);line-height:1.65;}
+.air-body span{color:var(--purple);}
+
+.wait-next{font-family:var(--mono);font-size:.62rem;color:var(--muted);text-align:center;padding:10px;animation:blink 1.8s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
 </style>
 </head>
 <body>
@@ -95,9 +110,9 @@
   <!-- JOIN -->
   <div id="joinScreen" style="display:flex;flex-direction:column;">
     <div class="join-hero">
-      <div class="join-icon">🎯</div>
+      <div class="join-icon">🤖</div>
       <div class="join-title">KATIL!</div>
-      <div class="join-sub">Matematik Ekseninde Yapay Zeka Buluşmaları<br>YZ'nin hatalarını bul, puan kazan.</div>
+      <div class="join-sub">Matematik Ekseninde Yapay Zeka Buluşmaları<br>Soruları cevapla, YZ'nin hatalarını keşfet!</div>
     </div>
     <div class="join-card">
       <input class="inp" id="nameInp" placeholder="Adınızı girin" maxlength="20" onkeydown="if(event.key==='Enter')document.getElementById('pinInp').focus()">
@@ -106,29 +121,35 @@
       <button class="btn-join" onclick="joinGame()">OYUNA GİR →</button>
     </div>
   </div>
+
   <!-- WAIT -->
   <div id="waitScreen" style="display:none;">
     <div class="wait-wrap">
       <div class="wait-icon">⏳</div>
       <div class="wait-title">HAZIR!</div>
-      <div class="wait-msg">Moderatör yarışmayı başlatana kadar bekleyin.<br>Soruları büyük ekrandan okuyun.<br>Telefonunuzda <strong style="color:var(--accent)">renk/sembol</strong> ile cevap verin.</div>
+      <div class="wait-msg">Moderatör yarışmayı başlatana kadar bekleyin.<br>Soruyu büyük ekrandan okuyun.<br><strong style="color:var(--accent)">Renk/sembol</strong> ile cevap verin.</div>
       <div class="player-chip" id="playerChip">👤 —</div>
     </div>
   </div>
+
   <!-- GAME -->
   <div id="gameScreen" style="display:none;">
     <div class="game-wrap">
       <div class="round-bar">
         <div class="round-badge" id="gRound">SORU 1/—</div>
-        <div class="diff-badge diff-easy" id="gDiff">🟢 KOLAY</div>
+        <div class="diff-badge d-mid" id="gDiff">🟡 ORTA</div>
       </div>
-      <div class="instruction">Soruyu büyük ekrandan okuyun.<br><strong>Hatalı adımın rengini/sembolünü seçin!</strong></div>
+      <div class="instruction">Soruyu büyük ekrandan okuyun.<br><strong>Doğru cevabın rengini/sembolünü seçin!</strong></div>
       <div class="kahoot-grid g2" id="kahootGrid"></div>
       <div class="result-card" id="resultCard">
         <div class="res-emoji" id="resEmoji"></div>
         <div class="res-title" id="resTitle"></div>
         <div class="res-pts" id="resPts"></div>
         <div class="res-exp" id="resExp"></div>
+      </div>
+      <div class="ai-reveal-phone" id="aiRevealPhone">
+        <div class="air-title">🤖 YZ HATASI</div>
+        <div class="air-body" id="airBody"></div>
       </div>
       <div class="wait-next" id="waitNext" style="display:none;">⏳ Sonraki soru bekleniyor...</div>
     </div>
@@ -138,113 +159,103 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, onValue, push, onDisconnect } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey:"AIzaSyAPbvuN7IA6e78-fym8nF6m5gW1fUPf7lw",authDomain:"hata-avi.firebaseapp.com",
-  databaseURL:"https://hata-avi-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId:"hata-avi",storageBucket:"hata-avi.firebasestorage.app",
-  messagingSenderId:"725079545594",appId:"1:725079545594:web:040eb5d99bf55567a81b43"
-};
-const app=initializeApp(firebaseConfig);
-const db=getDatabase(app);
-
-// Same colors/shapes as moderator + projeksiyon
+const FC={apiKey:"AIzaSyAPbvuN7IA6e78-fym8nF6m5gW1fUPf7lw",authDomain:"hata-avi.firebaseapp.com",databaseURL:"https://hata-avi-default-rtdb.europe-west1.firebasedatabase.app",projectId:"hata-avi",storageBucket:"hata-avi.firebasestorage.app",messagingSenderId:"725079545594",appId:"1:725079545594:web:040eb5d99bf55567a81b43"};
+const app=initializeApp(FC);const db=getDatabase(app);
 const COLORS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316'];
 const SHAPES=['▲','◆','●','■','★','♥'];
 const DIFF_MAP={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🟣 ÇOK ZOR'};
-const DIFF_CLS={easy:'diff-easy',mid:'diff-mid',hard:'diff-hard',vhard:'diff-vhard'};
+const DIFF_CLS={easy:'d-easy',mid:'d-mid',hard:'d-hard',vhard:'d-vhard'};
 
-let playerName='',myScore=0,selectedStep=-1,answered=false;
-let currentRoundIndex=-1,roundStartTime=null,roundDuration=90;
+let playerName='',myScore=0,selOpt=-1,answered=false;
+let curRoundIdx=-1,roundStart=null,roundDur=60;
 
-// JOIN
 window.joinGame=function(){
   const n=document.getElementById('nameInp').value.trim();
   if(!n){document.getElementById('pinError').textContent='Lütfen adınızı girin.';return;}
   const pin=document.getElementById('pinInp').value.trim();
   onValue(ref(db,'game/pin'),snap=>{
-    const activePin=snap.val();
-    if(activePin&&pin!==activePin){document.getElementById('pinError').textContent='❌ Parola yanlış.';document.getElementById('pinInp').value='';document.getElementById('pinInp').focus();return;}
+    const ap=snap.val();
+    if(ap&&pin!==ap){document.getElementById('pinError').textContent='❌ Parola yanlış.';document.getElementById('pinInp').value='';document.getElementById('pinInp').focus();return;}
     document.getElementById('pinError').textContent='';
     playerName=n;
-    const connRef=push(ref(db,'game/connections'));
-    set(connRef,{name:playerName,joined:Date.now()});
-    onDisconnect(connRef).remove();
+    const cr=push(ref(db,'game/connections'));set(cr,{name:playerName,joined:Date.now()});onDisconnect(cr).remove();
     document.getElementById('joinScreen').style.display='none';
     document.getElementById('waitScreen').style.display='flex';
     document.getElementById('playerChip').textContent='👤 '+playerName;
   },{onlyOnce:true});
 };
 
-// PHASE
 onValue(ref(db,'game/phase'),snap=>{
-  const phase=snap.val();
-  if(phase==='lobby'&&playerName&&document.getElementById('waitScreen').style.display!=='none'){
+  const p=snap.val();
+  if(p==='lobby'&&playerName&&document.getElementById('waitScreen').style.display!=='none'){
     document.getElementById('waitScreen').innerHTML=`<div class="wait-wrap"><div class="wait-icon">🔄</div><div class="wait-title">SIFIRLANDII</div><div class="wait-msg">Moderatör lobi sıfırladı.<br>Lütfen sayfayı yenileyip tekrar katılın.</div></div>`;
   }
 });
 
-// TIMER
 onValue(ref(db,'game/timer'),snap=>{
   const t=snap.val();if(!t)return;
   const pill=document.getElementById('timerPill');const pb=document.getElementById('progFill');
-  if(t.value>0&&t.running){
-    pill.textContent=t.value;pill.className='timer-pill active'+(t.value<=10?' urgent':'');
-    const pct=Math.max(0,Math.min(100,t.value/roundDuration*100));
-    pb.style.width=pct+'%';pb.style.background=t.value<=10?'var(--accent2)':'var(--accent)';
-  }else{pill.textContent=t.value>0?t.value:'✓';pill.className='timer-pill done';}
+  if(t.value>0&&t.running){pill.textContent=t.value;pill.className='timer-pill active'+(t.value<=10?' urgent':'');const pct=Math.max(0,Math.min(100,t.value/roundDur*100));pb.style.width=pct+'%';pb.style.background=t.value<=10?'var(--accent2)':'var(--accent)';}
+  else{pill.textContent=t.value>0?t.value:'✓';pill.className='timer-pill done';}
 });
 
-// ROUND
 onValue(ref(db,'game/currentRound'),snap=>{
   const round=snap.val();if(!round||!playerName)return;
-  roundDuration=round.duration||90;
-  if(round.index!==currentRoundIndex){
-    currentRoundIndex=round.index;selectedStep=-1;answered=false;roundStartTime=round.timerStart;
+  roundDur=round.duration||60;
+  if(round.index!==curRoundIdx){
+    curRoundIdx=round.index;selOpt=-1;answered=false;roundStart=round.timerStart;
     document.getElementById('waitScreen').style.display='none';
     document.getElementById('gameScreen').style.display='flex';
-    const dEl=document.getElementById('gDiff');
-    dEl.textContent=DIFF_MAP[round.diff]||'';dEl.className='diff-badge '+(DIFF_CLS[round.diff]||'diff-easy');
+    const dEl=document.getElementById('gDiff');dEl.textContent=DIFF_MAP[round.diff]||'';dEl.className='diff-badge '+(DIFF_CLS[round.diff]||'d-mid');
     document.getElementById('gRound').textContent=`SORU ${round.index+1}/${round.totalRounds||'—'}`;
-    document.getElementById('myScore').style.display='block';
-    document.getElementById('myScore').textContent=myScore+' PT';
+    document.getElementById('myScore').style.display='block';document.getElementById('myScore').textContent=myScore+' PT';
     const rc=document.getElementById('resultCard');rc.className='result-card';
+    document.getElementById('aiRevealPhone').className='ai-reveal-phone';
     document.getElementById('waitNext').style.display='none';
     const grid=document.getElementById('kahootGrid');grid.innerHTML='';
-    const cnt=(round.steps||[]).length;
-    grid.className='kahoot-grid '+(cnt>4?'g3':'g2');
-    (round.steps||[]).forEach((s,i)=>{
+    const cnt=(round.options||[]).length;grid.className='kahoot-grid '+(cnt>4?'g3':'g2');
+    (round.options||[]).forEach((o,i)=>{
       const bg=COLORS[i]||'#888';const sh=SHAPES[i]||String(i+1);
       const btn=document.createElement('button');btn.className='kbtn';btn.id='kb-'+i;btn.style.background=bg;
-      // Symbol always WHITE regardless of bg
+      // Symbol ALWAYS white
       btn.innerHTML=`<div class="kbtn-sym">${sh}</div>`;
-      btn.onclick=()=>{if(answered)return;selectedStep=i;document.querySelectorAll('.kbtn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');submitAnswer();};
+      btn.onclick=()=>{if(answered)return;selOpt=i;document.querySelectorAll('.kbtn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');submitAnswer();};
       grid.appendChild(btn);
     });
   }
-  // REVEAL (timeout or moderator reveals before player answered)
+  // Reveal (timeout or moderator)
   if(round.revealed&&!answered){
     answered=true;
-    document.querySelectorAll('.kbtn').forEach((b,i)=>{b.disabled=true;if(i===round.wrongStep)b.classList.add('reveal-correct');else b.classList.add('reveal-wrong');});
+    document.querySelectorAll('.kbtn').forEach((b,i)=>{
+      b.disabled=true;
+      if(i===round.correctIndex)b.classList.add('reveal-correct');
+      else if(i===round.aiWrong&&round.aiWrong!==round.correctIndex)b.classList.add('reveal-ai');
+      else b.classList.add('reveal-wrong');
+    });
     showResult(false,0,round.explain,true);
+    showAiReveal(round);
   }
 });
 
 function submitAnswer(){
-  if(selectedStep<0||answered)return;
-  answered=true;
-  document.querySelectorAll('.kbtn').forEach(b=>b.disabled=true);
+  if(selOpt<0||answered)return;
+  answered=true;document.querySelectorAll('.kbtn').forEach(b=>b.disabled=true);
   onValue(ref(db,'game/currentRound'),snap=>{
     const round=snap.val();if(!round)return;
-    const elapsed=Math.max(1,Math.round((Date.now()-roundStartTime)/1000));
-    const remaining=Math.max(0,(round.duration||90)-elapsed);
-    const correct=selectedStep===round.wrongStep;
+    const elapsed=Math.max(1,Math.round((Date.now()-roundStart)/1000));
+    const remaining=Math.max(0,(round.duration||60)-elapsed);
+    const correct=selOpt===round.correctIndex;
     const pts=correct?remaining:0;
     myScore+=pts;
-    set(ref(db,`game/answers/${round.index}/${playerName.replace(/[.#$/[\]]/g,'_')}`),{name:playerName,correct,elapsed,pts,selectedStep});
-    document.querySelectorAll('.kbtn').forEach((b,i)=>{if(i===round.wrongStep)b.classList.add('reveal-correct');else{b.classList.remove('selected');b.classList.add('reveal-wrong');}});
+    set(ref(db,`game/answers/${round.index}/${playerName.replace(/[.#$/[\]]/g,'_')}`),{name:playerName,correct,elapsed,pts,selectedIndex:selOpt});
+    document.querySelectorAll('.kbtn').forEach((b,i)=>{
+      if(i===round.correctIndex)b.classList.add('reveal-correct');
+      else if(i===round.aiWrong&&round.aiWrong!==round.correctIndex)b.classList.add('reveal-ai');
+      else{b.classList.remove('selected');b.classList.add('reveal-wrong');}
+    });
     showResult(correct,pts,round.explain,false);
     document.getElementById('myScore').textContent=myScore+' PT';
+    showAiReveal(round);
   },{onlyOnce:true});
 }
 
@@ -255,6 +266,14 @@ function showResult(correct,pts,explain,timeout){
   else{rc.className='result-card visible fail';document.getElementById('resEmoji').textContent='❌';document.getElementById('resTitle').innerHTML='<span style="color:var(--accent2)">YANLIŞ</span>';document.getElementById('resPts').className='res-pts zero';document.getElementById('resPts').textContent='0 PT';}
   document.getElementById('resExp').textContent=explain||'';
   document.getElementById('waitNext').style.display='block';
+}
+
+function showAiReveal(round){
+  if(!round.aiModel)return;
+  const ar=document.getElementById('aiRevealPhone');ar.className='ai-reveal-phone visible';
+  const opts=round.options||[];
+  const aiWTxt=round.aiWrong>=0&&opts[round.aiWrong]?`${SHAPES[round.aiWrong]} Şık ${String.fromCharCode(65+round.aiWrong)}`:'—';
+  document.getElementById('airBody').innerHTML=`<span>${round.aiModel}</span> (${round.aiYear||'?'}) bu soruyu <span>${aiWTxt}</span> olarak yanlış cevapladı.${round.aiReason?'<br><br>'+round.aiReason:''}`;
 }
 </script>
 </body>
