@@ -3,19 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hata Avı — Projeksiyon</title>
+<title>Usev — Projeksiyon</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
-:root{--bg:#0a0a0a;--surface:#111;--card:#161616;--border:#222;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--purple:#a855f7;--text:#f0f0f0;--muted:#555;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;}
+:root{
+  --bg:#0a0a0a;--surface:#111;--card:#161616;--border:#222;
+  --accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--purple:#a855f7;
+  --text:#f0f0f0;--muted:#555;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;
+  --c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;--c4:#a855f7;--c5:#f97316;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans);}
-:root{--c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;--c4:#a855f7;--c5:#f97316;}
 .katex{font-size:.95em;}
 
-/* LOBBY */
+/* ── 3-2-1 COUNTDOWN OVERLAY ── */
+#countdownOverlay{
+  display:none;position:fixed;inset:0;background:var(--bg);z-index:500;
+  align-items:center;justify-content:center;flex-direction:column;gap:16px;
+}
+#countdownOverlay.visible{display:flex;}
+.cd-num{
+  font-family:var(--display);font-size:18rem;letter-spacing:-8px;
+  color:var(--accent);line-height:1;
+  animation:cdPop .8s ease;
+}
+@keyframes cdPop{
+  0%{transform:scale(.4);opacity:0;}
+  60%{transform:scale(1.15);}
+  100%{transform:scale(1);opacity:1;}
+}
+.cd-go{font-family:var(--display);font-size:8rem;letter-spacing:6px;color:var(--accent3);animation:cdPop .5s ease;}
+.cd-label{font-family:var(--mono);font-size:.9rem;color:var(--muted);letter-spacing:4px;text-transform:uppercase;}
+
+/* ── AUTO-ADVANCE BAR ── */
+#autoAdvanceBar{
+  display:none;position:fixed;bottom:0;left:0;right:0;height:6px;
+  background:var(--border);z-index:400;
+}
+#autoAdvanceBar.visible{display:block;}
+#autoAdvanceFill{height:100%;background:var(--accent3);transition:width 1s linear;}
+#autoAdvanceLabel{
+  display:none;position:fixed;bottom:10px;right:16px;
+  font-family:var(--mono);font-size:.65rem;color:var(--accent3);letter-spacing:1px;z-index:401;
+  background:rgba(0,0,0,.5);padding:3px 8px;border-radius:4px;
+}
+#autoAdvanceLabel.visible{display:block;}
+
+/* ── LOBBY ── */
 #lobbyScreen{width:100%;height:100vh;display:flex;flex-direction:column;}
 .lh{background:var(--surface);border-bottom:2px solid var(--accent);padding:16px 44px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .lh-title{font-family:var(--display);font-size:2.6rem;letter-spacing:4px;color:var(--accent);}
@@ -49,7 +87,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 .wsn{font-family:var(--display);font-size:1.2rem;color:var(--accent);width:20px;flex-shrink:0;}
 .wst{font-family:var(--mono);font-size:.63rem;color:var(--muted);line-height:1.5;}
 
-/* GAME */
+/* ── GAME ── */
 #gameScreen{width:100%;height:100vh;display:none;flex-direction:column;}
 .gh{background:var(--surface);border-bottom:2px solid var(--accent);padding:9px 28px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .gh-meta{display:flex;flex-direction:column;}
@@ -57,7 +95,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 .gh-title{font-family:var(--display);font-size:1.6rem;letter-spacing:2px;color:var(--accent);}
 .timer-wrap{display:flex;align-items:center;gap:10px;}
 .timer-num{font-family:var(--display);font-size:3.2rem;color:var(--accent2);letter-spacing:5px;min-width:85px;text-align:center;transition:color .3s;}
-.timer-num.ok{color:var(--accent3);}.timer-num.urgent{color:var(--accent2);animation:tpulse .4s infinite alternate;}
+.timer-num.ok{color:var(--accent3);}
+.timer-num.urgent{color:var(--accent2);animation:tpulse .4s infinite alternate;}
 @keyframes tpulse{from{opacity:1;transform:scale(1);}to{opacity:.6;transform:scale(1.04);}}
 .ans-ctr{font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:right;}
 .ans-ctr span{color:var(--accent3);font-family:var(--display);font-size:1.1rem;display:block;}
@@ -66,26 +105,62 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 
 .game-body{flex:1;display:flex;flex-direction:column;padding:12px 24px;gap:10px;overflow:hidden;}
 .question-area{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 18px;}
-.q-diff{font-family:var(--mono);font-size:.62rem;letter-spacing:1px;margin-bottom:3px;}
+.q-diff{font-family:var(--mono);font-size:.62rem;letter-spacing:1px;margin-bottom:3px;display:flex;align-items:center;gap:8px;}
+.cat-rozet{font-family:var(--mono);font-size:.58rem;padding:2px 8px;border-radius:12px;letter-spacing:.5px;}
+.mult-big{font-family:var(--display);font-size:1rem;letter-spacing:1px;padding:2px 10px;border-radius:4px;}
+.mb-1{background:rgba(61,214,140,.15);color:var(--accent3);}
+.mb-15{background:rgba(245,197,24,.15);color:var(--accent);}
+.mb-2{background:rgba(232,64,64,.15);color:var(--accent2);}
+.mb-3{background:rgba(168,85,247,.15);color:var(--purple);}
+.streak-info{font-family:var(--mono);font-size:.58rem;color:var(--muted);}
 .q-title-big{font-family:var(--display);font-size:1.5rem;letter-spacing:1px;margin-bottom:4px;}
 .q-text{font-family:var(--mono);font-size:.88rem;color:var(--accent);line-height:1.5;}
 
-/* KAHOOT OPTIONS GRID */
+/* KAHOOT OPTIONS */
 .opts-kahoot{display:grid;gap:8px;flex:1;}
 .opts-kahoot.g2{grid-template-columns:1fr 1fr;}
 .opts-kahoot.g3{grid-template-columns:1fr 1fr 1fr;}
-.opt-k{border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;transition:all .5s;position:relative;}
-.opt-k.rev-wrong{filter:brightness(.28);}
+.opt-k{
+  border-radius:10px;padding:10px 16px 8px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  gap:6px;transition:all .5s;position:relative;
+}
+.opt-k-top{display:flex;align-items:center;gap:12px;}
+.opt-k.preview-lock{filter:brightness(.35);pointer-events:none;}
+/* Okuma banner */
+.preview-banner{
+  display:none;position:absolute;top:0;left:0;right:0;
+  background:linear-gradient(135deg,rgba(59,130,246,.18),rgba(168,85,247,.18));
+  border-bottom:2px solid rgba(59,130,246,.4);
+  padding:10px 24px;
+  display:none;align-items:center;justify-content:center;gap:10px;
+  z-index:10;
+}
+.preview-banner.visible{display:flex;}
+.preview-banner-txt{font-family:var(--display);font-size:1.1rem;letter-spacing:3px;color:#93c5fd;}
+.preview-banner-sub{font-family:var(--mono);font-size:.65rem;color:rgba(147,197,253,.7);letter-spacing:1px;}
 .opt-k.rev-correct{animation:cpop .6s ease;box-shadow:0 0 28px rgba(255,255,255,.15);}
 .opt-k.rev-ai-wrong{animation:aipulse 1s ease 0.3s;}
 @keyframes cpop{0%{transform:scale(1);}40%{transform:scale(1.03);}100%{transform:scale(1);}}
 @keyframes aipulse{0%{transform:scale(1);}30%{transform:scale(1.02);box-shadow:0 0 20px rgba(168,85,247,.5);}100%{transform:scale(1);}}
-.opt-shape-k{font-size:2.6rem;width:38px;flex-shrink:0;color:#fff;text-align:center;line-height:1;}
+.opt-shape-k{font-size:2.4rem;width:36px;flex-shrink:0;color:#fff;text-align:center;line-height:1;}
 .opt-body-k{flex:1;}
 .opt-lbl-k{font-family:var(--mono);font-size:.52rem;opacity:.75;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;color:#fff;}
-.opt-math-k{font-family:var(--mono);font-size:.88rem;line-height:1.4;color:#fff;}
+.opt-math-k{font-family:var(--mono);font-size:.85rem;line-height:1.4;color:#fff;}
 .opt-chip{font-size:.56rem;padding:2px 9px;background:rgba(0,0,0,.32);border-radius:20px;position:absolute;top:8px;right:10px;letter-spacing:.5px;color:#fff;}
 .ai-wrong-chip{background:rgba(168,85,247,.5);border:1px solid var(--purple);}
+
+/* ── % BAR ── */
+.pct-wrap{
+  display:flex;align-items:center;gap:8px;padding:0 4px;
+  opacity:0;transition:opacity .4s;
+}
+.pct-wrap.visible{opacity:1;}
+.pct-track{flex:1;height:6px;background:rgba(0,0,0,.3);border-radius:3px;overflow:hidden;}
+.pct-fill{height:100%;background:rgba(255,255,255,.85);border-radius:3px;transition:width .6s ease;}
+.pct-num{font-family:var(--display);font-size:.9rem;color:#fff;min-width:36px;text-align:right;letter-spacing:1px;}
+.opt-k.rev-correct .pct-fill{background:#fff;}
+.opt-k.rev-wrong .pct-fill{background:rgba(255,255,255,.4);}
 
 /* REVEAL PANEL */
 .reveal-panel{display:none;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;}
@@ -112,12 +187,115 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 .lbs-name{flex:1;font-family:var(--mono);font-size:.67rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lbs-score{font-family:var(--display);font-size:.95rem;color:var(--accent3);}
 .empty{font-family:var(--mono);font-size:.62rem;color:var(--muted);text-align:center;padding:10px;}
+
+/* ── Takım Tablosu ── */
+.team-board{
+  position:fixed;left:0;top:0;height:100vh;width:200px;
+  background:rgba(10,10,10,.95);border-right:1px solid var(--border);
+  padding:14px 12px;display:none;flex-direction:column;gap:8px;z-index:50;
+}
+.team-board.visible{display:flex;}
+.team-board-title{font-family:var(--display);font-size:.9rem;letter-spacing:2px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:2px;}
+.team-board-row{
+  display:flex;align-items:center;gap:7px;padding:8px 9px;
+  border-radius:7px;border:2px solid transparent;transition:all .4s;
+}
+.team-board-rank{font-family:var(--display);font-size:1rem;color:var(--muted);width:18px;}
+.team-board-name{flex:1;font-family:var(--mono);font-size:.65rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.team-board-score{font-family:var(--display);font-size:1.1rem;letter-spacing:1px;}
+
+/* Lobi takım sayaçları */
+.lobby-team-counts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.ltc{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;font-family:var(--mono);font-size:.65rem;}
+.ltc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ltc-count{font-family:var(--display);font-size:.9rem;}
+
+/* ── PODIUM SCREEN ── */
+#podiumScreen{
+  display:none;width:100%;height:100vh;
+  flex-direction:column;align-items:center;justify-content:center;
+  background:var(--bg);position:relative;overflow:hidden;
+}
+#podiumScreen.visible{display:flex;}
+
+/* Confetti */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:1;}
+.cf{position:absolute;top:-12px;border-radius:2px;animation:cfFall linear forwards;}
+@keyframes cfFall{
+  0%{transform:translateY(0) rotate(0deg);opacity:1;}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0;}
+}
+
+.podium-title{
+  font-family:var(--display);font-size:3rem;letter-spacing:6px;color:var(--accent);
+  margin-bottom:8px;z-index:2;animation:titleIn .6s ease;text-align:center;
+}
+@keyframes titleIn{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+.podium-sub{font-family:var(--mono);font-size:.7rem;color:var(--muted);letter-spacing:3px;margin-bottom:48px;z-index:2;}
+
+.podium-stage{
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:12px;z-index:2;
+}
+.podium-col{
+  display:flex;flex-direction:column;align-items:center;gap:0;
+  width:220px;
+}
+.podium-avatar{font-size:3rem;margin-bottom:8px;animation:avatarBounce .6s ease;}
+@keyframes avatarBounce{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.podium-name{
+  font-family:var(--display);font-size:1.4rem;letter-spacing:1px;
+  color:#fff;text-align:center;margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;
+}
+.podium-score{font-family:var(--mono);font-size:.85rem;color:rgba(255,255,255,.7);margin-bottom:8px;}
+.podium-block{
+  width:100%;border-radius:8px 8px 0 0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-size:3.5rem;color:rgba(0,0,0,.4);
+  transform:scaleY(0);transform-origin:bottom;
+  animation:riseUp .8s ease forwards;
+}
+@keyframes riseUp{from{transform:scaleY(0);}to{transform:scaleY(1);}}
+
+.p1 .podium-block{height:220px;background:var(--accent);animation-delay:1s;}
+.p2 .podium-block{height:160px;background:#aaa;animation-delay:.3s;}
+.p3 .podium-block{height:120px;background:#cd7f32;animation-delay:.6s;}
+.p1 .podium-avatar,.p1 .podium-name{animation-delay:.9s;animation-fill-mode:backwards;}
+.p2 .podium-avatar,.p2 .podium-name{animation-delay:.2s;animation-fill-mode:backwards;}
+.p3 .podium-avatar,.p3 .podium-name{animation-delay:.5s;animation-fill-mode:backwards;}
+.p1 .podium-name{color:var(--accent);font-size:1.6rem;}
+.p1 .podium-score{color:rgba(245,197,24,.8);}
+
+/* Hardest question badge */
+.hardest-badge{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
+  background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);
+  border-radius:10px;padding:12px 24px;text-align:center;z-index:2;
+  animation:fadeInUp .6s ease 3s backwards;
+}
+@keyframes fadeInUp{from{opacity:0;transform:translateX(-50%) translateY(10px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+.hb-label{font-family:var(--mono);font-size:.6rem;color:var(--purple);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.hb-title{font-family:var(--display);font-size:1.1rem;letter-spacing:1px;color:var(--text);}
+.hb-rate{font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-top:2px;}
 </style>
 </head>
 <body>
+
+<!-- 3-2-1 COUNTDOWN OVERLAY -->
+<div id="countdownOverlay">
+  <div class="cd-num" id="cdNum">3</div>
+  <div class="cd-label">HAZIRLAN!</div>
+</div>
+
+<!-- AUTO-ADVANCE BAR -->
+<div id="autoAdvanceBar"><div id="autoAdvanceFill" style="width:100%"></div></div>
+<div id="autoAdvanceLabel">Sonraki soru...</div>
+
+<!-- LOBBY -->
 <div id="lobbyScreen">
   <div class="lh">
-    <div><div class="lh-title">🔍 HATA AVI</div><div class="lh-sub">MATEMATİK EKSENİNDE YAPAY ZEKA BULUŞMALARI</div></div>
+    <div><div class="lh-title">⚡ USEV</div><div class="lh-sub">Düşün, yarış, kazan.</div></div>
     <div class="lh-conn"><span class="dot"></span><span id="lobbyCount">0</span> katılımcı</div>
   </div>
   <div class="lobby-body">
@@ -129,6 +307,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
       <div class="lc-title">👥 KATILIMCILAR</div>
       <div class="lc-count" id="lcCount">Bekleniyor...</div>
       <div class="players-grid" id="playersGrid"></div>
+      <div class="lobby-team-counts" id="lobbyTeamCounts"></div>
     </div>
     <div class="lr">
       <div class="wait-big">Katılmak için<br><span>QR okutun</span><br>veya adresi açın</div>
@@ -140,7 +319,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
   </div>
 </div>
 
+<!-- GAME -->
 <div id="gameScreen">
+  <!-- Preview Banner -->
+  <div class="preview-banner" id="previewBanner">
+    <span class="preview-banner-txt">📖 OKUMA SÜRESİ</span>
+    <span class="preview-banner-sub">· katılımcılar soruyu okuyor · cevaplama henüz açılmadı ·</span>
+  </div>
   <div class="gh">
     <div class="gh-meta">
       <div class="gh-round" id="gRoundLbl">SORU 1/—</div>
@@ -148,7 +333,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
     </div>
     <div class="timer-wrap">
       <div class="ans-ctr"><span id="gAnsCnt">0</span>cevap</div>
-      <div><div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);text-align:center;margin-bottom:1px;letter-spacing:1px;">SÜRE</div><div class="timer-num" id="gTimer">—</div></div>
+      <div>
+        <div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);text-align:center;margin-bottom:1px;letter-spacing:1px;">SÜRE</div>
+        <div class="timer-num" id="gTimer">—</div>
+      </div>
     </div>
   </div>
   <div class="progress-wrap"><div class="progress-fill" id="gProg" style="width:100%"></div></div>
@@ -156,9 +344,30 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
     <div class="question-area">
       <div class="q-diff" id="gDiff"></div>
       <div class="q-title-big" id="gTitleBig">—</div>
+      <div id="gImgWrap" style="display:none;margin:6px 0;text-align:center;">
+        <img id="gImg" style="max-width:100%;max-height:200px;border-radius:8px;object-fit:contain;">
+      </div>
       <div class="q-text" id="gQ"></div>
     </div>
     <div class="opts-kahoot g2" id="gOpts"></div>
+    <!-- Sayısal tahmin gösterimi -->
+    <div id="gNumericDisplay" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:20px;padding:10px 0;">
+        <div style="text-align:center;">
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;">TAHMİNLER</div>
+          <div style="font-family:var(--display);font-size:2.5rem;color:#3b82f6;letter-spacing:4px;" id="gNumericCount">0</div>
+        </div>
+        <div id="gNumericReveal" style="display:none;text-align:center;">
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;">DOĞRU CEVAP</div>
+          <div style="font-family:var(--display);font-size:2.8rem;color:var(--accent3);letter-spacing:4px;" id="gNumericAnswer">—</div>
+        </div>
+      </div>
+      <div id="gNumericList" style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;max-height:200px;overflow:hidden;"></div>
+    </div>
+    <!-- Sıralama sorusu -->
+    <div id="gOrderingDisplay" style="display:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="gOrderingList"></div>
+    </div>
     <div class="reveal-panel" id="revealPanel">
       <div class="reveal-left">
         <div class="reveal-title">✅ DOĞRU CEVAP</div>
@@ -180,116 +389,517 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
   <div id="lbRows"></div>
 </div>
 
+<!-- TEAM BOARD (oyun sırasında sol panel) -->
+<div class="team-board" id="teamBoard">
+  <div class="team-board-title">🏆 TAKIMLAR</div>
+  <div id="teamBoardRows"></div>
+</div>
+
+<!-- PODIUM SCREEN -->
+<div id="podiumScreen">
+  <div class="confetti-wrap" id="confettiWrap"></div>
+  <div class="podium-title">🏆 OYUN BİTTİ!</div>
+  <div class="podium-sub">Düşün, yarış, kazan.</div>
+  <div class="podium-stage" id="podiumStage"></div>
+  <div class="hardest-badge" id="hardestBadge" style="display:none;">
+    <div class="hb-label">🧱 En Zor Soru</div>
+    <div class="hb-title" id="hbTitle">—</div>
+    <div class="hb-rate" id="hbRate">Doğru oranı: —%</div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
 const FC={apiKey:"AIzaSyAPbvuN7IA6e78-fym8nF6m5gW1fUPf7lw",authDomain:"hata-avi.firebaseapp.com",databaseURL:"https://hata-avi-default-rtdb.europe-west1.firebasedatabase.app",projectId:"hata-avi",storageBucket:"hata-avi.firebasestorage.app",messagingSenderId:"725079545594",appId:"1:725079545594:web:040eb5d99bf55567a81b43"};
 const app=initializeApp(FC);const db=getDatabase(app);
+
 const COLORS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316'];
 const SHAPES=['▲','◆','●','■','★','♥'];
 const DIFF_MAP={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🟣 ÇOK ZOR'};
 const AVATARS=['🧑‍💻','👨‍🎓','👩‍🎓','🧑‍🏫','👨‍🔬','👩‍🔬','🧑‍🎓','🎓'];
 
 function rk(el){if(window.renderMathInElement)renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}
-function waitRk(el,delay=80){setTimeout(()=>rk(el),delay);}
+function waitRk(el,d=80){setTimeout(()=>rk(el),d);}
 
+// QR
 const joinUrl=window.location.href.replace('projeksiyon.html','');
 const fullUrl=joinUrl.endsWith('/')?joinUrl:joinUrl+'/';
 document.getElementById('qrImg').src=`https://api.qrserver.com/v1/create-qr-code/?size=170x170&bgcolor=ffffff&color=000000&data=${encodeURIComponent(fullUrl)}`;
 try{const u=new URL(fullUrl);document.getElementById('qrUrl').textContent=u.hostname+u.pathname;}catch(e){document.getElementById('qrUrl').textContent=fullUrl;}
 
+// LOBBY MUSIC
 const lobbyAudio=new Audio('lobby.mp3');lobbyAudio.loop=true;lobbyAudio.volume=0.5;
-const playLobby=()=>lobbyAudio.play().catch(()=>{const n=document.createElement('div');n.id='audioNudge';n.style.cssText='position:fixed;bottom:18px;right:18px;background:rgba(245,197,24,.15);border:1px solid rgba(245,197,24,.4);color:#f5c518;font-family:IBM Plex Mono,monospace;font-size:.65rem;padding:8px 13px;border-radius:8px;cursor:pointer;z-index:999;letter-spacing:1px;';n.textContent='🎵 MÜZİĞİ BAŞLAT';n.onclick=()=>{lobbyAudio.play();n.remove();};document.body.appendChild(n);});
+const playLobby=()=>lobbyAudio.play().catch(()=>{
+  const n=document.createElement('div');n.id='audioNudge';
+  n.style.cssText='position:fixed;bottom:18px;right:18px;background:rgba(245,197,24,.15);border:1px solid rgba(245,197,24,.4);color:#f5c518;font-family:IBM Plex Mono,monospace;font-size:.65rem;padding:8px 13px;border-radius:8px;cursor:pointer;z-index:999;letter-spacing:1px;';
+  n.textContent='🎵 MÜZİĞİ BAŞLAT';n.onclick=()=>{lobbyAudio.play();n.remove();};document.body.appendChild(n);
+});
 document.addEventListener('click',()=>{if(lobbyAudio.paused)lobbyAudio.play().catch(()=>{});},{once:true});
 playLobby();
 function stopLobbyMusic(){lobbyAudio.pause();lobbyAudio.currentTime=0;const n=document.getElementById('audioNudge');if(n)n.remove();}
 
-onValue(ref(db,'game/pin'),snap=>{const p=snap.val();const box=document.getElementById('pinBox');const el=document.getElementById('projPin');if(p){el.textContent=p;box.style.display='block';}else box.style.display='none';});
+// ── 3-2-1 COUNTDOWN ──
+function showCountdown(cb){
+  const overlay=document.getElementById('countdownOverlay');
+  const numEl=document.getElementById('cdNum');
+  overlay.classList.add('visible');
+  const steps=[
+    {text:'3',delay:0},{text:'2',delay:900},{text:'1',delay:1800},{text:'GO!',delay:2700,go:true}
+  ];
+  steps.forEach(s=>{
+    setTimeout(()=>{
+      if(s.go){
+        numEl.className='cd-go';numEl.textContent='BAŞLA!';
+        setTimeout(()=>{overlay.classList.remove('visible');numEl.className='cd-num';if(cb)cb();},600);
+      } else {
+        numEl.className='cd-num';numEl.textContent=s.text;
+      }
+    },s.delay);
+  });
+}
 
-onValue(ref(db,'game/phase'),snap=>{
-  const ph=snap.val();
-  if(ph==='game'){stopLobbyMusic();document.getElementById('lobbyScreen').style.display='none';document.getElementById('gameScreen').style.display='flex';document.getElementById('gameScreen').style.flexDirection='column';}
-  else{document.getElementById('lobbyScreen').style.display='flex';document.getElementById('gameScreen').style.display='none';}
+// ── AUTO-ADVANCE BAR ──
+let autoAdvanceInt=null;
+function startAutoAdvanceBar(seconds){
+  const bar=document.getElementById('autoAdvanceBar');
+  const fill=document.getElementById('autoAdvanceFill');
+  const lbl=document.getElementById('autoAdvanceLabel');
+  bar.classList.add('visible');lbl.classList.add('visible');
+  fill.style.transition='none';fill.style.width='100%';
+  let rem=seconds;
+  lbl.textContent=`Sonraki soru ${rem}sn içinde...`;
+  clearInterval(autoAdvanceInt);
+  setTimeout(()=>{
+    fill.style.transition=`width ${seconds}s linear`;fill.style.width='0%';
+  },50);
+  autoAdvanceInt=setInterval(()=>{
+    rem--;lbl.textContent=`Sonraki soru ${rem}sn içinde...`;
+    if(rem<=0){clearInterval(autoAdvanceInt);bar.classList.remove('visible');lbl.classList.remove('visible');}
+  },1000);
+}
+
+// PIN
+onValue(ref(db,'game/pin'),snap=>{
+  const p=snap.val();const box=document.getElementById('pinBox');const el=document.getElementById('projPin');
+  if(p){el.textContent=p;box.style.display='block';}else box.style.display='none';
 });
 
+// PHASE
+onValue(ref(db,'game/phase'),snap=>{
+  const ph=snap.val();
+  if(ph==='game'){
+    stopLobbyMusic();
+    document.getElementById('lobbyScreen').style.display='none';
+    document.getElementById('gameScreen').style.display='flex';
+    document.getElementById('gameScreen').style.flexDirection='column';
+    document.getElementById('podiumScreen').classList.remove('visible');
+    // Reset round tracking for replay
+    curRoundIdx=-1;
+  } else if(ph==='finished'){
+    stopLobbyMusic();
+    document.getElementById('lobbyScreen').style.display='none';
+    document.getElementById('gameScreen').style.display='none';
+    document.getElementById('podiumScreen').classList.add('visible');
+    setTimeout(buildPodium,500);
+  } else {
+    // lobby — replay veya ilk giriş
+    document.getElementById('lobbyScreen').style.display='flex';
+    document.getElementById('gameScreen').style.display='none';
+    document.getElementById('podiumScreen').classList.remove('visible');
+    // Konfeti ve podyum temizle
+    const cw=document.getElementById('confettiWrap');if(cw)cw.innerHTML='';
+    clearInterval(confettiInterval);
+    // Lobi müziğini yeniden başlat
+    playLobby();
+  }
+});
+let confettiInterval=null;
+
+// CONNECTIONS
 let knownConns=new Set();let avMap={};
+let teamsDataProj=[]; // [{name,color}]
+let teamModeProj=false;
+let playerTeamMap={}; // name → team
+
+// Takım modu
+onValue(ref(db,'game/teamMode'),snap=>{
+  const d=snap.val();
+  teamModeProj=!!(d&&d.active);
+  teamsDataProj=d?.teams||[];
+  if(teamModeProj&&teamsDataProj.length){
+    document.getElementById('teamBoard').classList.add('visible');
+    renderTeamBoardProj({});
+  } else {
+    document.getElementById('teamBoard').classList.remove('visible');
+  }
+});
+
+function renderTeamBoardProj(all){
+  if(!teamModeProj||!teamsDataProj.length)return;
+  const scores={};
+  teamsDataProj.forEach(t=>scores[t.name]={...t,score:0,correct:0,total:0});
+  Object.values(all).forEach(ra=>Object.values(ra||{}).forEach(e=>{
+    const team=playerTeamMap[e.name];
+    if(team&&scores[team]){scores[team].total++;if(e.correct){scores[team].correct++;scores[team].score+=e.pts;}}
+  }));
+  const sorted=Object.values(scores).sort((a,b)=>b.score-a.score);
+  const rows=document.getElementById('teamBoardRows');rows.innerHTML='';
+  sorted.forEach((t,i)=>{
+    const row=document.createElement('div');row.className='team-board-row';
+    row.style.background=t.color+'18';row.style.borderColor=t.color+'66';
+    row.innerHTML=`<div class="team-board-rank" style="color:${t.color};">${i+1}</div><div class="team-board-name" style="color:${t.color};">${t.name}</div><div class="team-board-score" style="color:${t.color};">${t.score}</div>`;
+    rows.appendChild(row);
+  });
+}
+
+function renderLobbyTeamCounts(conns){
+  if(!teamModeProj||!teamsDataProj.length){document.getElementById('lobbyTeamCounts').innerHTML='';return;}
+  const counts={};teamsDataProj.forEach(t=>counts[t.name]=0);
+  Object.values(conns).forEach(c=>{if(c.team&&counts[c.team]!==undefined)counts[c.team]++;});
+  const wrap=document.getElementById('lobbyTeamCounts');wrap.innerHTML='';
+  teamsDataProj.forEach(t=>{
+    const d=document.createElement('div');d.className='ltc';
+    d.style.background=t.color+'18';d.style.border=`1px solid ${t.color}44`;
+    d.innerHTML=`<span class="ltc-dot" style="background:${t.color};"></span><span style="color:${t.color};">${t.name}</span><span class="ltc-count" style="color:${t.color};">${counts[t.name]||0}</span>`;
+    wrap.appendChild(d);
+  });
+}
+
 onValue(ref(db,'game/connections'),snap=>{
   const conns=snap.val()||{};const ids=Object.keys(conns);
   document.getElementById('lobbyCount').textContent=ids.length;
   document.getElementById('lcCount').textContent=ids.length>0?`${ids.length} kişi hazır`:'Bekleniyor...';
+  // Build playerTeamMap
+  Object.values(conns).forEach(c=>{if(c.name&&c.team)playerTeamMap[c.name]=c.team;});
   const grid=document.getElementById('playersGrid');
   knownConns.forEach(id=>{if(!conns[id]){knownConns.delete(id);const el=document.getElementById('pc-'+id);if(el)el.remove();}});
   ids.forEach(id=>{
-    if(!knownConns.has(id)){knownConns.add(id);if(!avMap[id])avMap[id]=AVATARS[Math.floor(Math.random()*AVATARS.length)];
+    if(!knownConns.has(id)){
+      knownConns.add(id);if(!avMap[id])avMap[id]=AVATARS[Math.floor(Math.random()*AVATARS.length)];
       grid.querySelectorAll('.pchip.newest').forEach(c=>{c.classList.remove('newest');const b=c.querySelector('.pnew');if(b)b.remove();});
       if(grid.querySelector('.empty'))grid.innerHTML='';
       const chip=document.createElement('div');chip.className='pchip newest';chip.id='pc-'+id;
-      chip.innerHTML=`<span class="pav">${avMap[id]}</span><span class="pname">${conns[id].name||'?'}</span><span class="pnew">YENİ</span>`;
+      // Takım rengi varsa chip'e uygula
+      const team=conns[id].team;const teamObj=teamsDataProj.find(t=>t.name===team);
+      const teamStyle=teamObj?`border-color:${teamObj.color};`:'';
+      chip.style.cssText=teamStyle;
+      chip.innerHTML=`<span class="pav">${avMap[id]}</span><span class="pname">${conns[id].name||'?'}</span>${teamObj?`<span style="font-size:.45rem;padding:1px 4px;border-radius:3px;background:${teamObj.color}22;color:${teamObj.color};">${team}</span>`:''}<span class="pnew">YENİ</span>`;
       grid.appendChild(chip);setTimeout(()=>{chip.classList.remove('newest');const b=chip.querySelector('.pnew');if(b)b.remove();},3000);
     }
   });
   if(!ids.length)grid.innerHTML='<div class="empty" style="grid-column:1/-1">Bekleniyor...</div>';
+  renderLobbyTeamCounts(conns);
 });
 
-let curRoundIdx=-1,roundDur=60;
-onValue(ref(db,'game/currentRound'),snap=>{
-  const round=snap.val();if(!round)return;
-  roundDur=round.duration||60;
-  if(round.index!==curRoundIdx){
-    curRoundIdx=round.index;
-    document.getElementById('revealPanel').className='reveal-panel';
-    document.getElementById('lbSide').className='lb-side';
-    document.getElementById('gProg').style.width='100%';
-    document.getElementById('gRoundLbl').textContent=`SORU ${round.index+1}/${round.totalRounds||'—'}`;
-    const gt=document.getElementById('gTitle');gt.textContent=round.title||'';waitRk(gt);
-    const gtb=document.getElementById('gTitleBig');gtb.textContent=round.title||'';waitRk(gtb);
-    document.getElementById('gDiff').textContent=DIFF_MAP[round.diff]||'';
-    const gq=document.getElementById('gQ');gq.textContent=round.q||'';waitRk(gq);
+// ── ROUND ──
+let curRoundIdx=-1,roundDur=60,curOptCount=0;
+let pendingRoundData=null; // holds round data while countdown plays
+
+function renderRound(round){
+  roundDur=round.duration||60;curOptCount=(round.options||[]).length;
+  document.getElementById('revealPanel').className='reveal-panel';
+  document.getElementById('lbSide').className='lb-side';
+  document.getElementById('gProg').style.width='100%';
+  clearInterval(autoAdvanceInt);
+  document.getElementById('autoAdvanceBar').classList.remove('visible');
+  document.getElementById('autoAdvanceLabel').classList.remove('visible');
+
+  document.getElementById('gRoundLbl').textContent=`SORU ${round.index+1}/${round.totalRounds||'—'}`;
+  const gt=document.getElementById('gTitle');gt.textContent=round.title||'';waitRk(gt);
+  const gtb=document.getElementById('gTitleBig');gtb.textContent=round.title||'';waitRk(gtb);
+  // Diff + Multiplier
+  const MULT_LABELS={easy:'×1 KOLAY',mid:'×1.5 ORTA',hard:'×2 ZOR',vhard:'×3 ÇOK ZOR'};
+  const MULT_CLS={easy:'mb-1',mid:'mb-15',hard:'mb-2',vhard:'mb-3'};
+  const diff=round.diff||'mid';
+  // Category color
+  function getCatCol(cat){if(!cat)return'#555';const C=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316','#ec4899','#14b8a6'];let h=0;for(let i=0;i<cat.length;i++)h=(h*31+cat.charCodeAt(i))&0xfffff;return C[h%C.length];}
+  const catHtml=round.category?`<span class="cat-rozet" style="background:${getCatCol(round.category)}22;color:${getCatCol(round.category)};border:1px solid ${getCatCol(round.category)}55;">${round.category}</span>`:'';
+  document.getElementById('gDiff').innerHTML=`<span>${DIFF_MAP[diff]||''}</span><span class="mult-big ${MULT_CLS[diff]||'mb-15'}">${MULT_LABELS[diff]||''}</span>${catHtml}`;
+  const gq=document.getElementById('gQ');gq.textContent=round.q||'';waitRk(gq);
+  // Görsel
+  const gImgWrap=document.getElementById('gImgWrap');const gImg=document.getElementById('gImg');
+  if(round.image&&round.image.data){
+    gImg.src=round.image.data;gImgWrap.style.display='block';
+  } else {gImgWrap.style.display='none';}
+
+  const isNumeric=round.qType==='numeric';
+  const isOrdering=round.qType==='ordering';
+  document.getElementById('gOpts').style.display=(isNumeric||isOrdering)?'none':'grid';
+  document.getElementById('gNumericDisplay').style.display=isNumeric?'block':'none';
+  document.getElementById('gOrderingDisplay').style.display=isOrdering?'block':'none';
+  document.getElementById('gNumericReveal').style.display='none';
+  document.getElementById('gNumericList').innerHTML='';
+  document.getElementById('gNumericCount').textContent='0';
+
+  if(isOrdering){
+    // Şıkları karıştırılmış göster (projeksiyon'da sabit shuffle — seed based)
+    const opts=round.options||[];
+    const list=document.getElementById('gOrderingList');list.innerHTML='';
+    // Projeksiyon'da doğru sırayı gösterme, sadece öğeleri dağıtık göster
+    const shuffled=[...opts.keys()].sort(()=>.5-Math.random());
+    shuffled.forEach(i=>{
+      const d=document.createElement('div');
+      d.id='gord-'+i;
+      d.style.cssText='background:var(--card);border:2px solid #f97316;border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:8px;transition:all .5s;';
+      d.innerHTML=`<span style="font-family:var(--display);font-size:1.2rem;color:#f97316;min-width:24px;">?</span><span style="font-family:var(--mono);font-size:.75rem;color:var(--text);">${opts[i].text||'—'}</span>`;
+      list.appendChild(d);
+    });
+  } else if(!isNumeric){
     const opts=document.getElementById('gOpts');opts.innerHTML='';
-    const cnt=(round.options||[]).length;opts.className='opts-kahoot '+(cnt>4?'g3':'g2');
+    const cnt=(round.options||[]).length;
+    opts.className='opts-kahoot '+(cnt>4?'g3':'g2');
     (round.options||[]).forEach((o,i)=>{
       const bg=COLORS[i]||'#888';const sh=SHAPES[i]||String(i+1);
       const d=document.createElement('div');d.className='opt-k';d.id='ok-'+i;d.style.background=bg;
-      d.innerHTML=`<div class="opt-shape-k">${sh}</div><div class="opt-body-k"><div class="opt-lbl-k">Şık ${String.fromCharCode(65+i)}</div><div class="opt-math-k">${o.text||'—'}</div></div>`;
+      d.innerHTML=`
+        <div class="opt-k-top">
+          <div class="opt-shape-k">${sh}</div>
+          <div class="opt-body-k">
+            <div class="opt-lbl-k">Şık ${String.fromCharCode(65+i)}</div>
+            <div class="opt-math-k">${o.text||'—'}</div>
+          </div>
+        </div>
+        <div class="pct-wrap" id="pct-${i}">
+          <div class="pct-track"><div class="pct-fill" id="pctf-${i}" style="width:0%"></div></div>
+          <div class="pct-num" id="pctn-${i}">0%</div>
+        </div>`;
       opts.appendChild(d);waitRk(d);
     });
   }
-  if(round.revealed){
-    const opts=round.options||[];
-    opts.forEach((_,i)=>{
-      const el=document.getElementById('ok-'+i);if(!el)return;
-      if(i===round.correctIndex)el.classList.add('rev-correct');
-      else el.classList.add('rev-wrong');
-      if(i===round.aiWrong&&round.aiWrong!==round.correctIndex){el.classList.remove('rev-wrong');el.classList.add('rev-ai-wrong');if(!el.querySelector('.ai-wrong-chip'))el.innerHTML+=`<span class="opt-chip ai-wrong-chip">🤖 YZ SEÇTİ</span>`;}
-      if(i===round.correctIndex&&!el.querySelector('.opt-chip'))el.innerHTML+=`<span class="opt-chip">✅ DOĞRU</span>`;
+}
+
+onValue(ref(db,'game/currentRound'),snap=>{
+  const round=snap.val();if(!round)return;
+  if(round.index!==curRoundIdx){
+    curRoundIdx=round.index;
+    pendingRoundData=round;
+    // Show 3-2-1 then render
+    showCountdown(()=>{
+      renderRound(round);
+      applyAnswerOpenState(round.answerOpen);
     });
-    const rp=document.getElementById('revealPanel');rp.className='reveal-panel visible';
-    const rt=document.getElementById('revealText');rt.textContent=round.explain||'';waitRk(rt);
-    document.getElementById('rvAiModel').textContent=round.aiModel||'—';
-    document.getElementById('rvAiYear').textContent=round.aiYear||'—';
-    const aiWIdx=round.aiWrong;
-    document.getElementById('rvAiWrong').textContent=(aiWIdx>=0&&opts[aiWIdx])?`${SHAPES[aiWIdx]} Şık ${String.fromCharCode(65+aiWIdx)}`:'—';
-    const rvAR=document.getElementById('rvAiReason');rvAR.textContent=round.aiReason||'—';waitRk(rvAR);
-    document.getElementById('lbSide').className='lb-side visible';
+  } else {
+    // answerOpen değişti mi?
+    applyAnswerOpenState(round.answerOpen);
+  }
+  if(round.revealed&&!document.getElementById('revealPanel').classList.contains('visible')){
+    applyReveal(round);
   }
 });
 
+function applyAnswerOpenState(answerOpen){
+  const banner=document.getElementById('previewBanner');
+  const opts=document.querySelectorAll('.opt-k');
+  if(answerOpen===false){
+    // Preview modu: şıklar kilitli, banner görünür
+    banner.classList.add('visible');
+    opts.forEach(o=>o.classList.add('preview-lock'));
+    document.getElementById('gTimer').textContent='📖';
+    document.getElementById('gTimer').className='timer-num';
+  } else {
+    // Cevaplama açık
+    banner.classList.remove('visible');
+    opts.forEach(o=>o.classList.remove('preview-lock'));
+  }
+}
+
+function applyReveal(round){
+  // Sıralama tipi
+  if(round.qType==='ordering'){
+    const opts=round.options||[];
+    const list=document.getElementById('gOrderingList');list.innerHTML='';
+    opts.forEach((o,i)=>{
+      const d=document.createElement('div');
+      d.style.cssText='background:var(--card);border:2px solid var(--accent3);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:8px;animation:sli .4s ease;';
+      d.style.animationDelay=(i*0.15)+'s';
+      d.innerHTML=`<span style="font-family:var(--display);font-size:1.4rem;color:var(--accent3);min-width:28px;">${i+1}</span><span style="font-family:var(--mono);font-size:.75rem;color:var(--text);">${o.text||'—'}</span>`;
+      list.appendChild(d);
+    });
+    return;
+  }
+  // Sayısal tip
+  if(round.qType==='numeric'){
+    const rev=document.getElementById('gNumericReveal');
+    if(rev){
+      rev.style.display='block';
+      document.getElementById('gNumericAnswer').textContent=(round.numericAnswer??'—')+(round.numericUnit?` ${round.numericUnit}`:'');
+    }
+    // Sıralamayı puana göre yeniden sırala
+    const all_snap_entries=Object.values((window._lastAnswers&&window._lastAnswers[round.index])||{});
+    const list=document.getElementById('gNumericList');list.innerHTML='';
+    all_snap_entries.sort((a,b)=>b.pts-a.pts).slice(0,9).forEach((e,i)=>{
+      const d=document.createElement('div');
+      d.style.cssText='background:var(--card);border:1px solid '+(i===0?'var(--accent)':'var(--border)')+';border-radius:6px;padding:6px 9px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.65rem;';
+      const diff=Math.abs(e.numericValue-round.numericAnswer);
+      d.innerHTML=`<span style="color:var(--muted);">${i+1}.</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;">${e.name}</span><span style="color:#3b82f6;font-family:var(--display);font-size:.9rem;">${e.numericValue}</span><span style="color:var(--muted);font-size:.55rem;">±${diff}</span>`;
+      list.appendChild(d);
+    });
+  }
+  const opts=round.options||[];
+  opts.forEach((_,i)=>{
+    const el=document.getElementById('ok-'+i);if(!el)return;
+    if(i===round.correctIndex)el.classList.add('rev-correct');
+    else el.classList.add('rev-wrong');
+    if(i===round.aiWrong&&round.aiWrong!==round.correctIndex){
+      el.classList.remove('rev-wrong');el.classList.add('rev-ai-wrong');
+      if(!el.querySelector('.ai-wrong-chip'))el.innerHTML+=`<span class="opt-chip ai-wrong-chip">🤖 YZ SEÇTİ</span>`;
+    }
+    if(i===round.correctIndex&&!el.querySelector('.opt-chip'))el.innerHTML+=`<span class="opt-chip">✅ DOĞRU</span>`;
+  });
+  const rp=document.getElementById('revealPanel');rp.className='reveal-panel visible';
+  const rt=document.getElementById('revealText');rt.textContent=round.explain||'';waitRk(rt);
+  document.getElementById('rvAiModel').textContent=round.aiModel||'—';
+  document.getElementById('rvAiYear').textContent=round.aiYear||'—';
+  const aiWIdx=round.aiWrong;
+  document.getElementById('rvAiWrong').textContent=(aiWIdx>=0&&opts[aiWIdx])?`${SHAPES[aiWIdx]} Şık ${String.fromCharCode(65+aiWIdx)}`:'—';
+  const rvAR=document.getElementById('rvAiReason');rvAR.textContent=round.aiReason||'—';waitRk(rvAR);
+  document.getElementById('lbSide').className='lb-side visible';
+}
+
+// TIMER
 onValue(ref(db,'game/timer'),snap=>{
   const t=snap.val();if(!t)return;
   const el=document.getElementById('gTimer');const pb=document.getElementById('gProg');
-  if(t.value>0){el.textContent=t.value;el.className='timer-num'+(t.running?(t.value<=10?' urgent':' ok'):'');const pct=Math.max(0,Math.min(100,t.value/roundDur*100));pb.style.width=pct+'%';pb.style.background=t.value<=10?'var(--accent2)':'var(--accent)';}
-  else{el.textContent='✓';el.className='timer-num';pb.style.width='0%';}
+  if(t.value>0){
+    el.textContent=t.value;
+    el.className='timer-num'+(t.running?(t.value<=10?' urgent':' ok'):'');
+    const pct=Math.max(0,Math.min(100,t.value/roundDur*100));
+    pb.style.width=pct+'%';pb.style.background=t.value<=10?'var(--accent2)':'var(--accent)';
+  } else {
+    el.textContent='✓';el.className='timer-num';pb.style.width='0%';
+  }
 });
 
+// AUTO-ADVANCE
+onValue(ref(db,'game/autoAdvance'),snap=>{
+  const d=snap.val();if(!d||!d.active)return;
+  startAutoAdvanceBar(d.seconds||10);
+});
+
+// ── ANSWERS + % BARS ──
 onValue(ref(db,'game/answers'),snap=>{
-  const all=snap.val()||{};const cur=all[curRoundIdx]||{};
-  document.getElementById('gAnsCnt').textContent=Object.keys(cur).length;
-  const scores={};Object.values(all).forEach(ra=>Object.values(ra||{}).forEach(e=>{if(!scores[e.name])scores[e.name]={name:e.name,score:0};if(e.correct)scores[e.name].score+=e.pts;}));
+  const all=snap.val()||{};
+  const curAns=all[curRoundIdx]||{};
+  const entries=Object.values(curAns);
+  const total=entries.length;
+  document.getElementById('gAnsCnt').textContent=total;
+
+  // Sayısal tahmin gösterimi
+  const numDisp=document.getElementById('gNumericDisplay');
+  if(numDisp&&numDisp.style.display!=='none'){
+    document.getElementById('gNumericCount').textContent=total;
+    // En yakın tahminleri listele
+    const list=document.getElementById('gNumericList');list.innerHTML='';
+    const sorted=[...entries].filter(e=>e.numericValue!=null)
+      .sort((a,b)=>Math.abs(a.numericValue-(a.numericAnswer||0))-Math.abs(b.numericValue-(b.numericAnswer||0)));
+    sorted.slice(0,9).forEach((e,i)=>{
+      const d=document.createElement('div');
+      d.style.cssText='background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 9px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.65rem;';
+      d.innerHTML=`<span style="color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:90px;">${e.name}</span><span style="color:#3b82f6;font-family:var(--display);font-size:.9rem;">${e.numericValue}</span>`;
+      list.appendChild(d);
+    });
+    return;
+  }
+
+  // Count per option (çoktan seçmeli)
+  entries.forEach(e=>{
+    const k=e.selectedIndex??-1;
+    counts[k]=(counts[k]||0)+1;
+  });
+
+  // Update % bars (show when at least 1 answer)
+  if(total>0){
+    for(let i=0;i<curOptCount;i++){
+      const cnt=counts[i]||0;
+      const pct=Math.round(cnt/total*100);
+      const fill=document.getElementById('pctf-'+i);
+      const num=document.getElementById('pctn-'+i);
+      const wrap=document.getElementById('pct-'+i);
+      if(fill)fill.style.width=pct+'%';
+      if(num)num.textContent=pct+'%';
+      if(wrap)wrap.classList.add('visible');
+    }
+  }
+
+  // Leaderboard
+  const scores={};
+  Object.values(all).forEach(ra=>Object.values(ra||{}).forEach(e=>{
+    if(!scores[e.name])scores[e.name]={name:e.name,score:0,streak:0};
+    if(e.correct){scores[e.name].score+=e.pts;if((e.streak||0)>scores[e.name].streak)scores[e.name].streak=e.streak||0;}
+  }));
   const lb=Object.values(scores).sort((a,b)=>b.score-a.score);
   const lbEl=document.getElementById('lbRows');
   if(!lb.length){lbEl.innerHTML='<div class="empty">—</div>';return;}
-  lbEl.innerHTML='';lb.slice(0,10).forEach((p,i)=>{const row=document.createElement('div');row.className='lbs-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');row.innerHTML=`<div class="lbs-rank">${i===0?'👑':i+1}</div><div class="lbs-name">${p.name}</div><div class="lbs-score">${p.score}</div>`;lbEl.appendChild(row);});
+  lbEl.innerHTML='';
+  lb.slice(0,10).forEach((p,i)=>{
+    const row=document.createElement('div');
+    row.className='lbs-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');
+    const fire=p.streak>=3?` <span style="font-size:.7rem;">🔥${p.streak}</span>`:'';
+    row.innerHTML=`<div class="lbs-rank">${i===0?'👑':i+1}</div><div class="lbs-name">${p.name}${fire}</div><div class="lbs-score">${p.score}</div>`;
+    lbEl.appendChild(row);
+  });
+  // Takım tablosunu güncelle
+  if(teamModeProj)renderTeamBoardProj(all);
 });
+
+// ── PODIUM ──
+const PODIUM_AVATARS=['🥇','🥈','🥉'];
+const PODIUM_EMOJIS=['🎓','👨‍💻','🧑‍🏫','👩‍🔬','🧑‍🎓','🎯'];
+
+function buildPodium(){
+  // Listen for podium data
+  onValue(ref(db,'game/podium'),snap=>{
+    const data=snap.val();if(!data)return;
+    const players=data.players||[];
+    const hardest=data.hardest||{};
+    const stage=document.getElementById('podiumStage');
+    stage.innerHTML='';
+    // Order: 2nd, 1st, 3rd
+    const order=[1,0,2];
+    const pClasses=['p2','p1','p3'];
+    order.forEach((pIdx,colIdx)=>{
+      const p=players[pIdx];if(!p)return;
+      const col=document.createElement('div');
+      col.className=`podium-col ${pClasses[colIdx]}`;
+      const av=PODIUM_EMOJIS[Math.floor(Math.random()*PODIUM_EMOJIS.length)];
+      const medal=PODIUM_AVATARS[pIdx]||'🏅';
+      col.innerHTML=`
+        <div class="podium-avatar">${medal} ${av}</div>
+        <div class="podium-name">${p.name||'—'}</div>
+        <div class="podium-score">${p.score||0} PT · ${p.correct||0}/${p.total||0} doğru</div>
+        <div class="podium-block">${pIdx+1}</div>
+      `;
+      stage.appendChild(col);
+    });
+    // Hardest question
+    if(hardest.title){
+      document.getElementById('hbTitle').textContent=hardest.title;
+      document.getElementById('hbRate').textContent=`Doğru oranı: %${hardest.rate||0}`;
+      document.getElementById('hardestBadge').style.display='block';
+    }
+    // Confetti burst
+    spawnConfetti();
+  },{onlyOnce:true});
+}
+
+function spawnConfetti(){
+  const wrap=document.getElementById('confettiWrap');
+  wrap.innerHTML='';
+  const colors=['#f5c518','#e84040','#3b82f6','#3dd68c','#a855f7','#f97316','#fff','#ffd700'];
+  for(let i=0;i<180;i++){
+    const el=document.createElement('div');el.className='cf';
+    const color=colors[Math.floor(Math.random()*colors.length)];
+    const size=5+Math.random()*8;const left=Math.random()*100;
+    const dur=2.5+Math.random()*3;const delay=Math.random()*4;
+    const isCircle=Math.random()>.5;
+    el.style.cssText=`left:${left}%;width:${size}px;height:${size}px;background:${color};animation-duration:${dur}s;animation-delay:${delay}s;border-radius:${isCircle?'50%':'2px'};`;
+    wrap.appendChild(el);
+  }
+  clearInterval(confettiInterval);
+  confettiInterval=setInterval(spawnConfetti,8000);
+}
 </script>
 </body>
 </html>

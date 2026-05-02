@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Usev — Giriş</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
+:root{--bg:#0d0d0d;--surface:#141414;--card:#1a1a1a;--border:#2a2a2a;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--text:#f0f0f0;--muted:#666;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+
+.login-wrap{width:100%;max-width:420px;padding:24px;}
+
+.logo{text-align:center;margin-bottom:40px;}
+.logo-title{font-family:var(--display);font-size:3rem;letter-spacing:4px;color:var(--accent);}
+.logo-sub{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:2px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;}
+.card-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--text);margin-bottom:6px;}
+.card-sub{font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:28px;line-height:1.6;}
+
+.field{margin-bottom:16px;}
+.field-label{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block;}
+.inp{width:100%;background:var(--card);border:2px solid var(--border);color:var(--text);padding:12px 14px;font-family:var(--mono);font-size:.9rem;border-radius:8px;outline:none;transition:border-color .2s;letter-spacing:1px;}
+.inp:focus{border-color:var(--accent);}
+.inp.error{border-color:var(--accent2);}
+.inp::placeholder{color:var(--muted);}
+
+.error-msg{font-family:var(--mono);font-size:.65rem;color:var(--accent2);margin-top:12px;min-height:18px;text-align:center;}
+
+.btn-login{width:100%;margin-top:8px;font-family:var(--display);font-size:1.1rem;letter-spacing:3px;padding:14px;border:none;cursor:pointer;border-radius:8px;background:var(--accent);color:#000;transition:all .2s;}
+.btn-login:hover{background:#ffd43b;transform:translateY(-1px);}
+.btn-login:active{transform:scale(.98);}
+.btn-login:disabled{background:#2a2a2a;color:var(--muted);cursor:not-allowed;transform:none;}
+
+.spinner{display:none;text-align:center;margin-top:16px;font-family:var(--mono);font-size:.7rem;color:var(--muted);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+.hint{font-family:var(--mono);font-size:.58rem;color:var(--border);text-align:center;margin-top:20px;line-height:1.8;}
+.hint span{color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div class="login-wrap">
+  <div class="logo">
+    <div style="display:flex;justify-content:center;margin-bottom:8px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="72" height="72">
+        <defs>
+          <radialGradient id="lg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f5c518" stop-opacity="0.15"/><stop offset="100%" stop-color="#f5c518" stop-opacity="0"/></radialGradient>
+          <filter id="gw"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="bw"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <circle cx="100" cy="105" r="72" fill="url(#lg)"/>
+        <g filter="url(#gw)" opacity="0.92">
+          <path d="M 72 145 C 55 145 42 135 40 122 C 37 115 38 108 42 103 C 38 98 36 91 38 84 C 40 75 47 69 56 67 C 56 60 59 54 65 50 C 72 46 80 47 86 51 C 90 44 97 40 105 40 C 113 40 120 44 124 51 C 130 47 138 47 143 52 C 149 57 150 64 148 71 C 155 74 160 80 161 88 C 163 96 160 103 155 108 C 159 113 161 120 159 127 C 156 138 147 145 136 145 Z" fill="none" stroke="#9b8abf" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M 100 44 C 98 65 98 85 100 105 C 102 125 102 138 100 145" fill="none" stroke="#9b8abf" stroke-width="1.8" stroke-dasharray="4,3"/>
+          <path d="M 56 67 C 62 72 65 80 62 88" fill="none" stroke="#9b8abf" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M 42 103 C 52 100 60 104 62 112" fill="none" stroke="#9b8abf" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M 46 84 C 54 87 58 94 55 102" fill="none" stroke="#9b8abf" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M 148 71 C 140 76 138 84 141 92" fill="none" stroke="#9b8abf" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M 155 108 C 145 105 138 109 136 117" fill="none" stroke="#9b8abf" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M 161 88 C 152 91 147 99 150 107" fill="none" stroke="#9b8abf" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M 88 145 C 88 152 94 156 100 156 C 106 156 112 152 112 145" fill="none" stroke="#9b8abf" stroke-width="2" stroke-linecap="round"/>
+        </g>
+        <polygon points="145,38 118,95 132,95 108,158 142,88 126,88" fill="#f5c518" opacity="0.25" filter="url(#bw)"/>
+        <polygon points="143,40 117,93 131,93 107,155 140,86 124,86" fill="#f5c518" filter="url(#bw)"/>
+        <polygon points="135,48 120,85 128,85 118,118 132,80 124,80" fill="#fff" opacity="0.35"/>
+      </svg>
+    </div>
+    <div class="logo-title">⚡ USEV</div>
+    <div class="logo-sub">Düşün, yarış, kazan.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">MODERATÖRGİRİŞİ</div>
+    <div class="card-sub">Etkinliği yönetmek için giriş yapın.</div>
+
+    <div class="field">
+      <label class="field-label">Kullanıcı Adı</label>
+      <input class="inp" id="username" type="text" placeholder="admin" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('password').focus()">
+    </div>
+
+    <div class="field">
+      <label class="field-label">Parola</label>
+      <input class="inp" id="password" type="password" placeholder="••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+
+    <div class="error-msg" id="errMsg"></div>
+    <button class="btn-login" id="loginBtn" onclick="doLogin()">GİRİŞ YAP →</button>
+    <div class="spinner" id="spinner">Doğrulanıyor...</div>
+  </div>
+
+  <div class="hint">
+    Varsayılan: <span>admin</span> / <span>nimda</span><br>
+    Parolayı moderatör panelinden değiştirebilirsiniz.
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const FC={apiKey:"AIzaSyAPbvuN7IA6e78-fym8nF6m5gW1fUPf7lw",authDomain:"hata-avi.firebaseapp.com",databaseURL:"https://hata-avi-default-rtdb.europe-west1.firebasedatabase.app",projectId:"hata-avi",storageBucket:"hata-avi.firebasestorage.app",messagingSenderId:"725079545594",appId:"1:725079545594:web:040eb5d99bf55567a81b43"};
+const app=initializeApp(FC);
+const db=getDatabase(app);
+
+// SHA-256 hash
+async function sha256(str){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// Default admin credentials
+const DEFAULT_USER='admin';
+const DEFAULT_PASS_HASH=await sha256('nimda');
+
+// Initialize: admin hesabı yoksa oluştur
+async function ensureDefaults(){
+  const snap=await get(ref(db,'config/moderators'));
+  if(!snap.val()){
+    const adminKey='admin';
+    await set(ref(db,`config/moderators/${adminKey}`),{
+      username:DEFAULT_USER,
+      passwordHash:DEFAULT_PASS_HASH,
+      role:'admin',
+      createdAt:Date.now(),
+    });
+  }
+}
+ensureDefaults();
+
+// Zaten giriş yaptıysa yönlendir
+if(sessionStorage.getItem('modAuth')==='1'){
+  window.location.href='moderator.html';
+}
+
+window.doLogin=async function(){
+  const user=document.getElementById('username').value.trim();
+  const pass=document.getElementById('password').value;
+  const errEl=document.getElementById('errMsg');
+  const btn=document.getElementById('loginBtn');
+  const spinner=document.getElementById('spinner');
+
+  if(!user||!pass){errEl.textContent='Kullanıcı adı ve parola zorunlu.';return;}
+  errEl.textContent='';btn.disabled=true;spinner.style.display='block';
+
+  try{
+    const hash=await sha256(pass);
+    // Tüm moderatörleri tara
+    const snap=await get(ref(db,'config/moderators'));
+    const mods=snap.val()||{};
+    let matched=null;
+
+    // Önce yeni çok-hesaplı yapıda ara
+    Object.values(mods).forEach(m=>{
+      if(m.username===user&&m.passwordHash===hash)matched=m;
+    });
+
+    // Eski tek-hesaplı yapıda ara (geriye dönük uyumluluk)
+    if(!matched){
+      const oldSnap=await get(ref(db,'config/adminAuth'));
+      const old=oldSnap.val();
+      if(old&&old.username===user&&old.passwordHash===hash){
+        matched={username:user,role:'admin'};
+      }
+    }
+
+    // Hiç config yoksa default'u kabul et
+    if(!matched&&Object.keys(mods).length===0){
+      if(user===DEFAULT_USER&&hash===DEFAULT_PASS_HASH){
+        matched={username:user,role:'admin'};
+      }
+    }
+
+    if(matched){
+      sessionStorage.setItem('modAuth','1');
+      sessionStorage.setItem('modUser',matched.username);
+      sessionStorage.setItem('modRole',matched.role||'moderator');
+      window.location.href='moderator.html';
+    } else {
+      errEl.textContent='❌ Kullanıcı adı veya parola hatalı.';
+      document.getElementById('password').classList.add('error');
+      setTimeout(()=>document.getElementById('password').classList.remove('error'),1500);
+    }
+  }catch(e){
+    errEl.textContent='Bağlantı hatası. Tekrar deneyin.';
+    console.error(e);
+  }
+  btn.disabled=false;spinner.style.display='none';
+};
+</script>
+</body>
+</html>

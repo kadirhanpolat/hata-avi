@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="brainGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f5c518" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#f5c518" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="boltGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background glow -->
+  <circle cx="100" cy="105" r="72" fill="url(#brainGlow)"/>
+
+  <!-- BRAIN - detailed outline -->
+  <g filter="url(#glow)" opacity="0.92">
+    <!-- Main brain body -->
+    <path d="
+      M 72 145
+      C 55 145 42 135 40 122
+      C 37 115 38 108 42 103
+      C 38 98 36 91 38 84
+      C 40 75 47 69 56 67
+      C 56 60 59 54 65 50
+      C 72 46 80 47 86 51
+      C 90 44 97 40 105 40
+      C 113 40 120 44 124 51
+      C 130 47 138 47 143 52
+      C 149 57 150 64 148 71
+      C 155 74 160 80 161 88
+      C 163 96 160 103 155 108
+      C 159 113 161 120 159 127
+      C 156 138 147 145 136 145
+      Z
+    " fill="none" stroke="#7c6fa0" stroke-width="2.5" stroke-linejoin="round"/>
+
+    <!-- Brain center divide -->
+    <path d="M 100 44 C 98 65 98 85 100 105 C 102 125 102 138 100 145"
+      fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-dasharray="4,3"/>
+
+    <!-- Left hemisphere folds -->
+    <path d="M 56 67 C 62 72 65 80 62 88" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 42 103 C 52 100 60 104 62 112" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 46 84 C 54 87 58 94 55 102" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 65 50 C 68 58 66 66 70 72" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 40 122 C 50 118 60 122 62 130" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 72 145 C 75 137 73 128 77 122" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+
+    <!-- Right hemisphere folds -->
+    <path d="M 148 71 C 140 76 138 84 141 92" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 155 108 C 145 105 138 109 136 117" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 161 88 C 152 91 147 99 150 107" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 143 52 C 140 60 142 68 138 74" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 159 127 C 149 123 139 127 137 135" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 136 145 C 133 137 135 128 131 122" fill="none" stroke="#7c6fa0" stroke-width="1.8" stroke-linecap="round"/>
+
+    <!-- Brain stem -->
+    <path d="M 88 145 C 88 152 94 156 100 156 C 106 156 112 152 112 145"
+      fill="none" stroke="#7c6fa0" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- LIGHTNING BOLT - coming from top right into center of brain -->
+  <!-- Shadow/glow layer -->
+  <polygon
+    points="145,38 118,95 132,95 108,158 142,88 126,88"
+    fill="#f5c518"
+    opacity="0.25"
+    filter="url(#boltGlow)"
+  />
+  <!-- Main bolt -->
+  <polygon
+    points="143,40 117,93 131,93 107,155 140,86 124,86"
+    fill="#f5c518"
+    filter="url(#boltGlow)"
+  />
+  <!-- Bolt highlight -->
+  <polygon
+    points="135,48 120,85 128,85 118,118 132,80 124,80"
+    fill="#fff"
+    opacity="0.35"
+  />
+</svg>

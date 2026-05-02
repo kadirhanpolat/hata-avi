@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hata Avı — Soru Editörü</title>
+<title>Usev — Soru Editörü</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -149,9 +149,54 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .btn-purple{background:var(--purple);color:#fff;}
 .btn-purple:hover{background:#c084fc;}
 
-/* KATEX overrides */
-.katex{font-size:1em;}
+/* ── Kategori ── */
+.cat-inp-wrap{position:relative;}
+.cat-inp{width:100%;}
+.cat-suggestions{
+  position:absolute;top:100%;left:0;right:0;
+  background:var(--card2);border:1px solid var(--border);border-top:none;
+  border-radius:0 0 6px 6px;z-index:50;display:none;max-height:160px;overflow-y:auto;
+}
+.cat-suggestions.visible{display:block;}
+.cat-sug-item{
+  font-family:var(--mono);font-size:.75rem;padding:8px 12px;cursor:pointer;
+  transition:background .15s;display:flex;align-items:center;gap:8px;
+}
+.cat-sug-item:hover{background:rgba(245,197,24,.08);}
+.cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.cat-badge{
+  font-family:var(--mono);font-size:.55rem;padding:2px 7px;border-radius:3px;
+  letter-spacing:.5px;display:inline-block;
+}
+/* Kategori filtre (sol panel) */
+.cat-filter-wrap{padding:8px 10px;border-bottom:1px solid var(--border);}
+.cat-filter-inp{
+  width:100%;background:var(--card);border:1px solid var(--border);
+  color:var(--text);padding:6px 10px;font-family:var(--mono);font-size:.7rem;
+  border-radius:6px;outline:none;transition:border-color .2s;
+}
+.cat-filter-inp:focus{border-color:var(--accent);}
+.cat-filter-inp::placeholder{color:var(--muted);}
+.cat-pills{display:flex;flex-wrap:wrap;gap:4px;padding:6px 10px 4px;border-bottom:1px solid var(--border);}
+.cat-pill{
+  font-family:var(--mono);font-size:.58rem;padding:3px 9px;border-radius:20px;
+  cursor:pointer;border:1px solid transparent;transition:all .15s;
+}
+.cat-pill.active{border-color:var(--accent);background:rgba(245,197,24,.1);color:var(--accent);}
+.cat-pill:not(.active){background:var(--card);color:var(--muted);}
+.cat-pill:hover:not(.active){border-color:var(--border);color:var(--text);}
 .prev-opt-math .katex{font-size:.9em;}
+
+/* ── Görsel alanı ── */
+.img-field-wrap{display:flex;flex-direction:column;gap:6px;}
+.img-tabs{display:flex;gap:5px;margin-bottom:2px;}
+.img-tab{font-family:var(--mono);font-size:.62rem;padding:4px 11px;border-radius:4px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .15s;}
+.img-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.07);}
+.img-tab-clear{border-color:var(--accent2);color:var(--accent2);}
+.img-tab-clear:hover{background:rgba(232,64,64,.1);}
+.img-drop-zone{border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;}
+.img-drop-zone:hover,.img-drop-zone.drag{border-color:var(--accent);background:rgba(245,197,24,.04);}
+.img-drop-txt{font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.8;}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--accent3);color:var(--accent3);font-family:var(--mono);font-size:.7rem;padding:9px 18px;border-radius:8px;letter-spacing:1px;z-index:999;display:none;animation:toastIn .3s ease;}
@@ -178,7 +223,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 <div class="header">
   <div>
     <div class="htitle">📝 SORU EDİTÖRÜ</div>
-    <div class="hsub">MATEMATİK EKSENİNDE YAPAY ZEKA BULUŞMALARI</div>
+    <div class="hsub">Düşün, yarış, kazan.</div>
   </div>
   <div class="hactions">
     <span id="syncStatus" style="font-family:var(--mono);font-size:.6rem;color:var(--muted);"></span>
@@ -196,6 +241,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="panel-title">SORULAR</div>
       <span id="qCount" style="font-family:var(--mono);font-size:.63rem;color:var(--muted);">0 soru</span>
     </div>
+    <div class="cat-filter-wrap">
+      <input class="cat-filter-inp" id="catFilterInp" placeholder="🔍 Başlık veya kategori ara..." oninput="filterList()">
+    </div>
+    <div class="cat-pills" id="catPills"></div>
     <div class="qlist" id="qList">
       <div class="empty-state">Henüz soru yok.<br>"+ Yeni Soru" ile ekleyin.</div>
     </div>
@@ -219,6 +268,49 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="fg">
         <div class="flbl">Soru Başlığı <span class="freq">*</span></div>
         <input class="inp" id="fTitle" placeholder="Örn: ⭐ Türev — GPT-4 Hatası" oninput="onFC()">
+      </div>
+
+      <!-- SORU TİPİ -->
+      <div class="fg">
+        <div class="flbl">Soru Tipi</div>
+        <div style="display:flex;gap:7px;">
+          <button class="dbtn s-easy" id="typeMultiple" onclick="setQType('multiple')">🔘 Çoktan Seçmeli</button>
+          <button class="dbtn" id="typeNumeric" onclick="setQType('numeric')">🔢 Sayısal Tahmin</button>
+          <button class="dbtn" id="typeOrdering" onclick="setQType('ordering')">🔀 Sıralama</button>
+        </div>
+      </div>
+
+      <!-- SAYISAL CEVAP (sadece numeric tipte görünür) -->
+      <div class="fg" id="numericFields" style="display:none;">
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;">
+          <div style="font-family:var(--display);font-size:.9rem;letter-spacing:1px;color:#3b82f6;margin-bottom:10px;">🔢 SAYISAL TAHMİN AYARLARI</div>
+          <div class="inp-row">
+            <div>
+              <div class="flbl">Doğru Değer <span class="freq">*</span></div>
+              <input class="inp inp-sm" id="fNumericAnswer" type="number" placeholder="Örn: 1847" oninput="onFC()">
+            </div>
+            <div>
+              <div class="flbl">Birim <span class="fhint">(isteğe bağlı)</span></div>
+              <input class="inp inp-sm" id="fNumericUnit" placeholder="Örn: yıl, km, °C" oninput="onFC()">
+            </div>
+          </div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-top:8px;line-height:1.6;">
+            Puan: doğru tahmin = tam puan · %50 sapma = sıfır puan
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <!-- KATEGORİ -->
+      <div class="fg">
+        <div class="flbl">Kategori
+          <span class="fhint">(etiketleyerek filtreleyin)</span>
+        </div>
+        <div class="cat-inp-wrap">
+          <input class="inp cat-inp" id="fCategory" placeholder="Matematik, Fizik, YZ & Teknoloji..." autocomplete="off"
+            oninput="onCatInput()" onfocus="onCatInput()" onblur="setTimeout(hideCatSug,200)" onkeydown="onCatKey(event)">
+          <div class="cat-suggestions" id="catSuggestions"></div>
+        </div>
       </div>
 
       <!-- Question text -->
@@ -268,6 +360,36 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <textarea class="inp" id="fExplain" rows="3" placeholder="Doğru cevabın neden doğru olduğunu açıklayın..." oninput="onFC()"></textarea>
       </div>
 
+      <!-- GÖRSEL -->
+      <div class="fg">
+        <div class="flbl">Soru Görseli <span class="fhint">(isteğe bağlı · URL veya dosya yükle)</span></div>
+        <div class="img-field-wrap">
+          <div class="img-tabs">
+            <button class="img-tab active" id="imgTabUrl" onclick="switchImgTab('url')">🔗 URL</button>
+            <button class="img-tab" id="imgTabFile" onclick="switchImgTab('file')">📁 Dosya</button>
+            <button class="img-tab img-tab-clear" id="imgTabClear" onclick="clearImage()" style="display:none;">✕ Sil</button>
+          </div>
+          <div id="imgPanelUrl">
+            <input class="inp inp-sm" id="fImageUrl" placeholder="https://... görsel URL girin" oninput="onImageUrlChange()">
+          </div>
+          <div id="imgPanelFile" style="display:none;">
+            <div class="img-drop-zone" id="imgDropZone"
+              onclick="document.getElementById('imgFileInput').click()"
+              ondragover="event.preventDefault();this.classList.add('drag')"
+              ondragleave="this.classList.remove('drag')"
+              ondrop="handleImgDrop(event)">
+              <div class="img-drop-txt">📷 Görsel sürükleyin veya tıklayın<br><span style="font-size:.55rem;color:var(--border);">Max 300KB · JPG, PNG, GIF, WebP</span></div>
+            </div>
+            <input type="file" id="imgFileInput" accept="image/*" style="display:none;" onchange="handleImgFile(this.files[0])">
+          </div>
+          <div id="imgPreviewWrap" style="display:none;margin-top:8px;">
+            <img id="imgPreview" style="max-width:100%;max-height:180px;border-radius:6px;border:1px solid var(--border);display:block;">
+            <div id="imgSizeInfo" style="font-family:var(--mono);font-size:.56rem;color:var(--muted);margin-top:3px;"></div>
+          </div>
+          <div id="imgError" style="font-family:var(--mono);font-size:.62rem;color:var(--accent2);margin-top:4px;min-height:15px;"></div>
+        </div>
+      </div>
+
       <!-- AI Model Info -->
       <div class="ai-box">
         <div class="ai-box-title">🤖 YZ MODEL BİLGİSİ</div>
@@ -312,6 +434,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="prev-proj-card">
         <div class="prev-q-diff" id="pvDiff"></div>
         <div class="prev-q-title" id="pvTitle"></div>
+        <div id="pvImgWrap" style="display:none;margin:5px 0;"><img id="pvImg" style="max-width:100%;max-height:120px;border-radius:6px;object-fit:cover;"></div>
         <div class="prev-q-text" id="pvQ"></div>
         <div class="prev-opts-grid" id="pvOptGrid"></div>
       </div>
@@ -392,6 +515,11 @@ const FC = {
 const app = initializeApp(FC);
 const db  = getDatabase(app);
 
+// Auth check — editör sadece giriş yapılmışsa açılır
+if(sessionStorage.getItem('modAuth')!=='1'){
+  window.location.href='login.html';
+}
+
 const COLORS  = ['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316'];
 const SHAPES  = ['▲','◆','●','■','★','♥'];
 const DIFF_LABELS = {easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🟣 ÇOK ZOR'};
@@ -417,9 +545,23 @@ let questions = [];
 let activeId  = null;
 let curDiff   = 'mid';
 let curOpts   = [];   // [{text, isCorrect}]
+let curQType  = 'multiple'; // 'multiple' | 'numeric'
 let dirty     = false;
 let dragSrcIdx = null;
 let katexReady = false;
+let activeCatFilter = 'all';
+let searchFilter = '';
+
+// Kategori renk paleti (hash tabanlı, tutarlı)
+const CAT_COLORS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316','#ec4899','#14b8a6','#84cc16','#f59e0b','#6366f1'];
+function getCatColor(cat){
+  if(!cat)return'#555';
+  let h=0;for(let i=0;i<cat.length;i++)h=(h*31+cat.charCodeAt(i))&0xfffff;
+  return CAT_COLORS[h%CAT_COLORS.length];
+}
+function getAllCategories(){
+  const cats=new Set();questions.forEach(q=>{if(q.category)cats.add(q.category);});return[...cats].sort();
+}
 
 // Wait for KaTeX
 function waitKatex(cb) {
@@ -461,29 +603,104 @@ onValue(ref(db,'questions'), snap => {
   questions = Object.entries(data).map(([id,q])=>({id,...q})).sort((a,b)=>(a.order||0)-(b.order||0));
   document.getElementById('syncStatus').textContent = '✅ Bağlı';
   document.getElementById('qCount').textContent = questions.length + ' soru';
+  renderCatPills();
   renderList();
 });
 
-// LIST
+// ── KATEGORİ PİLLLERI ──
+function renderCatPills(){
+  const pills=document.getElementById('catPills');
+  const cats=getAllCategories();
+  pills.innerHTML='';
+  if(!cats.length)return;
+  // "Tümü" pill
+  const all=document.createElement('div');
+  all.className='cat-pill'+(activeCatFilter==='all'?' active':'');
+  all.textContent='Tümü ('+questions.length+')';
+  all.onclick=()=>{activeCatFilter='all';renderCatPills();renderList();};
+  pills.appendChild(all);
+  // Per-category
+  cats.forEach(cat=>{
+    const count=questions.filter(q=>q.category===cat).length;
+    const p=document.createElement('div');
+    p.className='cat-pill'+(activeCatFilter===cat?' active':'');
+    p.style.borderColor=activeCatFilter===cat?getCatColor(cat):'transparent';
+    p.style.color=activeCatFilter===cat?getCatColor(cat):'';
+    p.style.background=activeCatFilter===cat?getCatColor(cat)+'22':'';
+    p.innerHTML=`<span class="cat-dot" style="background:${getCatColor(cat)}"></span>${cat} (${count})`;
+    p.onclick=()=>{activeCatFilter=cat;renderCatPills();renderList();};
+    pills.appendChild(p);
+  });
+}
+
+// ── ARAMA + FİLTRE ──
+window.filterList=function(){
+  searchFilter=document.getElementById('catFilterInp').value.toLowerCase().trim();
+  renderList();
+};
+
+// ── LISTE ──
 function renderList() {
   const list = document.getElementById('qList');
-  if(!questions.length){list.innerHTML='<div class="empty-state">Henüz soru yok.<br>"+ Yeni Soru" ile ekleyin.</div>';return;}
+  // Filter by category + search
+  let filtered=questions;
+  if(activeCatFilter!=='all') filtered=filtered.filter(q=>q.category===activeCatFilter);
+  if(searchFilter) filtered=filtered.filter(q=>
+    (q.title||'').toLowerCase().includes(searchFilter)||
+    (q.category||'').toLowerCase().includes(searchFilter)||
+    (q.q||'').toLowerCase().includes(searchFilter)
+  );
+  document.getElementById('qCount').textContent=
+    filtered.length===questions.length?questions.length+' soru':filtered.length+'/'+questions.length+' soru';
+  if(!filtered.length){
+    list.innerHTML='<div class="empty-state">'+(questions.length?'Filtre sonucu boş.':'Henüz soru yok.<br>"+ Yeni Soru" ile ekleyin.')+'</div>';
+    return;
+  }
   list.innerHTML = '';
-  questions.forEach((q,i) => {
+  filtered.forEach((q,i) => {
+    const globalIdx=questions.findIndex(x=>x.id===q.id);
     const item = document.createElement('div');
     item.className = 'qitem' + (q.id===activeId?' active':'');
-    item.draggable = true; item.dataset.idx = i;
+    item.draggable = true; item.dataset.idx = globalIdx;
     const aiTag = q.aiModel ? `<span style="font-family:var(--mono);font-size:.48rem;color:var(--purple);">🤖 ${q.aiModel}</span>` : '';
-    item.innerHTML=`<span class="qi-drag">⠿</span><span class="qi-num">${i+1}</span><div class="qi-body"><div class="qi-title">${stripLatex(q.title||'(Başlıksız)')}</div><div class="qi-meta"><span class="diff-tag ${DIFF_CLS[q.diff]||'d-mid'}">${DIFF_LABELS[q.diff]||'—'}</span><span class="qi-dur">⏱${q.duration||60}s</span>${aiTag}</div></div><button class="qi-del" onclick="event.stopPropagation();quickDel('${q.id}')">✕</button>`;
+    const catTag = q.category ? `<span class="cat-badge" style="background:${getCatColor(q.category)}22;color:${getCatColor(q.category)};border:1px solid ${getCatColor(q.category)}44;">${q.category}</span>` : '';
+    item.innerHTML=`<span class="qi-drag">⠿</span><span class="qi-num">${globalIdx+1}</span><div class="qi-body"><div class="qi-title">${stripLatex(q.title||'(Başlıksız)')}</div><div class="qi-meta"><span class="diff-tag ${DIFF_CLS[q.diff]||'d-mid'}">${DIFF_LABELS[q.diff]||'—'}</span><span class="qi-dur">⏱${q.duration||60}s</span>${catTag}${aiTag}</div></div><button class="qi-del" onclick="event.stopPropagation();quickDel('${q.id}')">✕</button>`;
     item.onclick = () => openQ(q.id);
-    item.addEventListener('dragstart',e=>{dragSrcIdx=i;item.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+    item.addEventListener('dragstart',e=>{dragSrcIdx=globalIdx;item.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
     item.addEventListener('dragend',()=>{item.classList.remove('dragging');document.querySelectorAll('.qitem').forEach(el=>el.classList.remove('drag-over'));});
     item.addEventListener('dragover',e=>{e.preventDefault();item.classList.add('drag-over');});
     item.addEventListener('dragleave',()=>item.classList.remove('drag-over'));
-    item.addEventListener('drop',e=>{e.preventDefault();item.classList.remove('drag-over');if(dragSrcIdx!==i)reorder(dragSrcIdx,i);});
+    item.addEventListener('drop',e=>{e.preventDefault();item.classList.remove('drag-over');if(dragSrcIdx!==globalIdx)reorder(dragSrcIdx,globalIdx);});
     list.appendChild(item);
   });
 }
+
+// ── KATEGORİ OTOTAMAMLAYıCı ──
+window.onCatInput=function(){
+  const val=document.getElementById('fCategory').value.toLowerCase().trim();
+  const sug=document.getElementById('catSuggestions');
+  const cats=getAllCategories().filter(c=>!val||c.toLowerCase().includes(val));
+  if(!cats.length){sug.classList.remove('visible');return;}
+  sug.innerHTML='';
+  cats.forEach(cat=>{
+    const d=document.createElement('div');d.className='cat-sug-item';
+    d.innerHTML=`<span class="cat-dot" style="background:${getCatColor(cat)}"></span>${cat}`;
+    d.onmousedown=()=>{document.getElementById('fCategory').value=cat;sug.classList.remove('visible');onFC();};
+    sug.appendChild(d);
+  });
+  sug.classList.add('visible');
+};
+window.hideCatSug=function(){document.getElementById('catSuggestions').classList.remove('visible');};
+window.onCatKey=function(e){
+  const sug=document.getElementById('catSuggestions');
+  const items=sug.querySelectorAll('.cat-sug-item');
+  if(!items.length)return;
+  if(e.key==='Escape'){hideCatSug();}
+  if(e.key==='Enter'){
+    const active=sug.querySelector('.cat-sug-item.active');
+    if(active){active.onmousedown();e.preventDefault();}
+  }
+};
 
 function stripLatex(s){ return s.replace(/\$[^$]*\$/g,'…'); }
 
@@ -500,6 +717,7 @@ function openQ(id) {
   document.getElementById('editorEmpty').style.display='none';
   document.getElementById('editorForm').style.display='block';
   document.getElementById('fTitle').value=q.title||'';
+  document.getElementById('fCategory').value=q.category||'';
   document.getElementById('fQuestion').value=q.q||'';
   document.getElementById('fDuration').value=q.duration||60;
   document.getElementById('fHint').value=q.hint||'';
@@ -507,11 +725,26 @@ function openQ(id) {
   document.getElementById('fAiModel').value=q.aiModel||'';
   document.getElementById('fAiYear').value=q.aiYear||'';
   document.getElementById('fAiReason').value=q.aiReason||'';
+  // Görsel yükle
+  curImage=q.image||null;
+  document.getElementById('fImageUrl').value='';
+  hideImgPreview();
+  if(curImage){
+    document.getElementById('imgTabClear').style.display='block';
+    if(curImage.type==='url'){document.getElementById('fImageUrl').value=curImage.data;}
+    showImgPreview(curImage.data);
+  }
   console.log('[OPEN Q] aiReason:', q.aiReason ? q.aiReason.substring(0,60) : '(BOŞ/UNDEFINED)', '| Firebase key:', id);
   curDiff=q.diff||'mid';
+  curQType=q.qType||'multiple';
   curOpts=(q.options||[]).map(o=>({...o}));
   if(!curOpts.length) curOpts=[{text:'',isCorrect:false},{text:'',isCorrect:false},{text:'',isCorrect:false},{text:'',isCorrect:false}];
-  renderDiffSel(); renderOpts(); updateAiWrongSelect(q.aiWrong);
+  renderDiffSel();
+  setQType(curQType);
+  // Numeric fields
+  document.getElementById('fNumericAnswer').value=q.numericAnswer!=null?q.numericAnswer:'';
+  document.getElementById('fNumericUnit').value=q.numericUnit||'';
+  renderOpts(); updateAiWrongSelect(q.aiWrong);
   renderList();
   // delay preview so KaTeX loads and aiWrong select is populated
   setTimeout(()=>updatePreview(), 150);
@@ -522,7 +755,7 @@ window.openQ=openQ;
 window.addQuestion = function() {
   if(dirty&&!confirm('Kaydedilmemiş değişiklik var. Devam?'))return;
   const nr=push(ref(db,'questions'));
-  const blank={title:'Yeni Soru',q:'',diff:'mid',duration:60,options:[{text:'',isCorrect:false},{text:'',isCorrect:false},{text:'',isCorrect:false},{text:'',isCorrect:false}],aiModel:'',aiYear:'',aiWrong:'',aiReason:'',hint:'',explain:'',order:questions.length};
+  const blank={title:'Yeni Soru',q:'',diff:'mid',duration:60,options:[{text:'',isCorrect:false},{text:'',isCorrect:false},{text:'',isCorrect:false},{text:'',isCorrect:false}],category:'',aiModel:'',aiYear:'',aiWrong:'',aiReason:'',hint:'',explain:'',order:questions.length};
   set(nr,blank).then(()=>{ activeId=nr.key; setTimeout(()=>openQ(nr.key),400); });
 };
 
@@ -530,21 +763,47 @@ window.addQuestion = function() {
 function renderDiffSel(){document.querySelectorAll('.dbtn').forEach(b=>{b.className='dbtn'+(b.dataset.d===curDiff?' s-'+b.dataset.d:'');});}
 window.setDiff=function(d){curDiff=d;renderDiffSel();onFC();};
 
+// Soru tipi
+window.setQType=function(type){
+  curQType=type;
+  const isNum=type==='numeric';
+  const isOrd=type==='ordering';
+  const isMulti=type==='multiple';
+  // Buton stilleri
+  [{id:'typeMultiple',active:isMulti,color:'var(--accent3)'},{id:'typeNumeric',active:isNum,color:'#3b82f6'},{id:'typeOrdering',active:isOrd,color:'#f97316'}].forEach(({id,active,color})=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.className='dbtn'+(active?' s-easy':'');
+    el.style.color=active?color:'';
+    el.style.borderColor=active?color:'';
+    el.style.background=active?color+'18':'';
+  });
+  document.getElementById('numericFields').style.display=isNum?'block':'none';
+  // Şıklar: numeric'te gizle, diğerlerinde göster
+  const optsSection=document.getElementById('optsList').closest('.fg');
+  if(optsSection)optsSection.style.display=isNum?'none':'block';
+  const optsAddBtns=optsSection?.nextElementSibling;
+  if(optsAddBtns&&optsAddBtns.style!==undefined)optsAddBtns.style.display=isNum?'none':'flex';
+  // Sıralama modunda şıkları yeniden render et (doğru şık butonu gizle)
+  renderOpts();
+  onFC();
+};
+
 // OPTIONS
 function renderOpts(){
   const list=document.getElementById('optsList');list.innerHTML='';
+  const isOrd=curQType==='ordering';
   curOpts.forEach((o,i)=>{
     const row=document.createElement('div');
-    row.className='opt-row'+(o.isCorrect?' is-correct':'');
+    row.className='opt-row'+(o.isCorrect&&!isOrd?' is-correct':'');
     row.style.borderLeftColor=COLORS[i]||'#888';
-    // Build row WITHOUT value in HTML to avoid escaping issues with LaTeX/backslashes
-    row.innerHTML=`<div class="opt-color" style="background:${COLORS[i]||'#888'};"></div><div class="opt-shape">${SHAPES[i]||i+1}</div><input class="opt-inp" placeholder="Şık ${String.fromCharCode(65+i)} — $...$ ile LaTeX" oninput="updateOpt(${i},'text',this.value)"><button class="opt-correct-btn ${o.isCorrect?'correct':''}" onclick="setCorrect(${i})">${o.isCorrect?'✅ DOĞRU':'Doğru?'}</button>${curOpts.length>2?`<button class="opt-del" onclick="removeOpt(${i})">✕</button>`:''}`;
-    // Set value via JS property AFTER innerHTML to correctly handle LaTeX, backslashes, quotes
+    const orderBadge=isOrd?`<span style="font-family:var(--display);font-size:1rem;color:${COLORS[i]||'#888'};min-width:22px;text-align:center;">${i+1}</span>`:'';
+    const correctBtn=isOrd?'':`<button class="opt-correct-btn ${o.isCorrect?'correct':''}" onclick="setCorrect(${i})">${o.isCorrect?'✅ DOĞRU':'Doğru?'}</button>`;
+    row.innerHTML=`<div class="opt-color" style="background:${COLORS[i]||'#888'};"></div>${isOrd?orderBadge:`<div class="opt-shape">${SHAPES[i]||i+1}</div>`}<input class="opt-inp" placeholder="${isOrd?`${i+1}. sıradaki öğe`:`Şık ${String.fromCharCode(65+i)} — $...$ ile LaTeX`}" oninput="updateOpt(${i},'text',this.value)">${correctBtn}${curOpts.length>2?`<button class="opt-del" onclick="removeOpt(${i})">✕</button>`:''}`;
     const inp=row.querySelector('.opt-inp');
-    if(inp) inp.value=o.text||'';
+    if(inp)inp.value=o.text||'';
     list.appendChild(row);
   });
-  updateAiWrongSelect();
+  if(!curQType||curQType!=='numeric')updateAiWrongSelect();
 }
 window.updateOpt=function(i,f,v){curOpts[i][f]=v;onFC();};
 window.setCorrect=function(i){curOpts.forEach((o,j)=>o.isCorrect=(j===i));renderOpts();onFC();};
@@ -559,6 +818,70 @@ function updateAiWrongSelect(val){
 
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
+// ── GÖRSEL ──
+let curImage=null; // {type:'url'|'base64', data:'...'}
+
+window.switchImgTab=function(tab){
+  document.getElementById('imgTabUrl').classList.toggle('active',tab==='url');
+  document.getElementById('imgTabFile').classList.toggle('active',tab==='file');
+  document.getElementById('imgPanelUrl').style.display=tab==='url'?'block':'none';
+  document.getElementById('imgPanelFile').style.display=tab==='file'?'block':'none';
+};
+
+window.onImageUrlChange=function(){
+  const url=document.getElementById('fImageUrl').value.trim();
+  if(!url){curImage=null;hideImgPreview();onFC();return;}
+  curImage={type:'url',data:url};
+  showImgPreview(url);
+  onFC();
+};
+
+window.handleImgDrop=function(e){
+  e.preventDefault();document.getElementById('imgDropZone').classList.remove('drag');
+  const f=e.dataTransfer.files[0];if(f)handleImgFile(f);
+};
+window.handleImgFile=function(file){
+  if(!file||!file.type.startsWith('image/')){
+    document.getElementById('imgError').textContent='Lütfen geçerli bir görsel seçin.';return;
+  }
+  if(file.size>1024*1024){
+    document.getElementById('imgError').textContent=`Dosya boyutu ${(file.size/1024).toFixed(0)}KB — max 1MB. Daha küçük bir görsel deneyin.`;return;
+  }
+  document.getElementById('imgError').textContent='';
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const b64=e.target.result; // data:image/...;base64,...
+    const sizeKB=Math.round(b64.length*0.75/1024);
+    if(sizeKB>300){
+      document.getElementById('imgError').textContent=`Görsel çok büyük (${sizeKB}KB). Max 300KB önerilir.`;
+    }
+    curImage={type:'base64',data:b64};
+    showImgPreview(b64);
+    document.getElementById('imgSizeInfo').textContent=`📦 ${sizeKB}KB`;
+    onFC();
+  };
+  reader.readAsDataURL(file);
+};
+
+function showImgPreview(src){
+  const wrap=document.getElementById('imgPreviewWrap');
+  const img=document.getElementById('imgPreview');
+  img.src=src;img.onerror=()=>{wrap.style.display='none';document.getElementById('imgError').textContent='Görsel yüklenemedi.';};
+  img.onload=()=>{wrap.style.display='block';document.getElementById('imgError').textContent='';};
+  document.getElementById('imgTabClear').style.display='block';
+}
+function hideImgPreview(){
+  document.getElementById('imgPreviewWrap').style.display='none';
+  document.getElementById('imgTabClear').style.display='none';
+  document.getElementById('imgError').textContent='';
+}
+window.clearImage=function(){
+  curImage=null;
+  document.getElementById('fImageUrl').value='';
+  hideImgPreview();
+  onFC();
+};
+
 // FIELD CHANGE
 window.onFC=function(){dirty=true;document.getElementById('saveStatus').textContent='● Kaydedilmemiş';updatePreview();};
 
@@ -571,18 +894,23 @@ window.saveQuestion=function(){
   if(!title){showToast('Başlık zorunlu!');return;}
   if(!q){showToast('Soru metni zorunlu!');return;}
   if(!explain){showToast('Cevap açıklaması zorunlu!');return;}
-  if(curOpts.every(o=>!o.isCorrect)){showToast('En az bir doğru şık seçin!');return;}
-  if(curOpts.some(o=>!o.text.trim())){showToast('Tüm şıklar dolu olmalı!');return;}
+  if(curQType==='multiple'&&curOpts.every(o=>!o.isCorrect)){showToast('En az bir doğru şık seçin!');return;}
+  if(curQType!=='numeric'&&curOpts.some(o=>!o.text.trim())){showToast('Tüm şıklar dolu olmalı!');return;}
   const aiWrongVal=document.getElementById('fAiWrong').value;
   const data={
     title,q,diff:curDiff,duration:parseInt(document.getElementById('fDuration').value)||60,
     options:curOpts,
+    category:document.getElementById('fCategory').value.trim(),
+    qType:curQType,
+    numericAnswer:curQType==='numeric'?parseFloat(document.getElementById('fNumericAnswer').value)||0:null,
+    numericUnit:curQType==='numeric'?document.getElementById('fNumericUnit').value.trim():'',
     hint:document.getElementById('fHint').value.trim(),
     explain,
     aiModel:document.getElementById('fAiModel').value.trim(),
     aiYear:document.getElementById('fAiYear').value.trim(),
     aiWrong:aiWrongVal!==''?parseInt(aiWrongVal):-1,
     aiReason:document.getElementById('fAiReason').value.trim(),
+    image:curImage||null,
     order:questions.findIndex(x=>x.id===activeId),
   };
   set(ref(db,'questions/'+activeId),data).then(()=>{
@@ -635,6 +963,16 @@ function updatePreview(){
   const pvQ=document.getElementById('pvQ');
   pvQ.textContent=q;
   waitKatex(()=>renderKatex(pvQ));
+
+  // Görsel önizleme
+  const pvImgWrap=document.getElementById('pvImgWrap');
+  const pvImg=document.getElementById('pvImg');
+  if(curImage&&curImage.data){
+    pvImg.src=curImage.data;
+    pvImgWrap.style.display='block';
+  } else {
+    pvImgWrap.style.display='none';
+  }
 
   // Options grid (projeksiyon)
   const og=document.getElementById('pvOptGrid');og.innerHTML='';
@@ -729,6 +1067,7 @@ window.handleCsvFile=function(file){
           aiYear:get('yz_yili'),
           aiWrong:isNaN(aiWrongIdx)?-1:aiWrongIdx,
           aiReason:getAny('yz_neden_hata','yz_secim_nedeni','yz_neden','yz_aciklama'),
+          category:getAny('kategori','category','konu'),
           order:questions.length+ri,
         };
         console.log('[CSV IMPORT] Soru '+(ri+1)+' aiReason:', q.aiReason ? q.aiReason.substring(0,60) : '(BOŞ)');
