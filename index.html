@@ -3,129 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Hata Avı — Katıl</title>
+<title>Hata Avı</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
-  :root{--bg:#0d0d0d;--surface:#141414;--card:#1a1a1a;--border:#2a2a2a;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--text:#f0f0f0;--muted:#777;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;}
+  :root{--bg:#0d0d0d;--surface:#141414;--card:#1a1a1a;--border:#2a2a2a;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--text:#f0f0f0;--muted:#777;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;
+    --c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;--c4:#a855f7;--c5:#f97316;}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;max-width:500px;margin:0 auto;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;max-width:500px;margin:0 auto;display:flex;flex-direction:column;}
 
   /* HEADER */
-  .header{background:var(--surface);border-bottom:2px solid var(--accent);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;}
-  .htitle{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent);}
-  .header-right{display:flex;align-items:center;gap:10px;}
-  .timer-pill{font-family:var(--display);font-size:1.3rem;padding:4px 14px;border-radius:20px;letter-spacing:3px;background:var(--card);border:1px solid var(--border);color:var(--muted);transition:all .3s;min-width:60px;text-align:center;}
+  .header{background:var(--surface);border-bottom:2px solid var(--accent);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .htitle{font-family:var(--display);font-size:1.3rem;letter-spacing:2px;color:var(--accent);}
+  .hright{display:flex;align-items:center;gap:10px;}
+  .timer-pill{font-family:var(--display);font-size:1.2rem;padding:3px 12px;border-radius:20px;letter-spacing:3px;min-width:54px;text-align:center;background:var(--card);border:1px solid var(--border);color:var(--muted);transition:all .3s;}
   .timer-pill.active{background:rgba(232,64,64,.15);border-color:var(--accent2);color:var(--accent2);}
   .timer-pill.urgent{animation:tpulse .5s infinite alternate;}
-  .timer-pill.done{background:var(--card);color:var(--muted);}
   @keyframes tpulse{from{color:var(--accent2);}to{color:#ff6b6b;}}
-  .my-score{font-family:var(--display);font-size:1rem;color:var(--accent3);letter-spacing:1px;}
+  .timer-pill.done{background:var(--card);color:var(--muted);}
+  .my-score{font-family:var(--display);font-size:.95rem;color:var(--accent3);letter-spacing:1px;}
 
-  .screen{padding:18px;}
+  /* PROGRESS BAR */
+  .prog-wrap{height:3px;background:var(--border);flex-shrink:0;}
+  .prog-fill{height:100%;background:var(--accent);transition:width 1s linear;}
 
-  /* JOIN */
-  .join-wrap{display:flex;flex-direction:column;gap:0;margin-top:20px;}
-  .join-hero{text-align:center;padding:32px 20px 24px;}
-  .join-icon{font-size:3.5rem;margin-bottom:12px;}
-  .join-title{font-family:var(--display);font-size:2.2rem;letter-spacing:3px;color:var(--accent);margin-bottom:6px;}
-  .join-sub{font-family:var(--mono);font-size:.7rem;color:var(--muted);line-height:1.7;letter-spacing:.5px;}
-  .join-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;}
-  .inp{width:100%;background:var(--surface);border:2px solid var(--border);color:var(--text);padding:14px 16px;font-family:var(--mono);font-size:1rem;border-radius:8px;outline:none;transition:border-color .2s;text-align:center;letter-spacing:1px;}
+  .screen{flex:1;padding:16px;display:flex;flex-direction:column;}
+
+  /* ── JOIN ── */
+  .join-hero{text-align:center;padding:28px 16px 20px;}
+  .join-icon{font-size:3rem;margin-bottom:10px;}
+  .join-title{font-family:var(--display);font-size:2rem;letter-spacing:3px;color:var(--accent);margin-bottom:5px;}
+  .join-sub{font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.7;}
+  .join-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .inp{width:100%;background:var(--surface);border:2px solid var(--border);color:var(--text);padding:13px 14px;font-family:var(--mono);font-size:.95rem;border-radius:8px;outline:none;transition:border-color .2s;text-align:center;letter-spacing:1px;}
   .inp:focus{border-color:var(--accent);}
   .inp::placeholder{color:var(--muted);}
-  .btn-join{width:100%;margin-top:12px;font-family:var(--display);font-size:1.2rem;letter-spacing:3px;padding:14px;border:none;cursor:pointer;border-radius:8px;background:var(--accent);color:#000;transition:all .2s;}
-  .btn-join:hover{background:#ffd43b;}
-  .btn-join:active{transform:scale(.98);}
+  .pin-inp{letter-spacing:8px;font-size:1.3rem;margin-top:10px;}
+  .pin-error{font-family:var(--mono);font-size:.65rem;color:var(--accent2);text-align:center;margin-top:7px;min-height:16px;}
+  .btn-join{width:100%;margin-top:12px;font-family:var(--display);font-size:1.1rem;letter-spacing:3px;padding:13px;border:none;cursor:pointer;border-radius:8px;background:var(--accent);color:#000;transition:all .2s;}
+  .btn-join:active{transform:scale(.97);}
 
-  /* WAIT */
-  .wait-wrap{text-align:center;padding:40px 20px;}
-  .wait-icon{font-size:3rem;margin-bottom:16px;animation:bounce 1.8s infinite;}
-  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-  .wait-title{font-family:var(--display);font-size:1.8rem;letter-spacing:3px;color:var(--accent);margin-bottom:10px;}
-  .wait-msg{font-family:var(--mono);font-size:.72rem;color:var(--muted);line-height:1.8;}
-  .player-chip{display:inline-block;background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);color:var(--accent);font-family:var(--mono);font-size:.8rem;padding:7px 18px;border-radius:20px;margin-top:18px;letter-spacing:.5px;}
+  /* ── WAIT ── */
+  .wait-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;}
+  .wait-icon{font-size:2.8rem;animation:bounce 1.8s infinite;}
+  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+  .wait-title{font-family:var(--display);font-size:1.7rem;letter-spacing:3px;color:var(--accent);}
+  .wait-msg{font-family:var(--mono);font-size:.7rem;color:var(--muted);line-height:1.8;}
+  .player-chip{background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);color:var(--accent);font-family:var(--mono);font-size:.78rem;padding:6px 16px;border-radius:20px;}
 
-  /* GAME */
-  .game-wrap{display:flex;flex-direction:column;gap:12px;}
-  .round-info{display:flex;align-items:center;justify-content:space-between;}
-  .round-badge{font-family:var(--mono);font-size:.62rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;}
-  .diff-badge{font-family:var(--mono);font-size:.6rem;padding:3px 8px;border-radius:3px;letter-spacing:.5px;}
+  /* ── GAME ── */
+  .game-wrap{flex:1;display:flex;flex-direction:column;gap:10px;}
+
+  /* Round/question info bar */
+  .round-bar{display:flex;align-items:center;justify-content:space-between;}
+  .round-badge{font-family:var(--mono);font-size:.6rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;}
+  .diff-badge{font-family:var(--mono);font-size:.58rem;padding:3px 8px;border-radius:3px;}
   .diff-easy{background:rgba(61,214,140,.1);color:var(--accent3);}
   .diff-mid{background:rgba(245,197,24,.1);color:var(--accent);}
   .diff-hard{background:rgba(232,64,64,.1);color:var(--accent2);}
 
-  .instruction{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:.72rem;color:var(--muted);line-height:1.6;text-align:center;}
+  /* Instruction */
+  .instruction{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;line-height:1.6;}
   .instruction strong{color:var(--accent);}
 
-  .steps-wrap{display:flex;flex-direction:column;gap:8px;}
-  .step-btn{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:12px;text-align:left;}
-  .step-btn:active{transform:scale(.97);}
-  .step-btn.selected{border-color:var(--accent2);background:rgba(232,64,64,.1);}
-  .step-btn.reveal-correct{border-color:var(--accent3);background:rgba(61,214,140,.1);}
-  .step-btn.reveal-wrong{border-color:var(--accent2);background:rgba(232,64,64,.05);opacity:.6;}
-  .step-num{font-family:var(--display);font-size:1.6rem;color:var(--border);flex-shrink:0;width:28px;text-align:center;transition:color .2s;}
-  .step-btn.selected .step-num{color:var(--accent2);}
-  .step-btn.reveal-correct .step-num{color:var(--accent3);}
-  .step-content{flex:1;}
-  .step-lbl{font-family:var(--mono);font-size:.56rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
-  .step-math{font-family:var(--mono);font-size:.82rem;color:var(--text);line-height:1.4;}
+  /* KAHOOT BUTTONS — 2x2 grid (or 3+) */
+  .kahoot-grid{display:grid;gap:8px;flex:1;}
+  .kahoot-grid.cols2{grid-template-columns:1fr 1fr;}
+  .kahoot-grid.cols1{grid-template-columns:1fr;}
 
-  .hint-bar{background:rgba(245,197,24,.07);border:1px dashed rgba(245,197,24,.3);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:.7rem;color:var(--accent);display:none;line-height:1.5;}
-  .hint-bar.visible{display:block;}
+  .kbtn{border:none;border-radius:10px;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0;flex-direction:column;transition:all .18s;position:relative;min-height:70px;}
+  .kbtn:active:not(:disabled){transform:scale(.95);}
+  .kbtn:disabled{cursor:not-allowed;}
+  .kbtn.selected{box-shadow:0 0 0 4px white;}
+  .kbtn.reveal-correct{box-shadow:0 0 0 4px white;animation:correctPop .5s ease;}
+  @keyframes correctPop{0%{transform:scale(1);}40%{transform:scale(1.06);}100%{transform:scale(1);}}
+  .kbtn.reveal-wrong{filter:brightness(.35);}
 
-  .action-row{display:grid;grid-template-columns:1fr auto;gap:8px;}
-  .btn-submit{font-family:var(--display);font-size:1rem;letter-spacing:2px;padding:13px;border:none;cursor:pointer;border-radius:8px;background:var(--accent);color:#000;transition:all .2s;}
-  .btn-submit:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
-  .btn-submit:not(:disabled):active{transform:scale(.97);}
-  .btn-hint{font-family:var(--mono);font-size:.6rem;letter-spacing:.5px;padding:13px 12px;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1.4;text-align:center;}
-  .btn-hint:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
-  .btn-hint:disabled{opacity:.35;cursor:not-allowed;}
+  .kbtn-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:12px 8px;border-radius:10px;}
+  .kbtn-shape{font-size:2.4rem;line-height:1;}
+  .kbtn-num{font-family:var(--display);font-size:3.5rem;letter-spacing:1px;line-height:1;}
 
-  /* RESULT */
-  .result-card{background:var(--card);border-radius:10px;padding:18px;display:none;animation:slideUp .35s ease;}
+  /* Result card */
+  .result-card{background:var(--card);border-radius:10px;padding:16px;display:none;animation:slu .35s ease;}
   .result-card.visible{display:block;}
-  @keyframes slideUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes slu{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
   .result-card.ok{border-left:4px solid var(--accent3);}
   .result-card.fail{border-left:4px solid var(--accent2);}
-  .result-emoji{font-size:2rem;margin-bottom:6px;}
-  .result-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;margin-bottom:4px;}
-  .result-pts{font-family:var(--display);font-size:2rem;letter-spacing:2px;margin-bottom:10px;}
-  .result-pts.plus{color:var(--accent3);}
-  .result-pts.zero{color:var(--muted);}
-  .result-explain{font-family:var(--mono);font-size:.7rem;color:var(--muted);line-height:1.75;}
-  .wait-next-msg{font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;padding:14px;animation:blink 1.8s infinite;}
+  .res-emoji{font-size:1.8rem;margin-bottom:5px;}
+  .res-title{font-family:var(--display);font-size:1.3rem;letter-spacing:2px;margin-bottom:3px;}
+  .res-pts{font-family:var(--display);font-size:2rem;letter-spacing:2px;margin-bottom:8px;}
+  .res-pts.plus{color:var(--accent3);}
+  .res-pts.zero{color:var(--muted);}
+  .res-exp{font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.7;}
+  .wait-next{font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center;padding:12px;animation:blink 1.8s infinite;}
   @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-
-  /* PROGRESS BAR */
-  .progress-bar-wrap{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:2px;}
-  .progress-bar{height:100%;background:var(--accent);transition:width 1s linear;}
 </style>
 </head>
 <body>
+
 <div class="header">
   <div class="htitle">🔍 HATA AVI</div>
-  <div class="header-right">
+  <div class="hright">
     <div class="my-score" id="myScore" style="display:none;"></div>
     <div class="timer-pill" id="timerPill">—</div>
   </div>
 </div>
-<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:100%"></div></div>
+<div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:100%"></div></div>
 
 <div class="screen" id="screen">
+
   <!-- JOIN -->
-  <div id="joinScreen">
-    <div class="join-wrap">
-      <div class="join-hero">
-        <div class="join-icon">🎯</div>
-        <div class="join-title">KATIL!</div>
-        <div class="join-sub">Matematik Ekseninde<br>Yapay Zeka Buluşmaları<br><br>YZ'nin hatalarını bul, puan kazan.</div>
-      </div>
-      <div class="join-card">
-        <input class="inp" id="nameInp" placeholder="Adınızı girin" maxlength="20" onkeydown="if(event.key==='Enter')document.getElementById('pinInp').focus()">
-        <input class="inp" id="pinInp" placeholder="4 haneli parola" maxlength="4" inputmode="numeric" pattern="[0-9]*" style="margin-top:10px;letter-spacing:8px;font-size:1.4rem;" onkeydown="if(event.key==='Enter')joinGame()">
-        <div id="pinError" style="font-family:var(--mono);font-size:.68rem;color:var(--accent2);text-align:center;margin-top:8px;min-height:16px;"></div>
-        <button class="btn-join" onclick="joinGame()">OYUNA GİR →</button>
-      </div>
+  <div id="joinScreen" style="display:flex;flex-direction:column;">
+    <div class="join-hero">
+      <div class="join-icon">🎯</div>
+      <div class="join-title">KATIL!</div>
+      <div class="join-sub">Matematik Ekseninde Yapay Zeka Buluşmaları<br>YZ'nin hatalarını bul, puan kazan.</div>
+    </div>
+    <div class="join-card">
+      <input class="inp" id="nameInp" placeholder="Adınızı girin" maxlength="20" onkeydown="if(event.key==='Enter')document.getElementById('pinInp').focus()">
+      <input class="inp pin-inp" id="pinInp" placeholder="····" maxlength="4" inputmode="numeric" pattern="[0-9]*" onkeydown="if(event.key==='Enter')joinGame()">
+      <div class="pin-error" id="pinError"></div>
+      <button class="btn-join" onclick="joinGame()">OYUNA GİR →</button>
     </div>
   </div>
 
@@ -134,7 +131,7 @@
     <div class="wait-wrap">
       <div class="wait-icon">⏳</div>
       <div class="wait-title">HAZIR!</div>
-      <div class="wait-msg">Moderatör ilk turu başlatana kadar bekleyin.<br>Soru büyük ekranda gösterilecek.<br>Siz sadece adımları seçeceksiniz.</div>
+      <div class="wait-msg">Moderatör yarışmayı başlatana kadar bekleyin.<br>Soruları büyük ekrandan okuyun.<br>Telefonunuzda sadece renk/numara seçin.</div>
       <div class="player-chip" id="playerChip">👤 —</div>
     </div>
   </div>
@@ -142,29 +139,22 @@
   <!-- GAME -->
   <div id="gameScreen" style="display:none;">
     <div class="game-wrap">
-      <div class="round-info">
+      <div class="round-bar">
         <div class="round-badge" id="gRound">TUR 1/6</div>
         <div class="diff-badge diff-easy" id="gDiff">🟢 KOLAY</div>
       </div>
-      <div class="instruction">
-        Büyük ekrandaki soruyu okuyun.<br>
-        <strong>Hangi adımda hata var?</strong> Tıklayın ve gönderin.
+      <div class="instruction">Soruyu büyük ekrandan okuyun.<br><strong>Hatalı adımın rengini/numarasını seçin!</strong></div>
+      <div class="kahoot-grid cols2" id="kahootGrid"></div>
+      <div class="result-card" id="resultCard">
+        <div class="res-emoji" id="resEmoji"></div>
+        <div class="res-title" id="resTitle"></div>
+        <div class="res-pts" id="resPts"></div>
+        <div class="res-exp" id="resExp"></div>
       </div>
-      <div class="steps-wrap" id="gSteps"></div>
-      <div class="hint-bar" id="gHintBar"></div>
-      <div class="action-row">
-        <button class="btn-submit" id="gSubmit" disabled onclick="submitAnswer()">GÖNDER</button>
-        <button class="btn-hint" id="gHintBtn" onclick="useHint()">💡 İPUCU<br>−5 PT</button>
-      </div>
-      <div class="result-card" id="gResult">
-        <div class="result-emoji" id="gResultEmoji"></div>
-        <div class="result-title" id="gResultTitle"></div>
-        <div class="result-pts" id="gResultPts"></div>
-        <div class="result-explain" id="gResultExp"></div>
-      </div>
-      <div class="wait-next-msg" id="gWaitNext" style="display:none;">⏳ Sonraki tur bekleniyor...</div>
+      <div class="wait-next" id="waitNext" style="display:none;">⏳ Sonraki tur bekleniyor...</div>
     </div>
   </div>
+
 </div>
 
 <script type="module">
@@ -172,192 +162,159 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getDatabase, ref, set, onValue, push, onDisconnect } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAPbvuN7IA6e78-fym8nF6m5gW1fUPf7lw",
-  authDomain: "hata-avi.firebaseapp.com",
-  databaseURL: "https://hata-avi-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "hata-avi",
-  storageBucket: "hata-avi.firebasestorage.app",
-  messagingSenderId: "725079545594",
-  appId: "1:725079545594:web:040eb5d99bf55567a81b43"
+  apiKey:"AIzaSyAPbvuN7IA6e78-fym8nF6m5gW1fUPf7lw",authDomain:"hata-avi.firebaseapp.com",
+  databaseURL:"https://hata-avi-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"hata-avi",storageBucket:"hata-avi.firebasestorage.app",
+  messagingSenderId:"725079545594",appId:"1:725079545594:web:040eb5d99bf55567a81b43"
 };
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
 
-const DIFF_MAP = {easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🔴 ÇOK ZOR'};
-const DIFF_CLASS = {easy:'diff-easy',mid:'diff-mid',hard:'diff-hard',vhard:'diff-hard'};
+const COLORS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316'];
+const TEXT_COLORS=['#fff','#fff','#000','#000','#fff','#000'];
+const SHAPES=['▲','◆','●','■','★','♥'];
+const DIFF_MAP={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🔴 ÇOK ZOR'};
+const DIFF_CLS={easy:'diff-easy',mid:'diff-mid',hard:'diff-hard',vhard:'diff-hard'};
 
-let playerName='', myScore=0, selectedStep=-1, hintUsed=false;
-let answered=false, currentRoundIndex=-1, roundStartTime=null;
-let currentRoundDuration=90;
+let playerName='',myScore=0,selectedStep=-1,answered=false;
+let currentRoundIndex=-1,roundStartTime=null,roundDuration=90;
 
-// Phase listener — keep participants in wait until game starts
-onValue(ref(db,'game/phase'),snap=>{
-  const phase=snap.val();
-  if(phase==='game' && playerName){
-    // game started, nothing extra needed — they're already watching for round
-  }
-  // if lobby resets while someone is on wait screen, show a notice
-  if(phase==='lobby' && playerName && document.getElementById('waitScreen').style.display!=='none'){
-    document.getElementById('waitScreen').innerHTML=`<div class="wait-wrap"><div class="wait-icon">🔄</div><div class="wait-title">SIFIRLANDII</div><div class="wait-msg">Moderatör lobi sıfırladı.<br>Lütfen sayfayı yenileyip tekrar katılın.</div></div>`;
-  }
-});
-
+// JOIN
 window.joinGame=function(){
   const n=document.getElementById('nameInp').value.trim();
-  if(!n){ document.getElementById('pinError').textContent='Lütfen adınızı girin.'; return; }
-  const enteredPin=document.getElementById('pinInp').value.trim();
-  // check pin against firebase
-  onValue(ref(db,'game/pin'), snap => {
-    const activePin = snap.val();
-    if(activePin && enteredPin !== activePin){
-      document.getElementById('pinError').textContent='❌ Parola yanlış, tekrar deneyin.';
-      document.getElementById('pinInp').value='';
-      document.getElementById('pinInp').focus();
-      return;
-    }
-    // pin correct or no pin set
+  if(!n){document.getElementById('pinError').textContent='Lütfen adınızı girin.';return;}
+  const pin=document.getElementById('pinInp').value.trim();
+  onValue(ref(db,'game/pin'),snap=>{
+    const activePin=snap.val();
+    if(activePin&&pin!==activePin){document.getElementById('pinError').textContent='❌ Parola yanlış.';document.getElementById('pinInp').value='';document.getElementById('pinInp').focus();return;}
     document.getElementById('pinError').textContent='';
     playerName=n;
     const connRef=push(ref(db,'game/connections'));
     set(connRef,{name:playerName,joined:Date.now()});
     onDisconnect(connRef).remove();
     document.getElementById('joinScreen').style.display='none';
-    document.getElementById('waitScreen').style.display='block';
+    document.getElementById('waitScreen').style.display='flex';
     document.getElementById('playerChip').textContent='👤 '+playerName;
   },{onlyOnce:true});
 };
 
-// Timer listener
-onValue(ref(db,'game/timer'),snap=>{
-  const t=snap.val(); if(!t) return;
-  const pill=document.getElementById('timerPill');
-  const pb=document.getElementById('progressBar');
-  if(t.value>0&&t.running){
-    pill.textContent=t.value;
-    pill.className='timer-pill active'+(t.value<=10?' urgent':'');
-    const pct=Math.max(0,Math.min(100,t.value/currentRoundDuration*100));
-    pb.style.width=pct+'%';
-    pb.style.background=t.value<=10?'var(--accent2)':'var(--accent)';
-  } else {
-    pill.textContent=t.value>0?t.value:'✓';
-    pill.className='timer-pill done';
-    pb.style.width=t.value>0?(t.value/currentRoundDuration*100)+'%':'0%';
+// PHASE
+onValue(ref(db,'game/phase'),snap=>{
+  const phase=snap.val();
+  if(phase==='lobby'&&playerName&&document.getElementById('waitScreen').style.display!=='none'){
+    document.getElementById('waitScreen').innerHTML=`<div class="wait-wrap"><div class="wait-icon">🔄</div><div class="wait-title">SIFIRLANDII</div><div class="wait-msg">Moderatör lobi sıfırladı.<br>Lütfen sayfayı yenileyip tekrar katılın.</div></div>`;
   }
 });
 
-// Round listener
-onValue(ref(db,'game/currentRound'),snap=>{
-  const round=snap.val();
-  if(!round||!playerName) return;
+// TIMER
+onValue(ref(db,'game/timer'),snap=>{
+  const t=snap.val();if(!t)return;
+  const pill=document.getElementById('timerPill');
+  const pb=document.getElementById('progFill');
+  if(t.value>0&&t.running){
+    pill.textContent=t.value;pill.className='timer-pill active'+(t.value<=10?' urgent':'');
+    const pct=Math.max(0,Math.min(100,t.value/roundDuration*100));
+    pb.style.width=pct+'%';pb.style.background=t.value<=10?'var(--accent2)':'var(--accent)';
+  }else{pill.textContent=t.value>0?t.value:'✓';pill.className='timer-pill done';}
+});
 
-  currentRoundDuration=round.duration||90;
+// ROUND
+onValue(ref(db,'game/currentRound'),snap=>{
+  const round=snap.val();if(!round||!playerName)return;
+  roundDuration=round.duration||90;
 
   if(round.index!==currentRoundIndex){
     currentRoundIndex=round.index;
-    selectedStep=-1; hintUsed=false; answered=false;
+    selectedStep=-1;answered=false;
     roundStartTime=round.timerStart;
 
     document.getElementById('waitScreen').style.display='none';
-    document.getElementById('gameScreen').style.display='block';
+    document.getElementById('gameScreen').style.display='flex';
 
     const dEl=document.getElementById('gDiff');
-    dEl.textContent=DIFF_MAP[round.diff]||'';
-    dEl.className='diff-badge '+(DIFF_CLASS[round.diff]||'diff-easy');
-    document.getElementById('gRound').textContent=`TUR ${round.index+1}/6`;
-    document.getElementById('gHintBar').classList.remove('visible');
-    document.getElementById('gHintBtn').disabled=false;
-    document.getElementById('gSubmit').disabled=true;
-    const rc=document.getElementById('gResult');
-    rc.className='result-card'; rc.style.display='none';
-    document.getElementById('gWaitNext').style.display='none';
+    dEl.textContent=DIFF_MAP[round.diff]||'';dEl.className='diff-badge '+(DIFF_CLS[round.diff]||'diff-easy');
+    document.getElementById('gRound').textContent=`TUR ${round.index+1}/${round.totalRounds||6}`;
     document.getElementById('myScore').style.display='block';
     document.getElementById('myScore').textContent=myScore+' PT';
+    const rc=document.getElementById('resultCard');rc.className='result-card';
+    document.getElementById('waitNext').style.display='none';
 
-    const sw=document.getElementById('gSteps'); sw.innerHTML='';
+    const grid=document.getElementById('kahootGrid');grid.innerHTML='';
+    const cnt=(round.steps||[]).length;
+    grid.className='kahoot-grid '+(cnt<=4?'cols2':'cols2');
+
     (round.steps||[]).forEach((s,i)=>{
-      const d=document.createElement('div');
-      d.className='step-btn';
-      d.innerHTML=`<div class="step-num">${i+1}</div><div class="step-content"><div class="step-lbl">${s.label}</div><div class="step-math">${s.math}</div></div>`;
-      d.onclick=()=>{
+      const bg=COLORS[i]||'#888';const tc=TEXT_COLORS[i]||'#fff';const sh=SHAPES[i]||String(i+1);
+      const btn=document.createElement('button');
+      btn.className='kbtn';btn.id='kb-'+i;
+      btn.style.background=bg;
+      btn.innerHTML=`<div class="kbtn-inner"><div class="kbtn-num" style="color:${tc};">${sh}</div></div>`;
+      btn.onclick=()=>{
         if(answered)return;
         selectedStep=i;
-        document.querySelectorAll('.step-btn').forEach(b=>b.classList.remove('selected'));
-        d.classList.add('selected');
-        document.getElementById('gSubmit').disabled=false;
+        document.querySelectorAll('.kbtn').forEach(b=>b.classList.remove('selected'));
+        btn.classList.add('selected');
+        // auto-submit immediately on tap (Kahoot style)
+        submitAnswer();
       };
-      sw.appendChild(d);
+      grid.appendChild(btn);
     });
   }
 
-  // Reveal
+  // REVEAL
   if(round.revealed&&!answered){
     answered=true;
-    document.querySelectorAll('.step-btn').forEach((b,i)=>{
-      if(i===round.wrongStep) b.classList.add('reveal-correct');
-      else { b.classList.remove('selected'); b.classList.add('reveal-wrong'); }
+    document.querySelectorAll('.kbtn').forEach((b,i)=>{
+      b.disabled=true;
+      if(i===round.wrongStep)b.classList.add('reveal-correct');
+      else b.classList.add('reveal-wrong');
     });
-    showResult(false, 0, round.explain, true);
+    showResult(false,0,round.explain,true);
   }
 });
 
-window.useHint=function(){
-  if(hintUsed||answered)return;
-  hintUsed=true;
-  document.getElementById('gHintBtn').disabled=true;
-  onValue(ref(db,'game/currentRound'),snap=>{
-    const r=snap.val();
-    if(r?.hint){
-      const h=document.getElementById('gHintBar');
-      h.textContent='💡 '+r.hint; h.classList.add('visible');
-    }
-  },{onlyOnce:true});
-};
-
-window.submitAnswer=function(){
+function submitAnswer(){
   if(selectedStep<0||answered)return;
   answered=true;
-  document.getElementById('gSubmit').disabled=true;
-  document.getElementById('gHintBtn').disabled=true;
+  document.querySelectorAll('.kbtn').forEach(b=>b.disabled=true);
   onValue(ref(db,'game/currentRound'),snap=>{
-    const round=snap.val(); if(!round)return;
+    const round=snap.val();if(!round)return;
     const elapsed=Math.max(1,Math.round((Date.now()-roundStartTime)/1000));
+    const remaining=Math.max(0,(round.duration||90)-elapsed);
     const correct=selectedStep===round.wrongStep;
-    const pts=correct?(hintUsed?5:10):0;
+    const pts=correct?remaining:0; // puan = kalan süre
     myScore+=pts;
     set(ref(db,`game/answers/${round.index}/${playerName.replace(/[.#$/[\]]/g,'_')}`),
-      {name:playerName,correct,elapsed,hintUsed,selectedStep,pts});
-    document.querySelectorAll('.step-btn').forEach((b,i)=>{
-      if(i===round.wrongStep) b.classList.add('reveal-correct');
-      else {b.classList.remove('selected');b.classList.add('reveal-wrong');}
+      {name:playerName,correct,elapsed,pts,selectedStep});
+    document.querySelectorAll('.kbtn').forEach((b,i)=>{
+      if(i===round.wrongStep)b.classList.add('reveal-correct');
+      else{b.classList.remove('selected');b.classList.add('reveal-wrong');}
     });
-    showResult(correct, pts, round.explain, false);
+    showResult(correct,pts,round.explain,false);
     document.getElementById('myScore').textContent=myScore+' PT';
   },{onlyOnce:true});
-};
+}
 
-function showResult(correct, pts, explain, timeout){
-  const rc=document.getElementById('gResult');
+function showResult(correct,pts,explain,timeout){
+  const rc=document.getElementById('resultCard');
   if(timeout){
     rc.className='result-card visible fail';
-    document.getElementById('gResultEmoji').textContent='⏰';
-    document.getElementById('gResultTitle').innerHTML='<span style="color:var(--accent2)">SÜRE DOLDU</span>';
-    document.getElementById('gResultPts').className='result-pts zero';
-    document.getElementById('gResultPts').textContent='0 PT';
-  } else if(correct){
+    document.getElementById('resEmoji').textContent='⏰';
+    document.getElementById('resTitle').innerHTML='<span style="color:var(--accent2)">SÜRE DOLDU</span>';
+    document.getElementById('resPts').className='res-pts zero';document.getElementById('resPts').textContent='0 PT';
+  }else if(correct){
     rc.className='result-card visible ok';
-    document.getElementById('gResultEmoji').textContent='🎯';
-    document.getElementById('gResultTitle').innerHTML='<span style="color:var(--accent3)">DOĞRU!</span>';
-    document.getElementById('gResultPts').className='result-pts plus';
-    document.getElementById('gResultPts').textContent=`+${pts} PT`;
-  } else {
+    document.getElementById('resEmoji').textContent='🎯';
+    document.getElementById('resTitle').innerHTML='<span style="color:var(--accent3)">DOĞRU!</span>';
+    document.getElementById('resPts').className='res-pts plus';document.getElementById('resPts').textContent='+'+pts+' PT';
+  }else{
     rc.className='result-card visible fail';
-    document.getElementById('gResultEmoji').textContent='❌';
-    document.getElementById('gResultTitle').innerHTML='<span style="color:var(--accent2)">YANLIŞ</span>';
-    document.getElementById('gResultPts').className='result-pts zero';
-    document.getElementById('gResultPts').textContent='0 PT';
+    document.getElementById('resEmoji').textContent='❌';
+    document.getElementById('resTitle').innerHTML='<span style="color:var(--accent2)">YANLIŞ</span>';
+    document.getElementById('resPts').className='res-pts zero';document.getElementById('resPts').textContent='0 PT';
   }
-  document.getElementById('gResultExp').textContent=explain||'';
-  document.getElementById('gWaitNext').style.display='block';
+  document.getElementById('resExp').textContent=explain||'';
+  document.getElementById('waitNext').style.display='block';
 }
 </script>
 </body>
