@@ -190,6 +190,18 @@ let playerName='', myScore=0, selectedStep=-1, hintUsed=false;
 let answered=false, currentRoundIndex=-1, roundStartTime=null;
 let currentRoundDuration=90;
 
+// Phase listener — keep participants in wait until game starts
+onValue(ref(db,'game/phase'),snap=>{
+  const phase=snap.val();
+  if(phase==='game' && playerName){
+    // game started, nothing extra needed — they're already watching for round
+  }
+  // if lobby resets while someone is on wait screen, show a notice
+  if(phase==='lobby' && playerName && document.getElementById('waitScreen').style.display!=='none'){
+    document.getElementById('waitScreen').innerHTML=`<div class="wait-wrap"><div class="wait-icon">🔄</div><div class="wait-title">SIFIRLANDII</div><div class="wait-msg">Moderatör lobi sıfırladı.<br>Lütfen sayfayı yenileyip tekrar katılın.</div></div>`;
+  }
+});
+
 window.joinGame=function(){
   const n=document.getElementById('nameInp').value.trim();
   if(!n){ document.getElementById('pinError').textContent='Lütfen adınızı girin.'; return; }

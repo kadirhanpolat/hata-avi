@@ -9,22 +9,37 @@
   :root{--bg:#0d0d0d;--surface:#141414;--card:#1a1a1a;--border:#2a2a2a;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--text:#f0f0f0;--muted:#666;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;}
+
   .header{background:var(--surface);border-bottom:2px solid var(--accent);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
   .htitle{font-family:var(--display);font-size:1.7rem;letter-spacing:2px;color:var(--accent);}
   .hsub{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:1px;}
   .conn-badge{font-family:var(--mono);font-size:.68rem;padding:5px 12px;border-radius:20px;background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.25);color:var(--accent3);}
   .dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);display:inline-block;margin-right:5px;animation:blink 1.5s infinite;}
   @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
-  .layout{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 56px);}
+
+  /* PHASE BANNER */
+  .phase-banner{padding:10px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+  .phase-label{font-family:var(--mono);font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+  .phase-val{font-family:var(--display);font-size:1.1rem;letter-spacing:2px;}
+  .phase-val.lobby{color:var(--accent3);}
+  .phase-val.game{color:var(--accent);}
+  .phase-actions{display:flex;gap:8px;}
+
+  .layout{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 98px);}
   .left{padding:24px;overflow-y:auto;border-right:1px solid var(--border);}
   .right{background:var(--surface);padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;}
+
   .sec{margin-bottom:20px;}
   .sec-title{font-family:var(--display);font-size:1rem;letter-spacing:2px;color:var(--accent);margin-bottom:10px;}
   .sec-lbl{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+
+  /* Round nav */
   .rnav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
   .rbtn{font-family:var(--mono);font-size:.63rem;padding:5px 10px;background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:4px;cursor:pointer;transition:all .2s;}
   .rbtn:hover,.rbtn.active{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.07);}
   .rbtn.done{border-color:var(--accent3);color:var(--accent3);}
+
+  /* Question card */
   .qcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px;}
   .qdiff{font-family:var(--mono);font-size:.6rem;letter-spacing:1px;margin-bottom:5px;}
   .qtitle{font-family:var(--display);font-size:1.2rem;letter-spacing:1px;margin-bottom:8px;}
@@ -36,6 +51,8 @@
   .stext{flex:1;line-height:1.4;}
   .slabel{font-size:.53rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:1px;}
   .wtag{font-size:.53rem;padding:2px 6px;background:var(--accent2);color:#fff;border-radius:3px;margin-left:4px;white-space:nowrap;}
+
+  /* Timer */
   .timer-row{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:14px;}
   .timer-big{font-family:var(--display);font-size:2.6rem;color:var(--accent2);letter-spacing:4px;min-width:76px;transition:color .3s;}
   .timer-big.running{color:var(--accent3);}
@@ -46,6 +63,8 @@
   .timer-inp{width:60px;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:5px 8px;font-family:var(--mono);font-size:.8rem;border-radius:4px;outline:none;text-align:center;}
   .timer-inp:focus{border-color:var(--accent);}
   .timer-inp-lbl{font-family:var(--mono);font-size:.58rem;color:var(--muted);}
+
+  /* Music */
   .music-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px;}
   .music-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px 10px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
   .music-card:hover{border-color:var(--accent);}
@@ -57,18 +76,25 @@
   .music-file{font-size:.52rem;color:var(--muted);}
   .music-status{font-size:.55rem;font-family:var(--mono);color:var(--accent3);white-space:nowrap;}
   .music-controls{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+
+  /* Buttons */
   .btn{font-family:var(--display);letter-spacing:2px;padding:9px 20px;border:none;cursor:pointer;border-radius:4px;transition:all .2s;font-size:.88rem;}
   .btn-primary{background:var(--accent);color:#000;}
   .btn-primary:hover{background:#ffd43b;transform:translateY(-1px);}
   .btn-primary:disabled{background:#2a2a2a;color:var(--muted);cursor:not-allowed;transform:none;}
+  .btn-green{background:var(--accent3);color:#000;}
+  .btn-green:hover{background:#5fffaa;transform:translateY(-1px);}
   .btn-danger{background:var(--accent2);color:#fff;}
   .btn-danger:hover{background:#ff6060;}
   .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:.65rem;letter-spacing:1px;padding:9px 14px;}
   .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
   .btn-sm{padding:6px 12px;font-size:.75rem;}
+
   .ctrl-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
   .status-msg{font-family:var(--mono);font-size:.62rem;color:var(--muted);margin-top:7px;line-height:1.6;min-height:18px;}
-  .lb-title{font-family:var(--display);font-size:1.2rem;letter-spacing:2px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:10px;}
+
+  /* Right panel */
+  .lb-title{font-family:var(--display);font-size:1.1rem;letter-spacing:2px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:8px;}
   .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
   .stat-box{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:9px;text-align:center;}
   .stat-val{font-family:var(--display);font-size:1.4rem;color:var(--accent);letter-spacing:1px;}
@@ -91,9 +117,30 @@
   .lb-score{font-family:var(--display);font-size:1.1rem;color:var(--accent3);letter-spacing:1px;}
   .lb-detail{font-family:var(--mono);font-size:.57rem;color:var(--muted);margin-left:4px;}
   .empty{font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;padding:16px;}
+
+  /* Lobby player list */
+  .lobby-players{display:flex;flex-direction:column;gap:5px;max-height:220px;overflow-y:auto;}
+  .lp-row{display:flex;align-items:center;gap:8px;padding:7px 11px;background:var(--card);border-radius:5px;border:1px solid var(--border);animation:fi .3s ease;}
+  .lp-row.newest{border-color:var(--accent);background:rgba(245,197,24,.07);}
+  .lp-name{font-family:var(--mono);font-size:.75rem;flex:1;}
+  .lp-new{font-size:.52rem;padding:2px 6px;background:var(--accent);color:#000;border-radius:3px;letter-spacing:.5px;}
+
+  /* Confirm overlay */
+  .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;}
+  .confirm-overlay.visible{display:flex;}
+  .confirm-box{background:var(--surface);border:2px solid var(--accent2);border-radius:12px;padding:36px;max-width:420px;width:90%;text-align:center;}
+  .confirm-icon{font-size:2.5rem;margin-bottom:12px;}
+  .confirm-title{font-family:var(--display);font-size:1.6rem;letter-spacing:2px;color:var(--accent2);margin-bottom:8px;}
+  .confirm-msg{font-family:var(--mono);font-size:.73rem;color:var(--muted);line-height:1.7;margin-bottom:22px;}
+  .confirm-btns{display:flex;gap:10px;justify-content:center;}
+
+  /* disabled overlay for game controls during lobby */
+  .game-controls{transition:opacity .3s;}
+  .game-controls.locked{opacity:.35;pointer-events:none;}
 </style>
 </head>
 <body>
+
 <div class="header">
   <div>
     <div class="htitle">🔍 HATA AVI — MODERATÖR</div>
@@ -102,85 +149,128 @@
   <span class="conn-badge"><span class="dot"></span><span id="connCount">0</span> bağlı</span>
 </div>
 
-<div class="layout">
-  <div class="left">
-    <div class="sec">
-      <div class="sec-title">TURLAR</div>
-      <div class="rnav" id="roundNav"></div>
-    </div>
+<!-- PHASE BANNER -->
+<div class="phase-banner">
+  <div>
+    <div class="phase-label">Mevcut Aşama</div>
+    <div class="phase-val lobby" id="phaseVal">⏳ LOBİ</div>
+  </div>
+  <div class="phase-actions">
+    <button class="btn btn-danger btn-sm" onclick="confirmReset()">🔄 LOBİYİ BAŞLAT / SIFIRLA</button>
+    <button class="btn btn-green" id="startGameBtn" onclick="startGame()" disabled>🚀 YARIŞMAYI BAŞLAT</button>
+  </div>
+</div>
 
-    <div class="sec">
-      <div class="sec-title">⏱ SÜRE</div>
-      <div class="timer-row">
-        <div>
-          <div class="timer-lbl">Kalan Süre</div>
-          <div class="timer-big" id="timerDisp">90</div>
-          <div class="timer-inp-row">
-            <input class="timer-inp" id="timerInput" type="number" value="90" min="10" max="300">
-            <span class="timer-inp-lbl">sn (değiştirilebilir)</span>
+<div class="layout">
+  <!-- LEFT -->
+  <div class="left">
+
+    <!-- GAME CONTROLS (locked during lobby) -->
+    <div class="game-controls locked" id="gameControls">
+      <div class="sec">
+        <div class="sec-title">TURLAR</div>
+        <div class="rnav" id="roundNav"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">⏱ SÜRE</div>
+        <div class="timer-row">
+          <div>
+            <div class="timer-lbl">Kalan Süre</div>
+            <div class="timer-big" id="timerDisp">90</div>
+            <div class="timer-inp-row">
+              <input class="timer-inp" id="timerInput" type="number" value="90" min="10" max="300">
+              <span class="timer-inp-lbl">sn (değiştirilebilir)</span>
+            </div>
+          </div>
+          <div style="margin-left:auto;">
+            <button class="btn btn-ghost btn-sm" id="stopBtn" onclick="stopTimer()" style="display:none;">⏹ DURDUR</button>
           </div>
         </div>
-        <div style="margin-left:auto;display:flex;flex-direction:column;gap:6px;">
-          <button class="btn btn-ghost btn-sm" id="stopBtn" onclick="stopTimer()" style="display:none;">⏹ DURDUR</button>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">🎵 MÜZİK</div>
+        <div class="sec-lbl">Yayınlanınca hangi müzik çalsın?</div>
+        <div class="music-grid" id="musicGrid"></div>
+        <div class="music-controls">
+          <button class="btn btn-ghost btn-sm" onclick="previewMusic()">▶ ÖNİZLE</button>
+          <button class="btn btn-ghost btn-sm" onclick="stopMusic()">⏹ DURDUR</button>
+          <button class="btn btn-ghost btn-sm" onclick="selectNoMusic()">🔇 MÜZİK YOK</button>
         </div>
       </div>
-    </div>
 
-    <div class="sec">
-      <div class="sec-title">🎵 MÜZİK</div>
-      <div class="sec-lbl">Yayınlanınca hangi müzik çalsın?</div>
-      <div class="music-grid" id="musicGrid"></div>
-      <div class="music-controls">
-        <button class="btn btn-ghost btn-sm" onclick="previewMusic()">▶ ÖNİZLE</button>
-        <button class="btn btn-ghost btn-sm" onclick="stopMusic()">⏹ DURDUR</button>
-        <button class="btn btn-ghost btn-sm" onclick="selectNoMusic()">🔇 MÜZİK YOK</button>
+      <div class="sec">
+        <div class="sec-title">MEVCUT SORU</div>
+        <div class="qcard">
+          <div class="qdiff" id="qDiff"></div>
+          <div class="qtitle" id="qTitle">—</div>
+          <div class="qtext" id="qText"></div>
+          <div class="steps" id="stepsList"></div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="ctrl-row">
+          <button class="btn btn-primary" id="publishBtn" onclick="publishRound()">📡 TURU YAYINLA</button>
+          <button class="btn btn-danger" id="revealBtn" onclick="revealAnswer()" disabled>✅ CEVABI GÖSTER</button>
+          <button class="btn btn-ghost" onclick="nextRound()">SONRAKİ →</button>
+        </div>
+        <div class="status-msg" id="statusMsg">Yarışmayı başlatmak için sağ üstteki butonu kullanın.</div>
       </div>
     </div>
 
-    <div class="sec">
-      <div class="sec-title">MEVCUT SORU</div>
-      <div class="qcard">
-        <div class="qdiff" id="qDiff"></div>
-        <div class="qtitle" id="qTitle">—</div>
-        <div class="qtext" id="qText"></div>
-        <div class="steps" id="stepsList"></div>
-      </div>
-    </div>
-
-    <div class="sec">
-      <div class="ctrl-row">
-        <button class="btn btn-primary" id="publishBtn" onclick="publishRound()">📡 TURU YAYINLA</button>
-        <button class="btn btn-danger" id="revealBtn" onclick="revealAnswer()" disabled>✅ CEVABI GÖSTER</button>
-        <button class="btn btn-ghost" onclick="nextRound()">SONRAKİ →</button>
-      </div>
-      <div class="status-msg" id="statusMsg">Turu yayınlayın — süre ve müzik otomatik başlar.</div>
-    </div>
   </div>
 
+  <!-- RIGHT -->
   <div class="right">
+
+    <!-- PIN -->
     <div class="lb-title">🔐 KATILIM PAROLASI</div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;">
-      <div class="sec-lbl" style="margin-bottom:10px;">Katılımcılara gösterilecek 4 haneli parola</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div class="sec-lbl" style="margin-bottom:8px;">4 haneli katılım parolası</div>
       <div style="display:flex;align-items:center;gap:10px;">
-        <div id="pinDisplay" style="font-family:var(--display);font-size:3rem;letter-spacing:12px;color:var(--accent);flex:1;text-align:center;background:var(--bg);border-radius:6px;padding:8px 0;">——</div>
-        <div style="display:flex;flex-direction:column;gap:6px;">
+        <div id="pinDisplay" style="font-family:var(--display);font-size:2.8rem;letter-spacing:10px;color:var(--accent);flex:1;text-align:center;background:var(--bg);border-radius:6px;padding:6px 0;">——</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
           <button class="btn btn-primary btn-sm" onclick="generatePin()">🎲 YENİ</button>
           <button class="btn btn-ghost btn-sm" onclick="clearPin()">🗑 SİL</button>
         </div>
       </div>
-      <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-top:8px;text-align:center;line-height:1.6;" id="pinStatus">Parola oluşturmak için "Yeni" butonuna basın.<br>Projeksiyon ekranında da gösterilir.</div>
+      <div style="font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-top:8px;text-align:center;line-height:1.6;" id="pinStatus">Projeksiyon ekranında gösterilir.</div>
     </div>
 
-    <div class="lb-title">📊 CANLI SONUÇLAR</div>
-    <div class="stats-grid">
-      <div class="stat-box"><div class="stat-val" id="sCevap">0</div><div class="stat-lbl">Cevap</div></div>
-      <div class="stat-box"><div class="stat-val" id="sDoğru">0</div><div class="stat-lbl">Doğru</div></div>
-      <div class="stat-box"><div class="stat-val" id="sOran">—</div><div class="stat-lbl">Başarı</div></div>
+    <!-- LOBBY PLAYERS -->
+    <div class="lb-title">👥 LOBİDEKİ KATILIMCILAR</div>
+    <div class="lobby-players" id="lobbyPlayers"><div class="empty">Henüz kimse katılmadı</div></div>
+    <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);text-align:center;" id="lobbyPlayerCount">0 katılımcı</div>
+
+    <!-- LIVE RESULTS (shown during game) -->
+    <div id="liveResultsSection" style="display:none;">
+      <div class="lb-title">📊 CANLI SONUÇLAR</div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-val" id="sCevap">0</div><div class="stat-lbl">Cevap</div></div>
+        <div class="stat-box"><div class="stat-val" id="sDoğru">0</div><div class="stat-lbl">Doğru</div></div>
+        <div class="stat-box"><div class="stat-val" id="sOran">—</div><div class="stat-lbl">Başarı</div></div>
+      </div>
+      <div class="sec-lbl">Bu Tura Gelen Cevaplar</div>
+      <div class="ans-list" id="answersLive"><div class="empty">Henüz cevap yok</div></div>
+      <div class="sec-lbl">Genel Sıralama</div>
+      <div class="lb-list" id="lbList"><div class="empty">—</div></div>
     </div>
-    <div class="sec-lbl">Bu Tura Gelen Cevaplar</div>
-    <div class="ans-list" id="answersLive"><div class="empty">Henüz cevap yok</div></div>
-    <div class="sec-lbl">Genel Sıralama</div>
-    <div class="lb-list" id="lbList"><div class="empty">Katılımcı bekleniyor...</div></div>
+
+  </div>
+</div>
+
+<!-- CONFIRM RESET OVERLAY -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">⚠️</div>
+    <div class="confirm-title">EMİN MİSİNİZ?</div>
+    <div class="confirm-msg">Bu işlem tüm yarışma verilerini,<br>katılımcı kayıtlarını ve cevapları siler.<br>Lobi sıfırdan başlar.</div>
+    <div class="confirm-btns">
+      <button class="btn btn-danger" onclick="doReset()">EVET, SIFIRLA</button>
+      <button class="btn btn-ghost" onclick="closeConfirm()">İPTAL</button>
+    </div>
   </div>
 </div>
 
@@ -212,7 +302,7 @@ const rounds = [
    wrong:1,hint:"(a+b)² açılımında kaç terim olmalı? Çift çarpımı unutmayın.",explain:"Adım 1'de hata! (a+b)²=a²+2ab+b² olmalı. Doğru: 9+24+16=49"},
   {title:"🧠 Hatalı Mantık Çıkarımı",diff:"easy",q:"Öncül 1: 'Tüm kareler dikdörtgendir.' — Öncül 2: 'ABCD bir dikdörtgendir.' — YZ ne sonuç çıkardı?",
    steps:[{label:"Öncül 1",math:"∀x: Kare(x) → Dikdörtgen(x)"},{label:"Öncül 2",math:"Dikdörtgen(ABCD)"},{label:"Adım — YZ Dönüşümü",math:"∀x: Dikdörtgen(x) → Kare(x)"},{label:"Sonuç (YZ)",math:"∴ ABCD bir karedir."}],
-   wrong:2,hint:"'Tüm A'lar B'dir' önermesi tersine çevrilebilir mi?",explain:"Adım 3'te hata — Affirming the Consequent yanılgısı! Her dikdörtgen kare değildir."},
+   wrong:2,hint:"'Tüm A'lar B'dir' önermesi tersine çevrilebilir mi?",explain:"Adım 3'te hata — Affirming the Consequent! Her dikdörtgen kare değildir."},
   {title:"⭐⭐ Hatalı Türev",diff:"mid",q:"f(x) = x³ · ln(x) fonksiyonunun türevini bulun",
    steps:[{label:"Problem",math:"f(x) = x³ · ln(x)"},{label:"Adım 1 — Çarpım Kuralı",math:"f′(x) = (x³)′·ln(x) + x³·(ln x)′"},{label:"Adım 2 — Türevler",math:"(x³)′=3x²  ve  (ln x)′=1/x"},{label:"Adım 3 — Yerine Koyma",math:"f′(x) = 3x²·ln(x) + x³·x"},{label:"Adım 4 — Sadeleştirme",math:"f′(x) = 3x²ln(x) + x⁴"}],
    wrong:3,hint:"x³·(1/x) sadeleştirince ne olur?",explain:"Adım 3'te hata! x³·(1/x)=x². Doğru: f′(x)=3x²ln(x)+x²"},
@@ -230,12 +320,120 @@ const rounds = [
 let curRound=0, timerVal=90, timerInt=null, timerRunning=false;
 let roundDone=Array(rounds.length).fill(false);
 let selectedMusic='01', currentAudio=null, roundMusicMap={};
+let isGamePhase=false;
+let knownConnIds=new Set();
 
-// ── Music ──
-function renderMusicGrid() {
-  const g = document.getElementById('musicGrid'); g.innerHTML='';
-  MUSIC_FILES.forEach(m => {
-    const c = document.createElement('div');
+// ── PIN ──
+window.generatePin=function(){
+  const pin=String(Math.floor(1000+Math.random()*9000));
+  document.getElementById('pinDisplay').textContent=pin;
+  document.getElementById('pinStatus').textContent='✅ Aktif — projeksiyon ekranında görünüyor.';
+  set(ref(db,'game/pin'),pin);
+};
+window.clearPin=function(){
+  document.getElementById('pinDisplay').textContent='——';
+  document.getElementById('pinStatus').textContent='Parola yok — herkes girebilir.';
+  set(ref(db,'game/pin'),null);
+};
+onValue(ref(db,'game/pin'),snap=>{
+  const p=snap.val();
+  if(p){document.getElementById('pinDisplay').textContent=p;document.getElementById('pinStatus').textContent='✅ Aktif.';}
+},{onlyOnce:true});
+
+// ── CONFIRM RESET ──
+window.confirmReset=function(){ document.getElementById('confirmOverlay').classList.add('visible'); };
+window.closeConfirm=function(){ document.getElementById('confirmOverlay').classList.remove('visible'); };
+window.doReset=async function(){
+  closeConfirm();
+  stopTimer(); stopMusic();
+  // wipe all game data
+  await remove(ref(db,'game/answers'));
+  await remove(ref(db,'game/currentRound'));
+  await remove(ref(db,'game/connections'));
+  await remove(ref(db,'game/timer'));
+  await set(ref(db,'game/phase'),'lobby');
+  // reset local state
+  curRound=0; roundDone=Array(rounds.length).fill(false);
+  knownConnIds=new Set();
+  setLobbyPhase();
+  renderRound();
+  document.getElementById('lobbyPlayers').innerHTML='<div class="empty">Henüz kimse katılmadı</div>';
+  document.getElementById('lobbyPlayerCount').textContent='0 katılımcı';
+  document.getElementById('statusMsg').textContent='Lobi sıfırlandı. Katılımcılar bağlanabilir.';
+};
+
+// ── PHASE ──
+function setLobbyPhase(){
+  isGamePhase=false;
+  document.getElementById('phaseVal').textContent='⏳ LOBİ';
+  document.getElementById('phaseVal').className='phase-val lobby';
+  document.getElementById('gameControls').classList.add('locked');
+  document.getElementById('startGameBtn').disabled=false;
+  document.getElementById('liveResultsSection').style.display='none';
+}
+function setGamePhase(){
+  isGamePhase=true;
+  document.getElementById('phaseVal').textContent='🎮 YARIŞMA';
+  document.getElementById('phaseVal').className='phase-val game';
+  document.getElementById('gameControls').classList.remove('locked');
+  document.getElementById('startGameBtn').disabled=true;
+  document.getElementById('liveResultsSection').style.display='block';
+  document.getElementById('statusMsg').textContent='Turu yayınlayın — süre ve müzik otomatik başlar.';
+}
+
+window.startGame=async function(){
+  await set(ref(db,'game/phase'),'game');
+  setGamePhase();
+};
+
+// listen phase from firebase (so other tabs/devices sync)
+onValue(ref(db,'game/phase'),snap=>{
+  const p=snap.val();
+  if(p==='game') setGamePhase();
+  else setLobbyPhase();
+});
+
+// ── LOBBY PLAYERS ──
+onValue(ref(db,'game/connections'),snap=>{
+  const conns=snap.val()||{};
+  const ids=Object.keys(conns);
+  document.getElementById('connCount').textContent=ids.length;
+  document.getElementById('lobbyPlayerCount').textContent=ids.length+' katılımcı';
+  document.getElementById('startGameBtn').disabled=ids.length===0&&!isGamePhase;
+
+  const list=document.getElementById('lobbyPlayers');
+  if(!ids.length){list.innerHTML='<div class="empty">Henüz kimse katılmadı</div>';return;}
+
+  // add only new ones
+  ids.forEach(id=>{
+    if(!knownConnIds.has(id)){
+      knownConnIds.add(id);
+      // remove 'newest' badge from previous
+      list.querySelectorAll('.lp-new').forEach(b=>b.remove());
+      list.querySelectorAll('.lp-row').forEach(r=>r.classList.remove('newest'));
+      if(list.querySelector('.empty')) list.innerHTML='';
+      const row=document.createElement('div');
+      row.className='lp-row newest'; row.id='lp-'+id;
+      const avatars=['🧑‍💻','👨‍🎓','👩‍🎓','🧑‍🏫','👨‍🔬','👩‍🔬'];
+      const av=avatars[Math.floor(Math.random()*avatars.length)];
+      row.innerHTML=`<span style="font-size:1rem;">${av}</span><span class="lp-name">${conns[id].name||'?'}</span><span class="lp-new">YENİ</span>`;
+      list.appendChild(row);
+      // fade out 'newest' after 3s
+      setTimeout(()=>{row.classList.remove('newest');const b=row.querySelector('.lp-new');if(b)b.remove();},3000);
+    }
+  });
+  // remove disconnected
+  knownConnIds.forEach(id=>{
+    if(!conns[id]){knownConnIds.delete(id);const el=document.getElementById('lp-'+id);if(el)el.remove();}
+  });
+  if(!list.children.length) list.innerHTML='<div class="empty">Henüz kimse katılmadı</div>';
+});
+
+// ── MUSIC ──
+function renderMusicGrid(){
+  const g=document.getElementById('musicGrid'); g.innerHTML='';
+  MUSIC_FILES.forEach(m=>{
+    const c=document.createElement('div');
     c.className='music-card'+(selectedMusic===m.id?' selected':'');
     c.id='mc-'+m.id;
     c.innerHTML=`<span class="music-icon">${m.icon}</span><span class="music-info"><span class="music-name">${m.name}</span><span class="music-file">${m.id}.mp3</span></span><span class="music-status" id="ms-${m.id}"></span>`;
@@ -243,30 +441,13 @@ function renderMusicGrid() {
     g.appendChild(c);
   });
 }
-function selectMusic(id) {
-  selectedMusic=id; roundMusicMap[curRound]=id;
-  document.querySelectorAll('.music-card').forEach(c=>c.classList.remove('selected'));
-  const el=document.getElementById('mc-'+id); if(el) el.classList.add('selected');
-}
-window.selectNoMusic=function(){
-  selectedMusic=null; roundMusicMap[curRound]=null;
-  document.querySelectorAll('.music-card').forEach(c=>c.classList.remove('selected'));
-};
-window.previewMusic=function(){
-  if(!selectedMusic)return; stopMusic();
-  currentAudio=new Audio(selectedMusic+'.mp3'); currentAudio.loop=true; currentAudio.volume=0.5;
-  currentAudio.play().catch(()=>{});
-  const el=document.getElementById('mc-'+selectedMusic); if(el) el.classList.add('playing');
-  const ms=document.getElementById('ms-'+selectedMusic); if(ms) ms.textContent='▶';
-};
-window.stopMusic=function(){
-  if(currentAudio){currentAudio.pause();currentAudio.currentTime=0;currentAudio=null;}
-  document.querySelectorAll('.music-card').forEach(c=>c.classList.remove('playing'));
-  document.querySelectorAll('[id^="ms-"]').forEach(e=>e.textContent='');
-};
+function selectMusic(id){selectedMusic=id;roundMusicMap[curRound]=id;document.querySelectorAll('.music-card').forEach(c=>c.classList.remove('selected'));const el=document.getElementById('mc-'+id);if(el)el.classList.add('selected');}
+window.selectNoMusic=function(){selectedMusic=null;roundMusicMap[curRound]=null;document.querySelectorAll('.music-card').forEach(c=>c.classList.remove('selected'));};
+window.previewMusic=function(){if(!selectedMusic)return;stopMusic();currentAudio=new Audio(selectedMusic+'.mp3');currentAudio.loop=true;currentAudio.volume=0.5;currentAudio.play().catch(()=>{});const mc=document.getElementById('mc-'+selectedMusic);if(mc)mc.classList.add('playing');const ms=document.getElementById('ms-'+selectedMusic);if(ms)ms.textContent='▶';};
+window.stopMusic=function(){if(currentAudio){currentAudio.pause();currentAudio.currentTime=0;currentAudio=null;}document.querySelectorAll('.music-card').forEach(c=>c.classList.remove('playing'));document.querySelectorAll('[id^="ms-"]').forEach(e=>e.textContent='');};
 
-// ── Round ──
-function renderRound() {
+// ── ROUND ──
+function renderRound(){
   const r=rounds[curRound];
   document.getElementById('qDiff').textContent=DIFF[r.diff]||'';
   document.getElementById('qTitle').textContent=r.title;
@@ -280,11 +461,10 @@ function renderRound() {
   });
   document.getElementById('publishBtn').disabled=false;
   document.getElementById('revealBtn').disabled=true;
-  document.getElementById('statusMsg').textContent='Turu yayınlayın — süre ve müzik otomatik başlar.';
   if(roundMusicMap[curRound]!==undefined){selectedMusic=roundMusicMap[curRound];renderMusicGrid();}
   renderNav();
 }
-function renderNav() {
+function renderNav(){
   const nav=document.getElementById('roundNav'); nav.innerHTML='';
   const diff=['🟢','🟢','🟡','🟡','🔴','🔴'];
   rounds.forEach((r,i)=>{
@@ -296,8 +476,8 @@ function renderNav() {
   });
 }
 
-// ── Timer ──
-function startTimer() {
+// ── TIMER ──
+function startTimer(){
   timerVal=parseInt(document.getElementById('timerInput').value)||90;
   document.getElementById('timerDisp').textContent=timerVal;
   timerRunning=true;
@@ -307,7 +487,7 @@ function startTimer() {
   timerInt=setInterval(()=>{
     timerVal--;
     el.textContent=timerVal;
-    if(timerVal<=10) el.className='timer-big urgent';
+    if(timerVal<=10)el.className='timer-big urgent';
     set(ref(db,'game/timer'),{value:timerVal,running:timerVal>0,ts:Date.now()});
     if(timerVal<=0){clearInterval(timerInt);timerRunning=false;el.className='timer-big';document.getElementById('stopBtn').style.display='none';stopMusic();}
   },1000);
@@ -320,32 +500,23 @@ window.stopTimer=function(){
   stopMusic();
 };
 
-// ── Publish ──
+// ── PUBLISH ──
 window.publishRound=async function(){
+  if(!isGamePhase)return;
   const r=rounds[curRound];
   const duration=parseInt(document.getElementById('timerInput').value)||90;
   stopTimer(); stopMusic();
-  await set(ref(db,'game/currentRound'),{
-    index:curRound,title:r.title,q:r.q,steps:r.steps,diff:r.diff,
-    revealed:false,timerStart:Date.now(),duration,hint:r.hint,
-  });
+  await set(ref(db,'game/currentRound'),{index:curRound,title:r.title,q:r.q,steps:r.steps,diff:r.diff,revealed:false,timerStart:Date.now(),duration,hint:r.hint});
   await remove(ref(db,'game/answers/'+curRound));
   document.getElementById('publishBtn').disabled=true;
   document.getElementById('revealBtn').disabled=false;
   document.getElementById('statusMsg').textContent=`✅ Tur ${curRound+1} yayınlandı! Süre ve müzik başladı.`;
-  timerVal=duration;
-  document.getElementById('timerDisp').textContent=timerVal;
+  timerVal=duration; document.getElementById('timerDisp').textContent=timerVal;
   startTimer();
-  if(selectedMusic){
-    currentAudio=new Audio(selectedMusic+'.mp3');
-    currentAudio.loop=true; currentAudio.volume=0.5;
-    currentAudio.play().catch(()=>{});
-    const mc=document.getElementById('mc-'+selectedMusic); if(mc) mc.classList.add('playing');
-    const ms=document.getElementById('ms-'+selectedMusic); if(ms) ms.textContent='▶';
-  }
+  if(selectedMusic){currentAudio=new Audio(selectedMusic+'.mp3');currentAudio.loop=true;currentAudio.volume=0.5;currentAudio.play().catch(()=>{});const mc=document.getElementById('mc-'+selectedMusic);if(mc)mc.classList.add('playing');const ms=document.getElementById('ms-'+selectedMusic);if(ms)ms.textContent='▶';}
 };
 
-// ── Reveal ──
+// ── REVEAL ──
 window.revealAnswer=async function(){
   const r=rounds[curRound]; stopTimer(); stopMusic();
   await update(ref(db,'game/currentRound'),{revealed:true,wrongStep:r.wrong,explain:r.explain});
@@ -355,7 +526,7 @@ window.revealAnswer=async function(){
 };
 window.nextRound=function(){if(curRound<rounds.length-1){stopTimer();curRound++;renderRound();}};
 
-// ── Listeners ──
+// ── ANSWERS LISTENER ──
 onValue(ref(db,'game/answers'),snap=>{
   const all=snap.val()||{};
   const cur=all[curRound]||{};
@@ -366,59 +537,19 @@ onValue(ref(db,'game/answers'),snap=>{
   document.getElementById('sOran').textContent=total?Math.round(correct/total*100)+'%':'—';
   const al=document.getElementById('answersLive');
   if(!total){al.innerHTML='<div class="empty">Henüz cevap yok</div>';}
-  else{
-    al.innerHTML='';
-    [...entries].sort((a,b)=>a.elapsed-b.elapsed).forEach(e=>{
-      const d=document.createElement('div');
-      d.className='ans-row '+(e.correct?'ok':'fail');
-      d.innerHTML=`<span class="ans-name">${e.name}</span><span class="ans-time">${e.elapsed}s</span><span>${e.correct?'✅':'❌'}</span>`;
-      al.appendChild(d);
-    });
-  }
+  else{al.innerHTML='';[...entries].sort((a,b)=>a.elapsed-b.elapsed).forEach(e=>{const d=document.createElement('div');d.className='ans-row '+(e.correct?'ok':'fail');d.innerHTML=`<span class="ans-name">${e.name}</span><span class="ans-time">${e.elapsed}s</span><span>${e.correct?'✅':'❌'}</span>`;al.appendChild(d);});}
   const scores={};
-  Object.values(all).forEach(ra=>Object.values(ra||{}).forEach(e=>{
-    if(!scores[e.name]) scores[e.name]={name:e.name,score:0,correct:0,total:0};
-    scores[e.name].total++;
-    if(e.correct){scores[e.name].correct++;scores[e.name].score+=(e.hintUsed?5:10);}
-  }));
+  Object.values(all).forEach(ra=>Object.values(ra||{}).forEach(e=>{if(!scores[e.name])scores[e.name]={name:e.name,score:0,correct:0,total:0};scores[e.name].total++;if(e.correct){scores[e.name].correct++;scores[e.name].score+=(e.hintUsed?5:10);}}));
   const lb=Object.values(scores).sort((a,b)=>b.score-a.score);
   const lbEl=document.getElementById('lbList');
-  if(!lb.length){lbEl.innerHTML='<div class="empty">Katılımcı bekleniyor...</div>';return;}
+  if(!lb.length){lbEl.innerHTML='<div class="empty">—</div>';return;}
   lbEl.innerHTML='';
-  lb.forEach((p,i)=>{
-    const row=document.createElement('div');
-    row.className='lb-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');
-    row.innerHTML=`<div class="lb-rank">${i===0?'👑':i+1}</div><div class="lb-name">${p.name}</div><div class="lb-score">${p.score}</div><div class="lb-detail">${p.correct}/${p.total}</div>`;
-    lbEl.appendChild(row);
-  });
-});
-onValue(ref(db,'game/connections'),snap=>{
-  document.getElementById('connCount').textContent=Object.keys(snap.val()||{}).length;
+  lb.forEach((p,i)=>{const row=document.createElement('div');row.className='lb-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');row.innerHTML=`<div class="lb-rank">${i===0?'👑':i+1}</div><div class="lb-name">${p.name}</div><div class="lb-score">${p.score}</div><div class="lb-detail">${p.correct}/${p.total}</div>`;lbEl.appendChild(row);});
 });
 
 renderMusicGrid();
 renderRound();
-
-// ── PIN ──
-window.generatePin = function() {
-  const pin = String(Math.floor(1000 + Math.random() * 9000));
-  document.getElementById('pinDisplay').textContent = pin;
-  document.getElementById('pinStatus').textContent = '✅ Parola aktif — katılımcılar bu kodu girerek sisteme girebilir.';
-  set(ref(db, 'game/pin'), pin);
-};
-window.clearPin = function() {
-  document.getElementById('pinDisplay').textContent = '——';
-  document.getElementById('pinStatus').textContent = 'Parola kaldırıldı — artık herkes girebilir.';
-  set(ref(db, 'game/pin'), null);
-};
-// restore pin on load
-onValue(ref(db,'game/pin'), snap => {
-  const p = snap.val();
-  if (p) {
-    document.getElementById('pinDisplay').textContent = p;
-    document.getElementById('pinStatus').textContent = '✅ Parola aktif.';
-  }
-}, {onlyOnce: true});
+setLobbyPhase();
 </script>
 </body>
 </html>

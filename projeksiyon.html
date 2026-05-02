@@ -8,135 +8,157 @@
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
   :root{--bg:#0a0a0a;--surface:#111;--card:#161616;--border:#222;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--text:#f0f0f0;--muted:#555;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{width:100%;height:100%;overflow:hidden;}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans);}
 
-  /* ── LOBBY (before game starts) ── */
+  /* ─── LOBBY ─── */
   #lobbyScreen{width:100%;height:100vh;display:flex;flex-direction:column;}
-  .lobby-header{background:var(--surface);border-bottom:2px solid var(--accent);padding:20px 48px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-  .lobby-title{font-family:var(--display);font-size:3rem;letter-spacing:4px;color:var(--accent);}
-  .lobby-sub{font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:2px;margin-top:2px;}
-  .lobby-badge{font-family:var(--mono);font-size:.8rem;padding:6px 16px;border-radius:20px;background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.25);color:var(--accent3);}
+
+  .lobby-header{background:var(--surface);border-bottom:2px solid var(--accent);padding:18px 48px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .lobby-title{font-family:var(--display);font-size:2.8rem;letter-spacing:4px;color:var(--accent);}
+  .lobby-sub{font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:2px;margin-top:2px;}
+  .lobby-conn{font-family:var(--mono);font-size:.8rem;padding:6px 16px;border-radius:20px;background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.25);color:var(--accent3);}
   .dot{width:9px;height:9px;border-radius:50%;background:var(--accent3);display:inline-block;margin-right:7px;animation:blink 1.5s infinite;}
   @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
 
-  .lobby-body{flex:1;display:grid;grid-template-columns:1fr 420px;overflow:hidden;}
-  .lobby-left{padding:40px 48px;display:flex;flex-direction:column;justify-content:center;align-items:center;border-right:1px solid var(--border);}
-  .qr-section{text-align:center;}
-  .qr-label{font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;}
-  .qr-box{background:white;padding:16px;border-radius:12px;display:inline-block;margin-bottom:16px;}
-  .qr-box img{width:220px;height:220px;display:block;}
-  .qr-url{font-family:var(--mono);font-size:.85rem;color:var(--accent);letter-spacing:1px;}
-  .join-instruction{margin-top:32px;font-family:var(--display);font-size:2rem;letter-spacing:3px;color:var(--muted);text-align:center;}
-  .join-instruction span{color:var(--accent);}
+  .lobby-body{flex:1;display:grid;grid-template-columns:340px 1fr 340px;overflow:hidden;gap:0;}
 
-  .lobby-right{padding:24px 28px;overflow:hidden;display:flex;flex-direction:column;}
-  .join-feed-title{font-family:var(--display);font-size:1.4rem;letter-spacing:3px;color:var(--accent);margin-bottom:16px;flex-shrink:0;}
-  .join-count{font-family:var(--display);font-size:1rem;color:var(--accent3);letter-spacing:2px;margin-bottom:12px;flex-shrink:0;}
-  .join-feed{flex:1;overflow:hidden;display:flex;flex-direction:column;gap:8px;justify-content:flex-end;}
-  .join-item{padding:10px 16px;border-radius:8px;font-family:var(--mono);font-size:.88rem;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:10px;transition:all .5s;}
-  .join-item.newest{border-color:var(--accent);background:rgba(245,197,24,.08);animation:newJoin .6s ease;}
-  @keyframes newJoin{0%{transform:translateX(30px);opacity:0;border-color:var(--accent);}40%{transform:translateX(-4px);}100%{transform:translateX(0);opacity:1;}}
-  .join-avatar{font-size:1.2rem;}
-  .join-name{flex:1;color:var(--text);}
-  .join-new-badge{font-size:.55rem;font-family:var(--mono);padding:2px 7px;background:var(--accent);color:#000;border-radius:3px;letter-spacing:.5px;animation:badgeFade 2s forwards;}
-  @keyframes badgeFade{0%,70%{opacity:1;}100%{opacity:0;}}
+  /* Left col: QR + PIN */
+  .lobby-left{padding:32px 28px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:24px;border-right:1px solid var(--border);}
+  .qr-lbl{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;text-align:center;}
+  .qr-box{background:white;padding:14px;border-radius:10px;display:inline-block;}
+  .qr-box img{width:200px;height:200px;display:block;}
+  .qr-url{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:1px;text-align:center;word-break:break-all;margin-top:6px;}
 
-  /* ── GAME SCREEN ── */
+  .pin-box{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;text-align:center;}
+  .pin-lbl{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+  .pin-val{font-family:var(--display);font-size:4.5rem;letter-spacing:16px;color:var(--accent);line-height:1;}
+  .pin-sublbl{font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-top:6px;letter-spacing:1px;}
+
+  /* Center col: Players */
+  .lobby-center{padding:28px 32px;overflow:hidden;display:flex;flex-direction:column;}
+  .lc-title{font-family:var(--display);font-size:1.6rem;letter-spacing:3px;color:var(--accent);margin-bottom:6px;}
+  .lc-count{font-family:var(--mono);font-size:.75rem;color:var(--accent3);letter-spacing:1px;margin-bottom:18px;}
+  .players-grid{flex:1;overflow:hidden;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:min-content;gap:8px;align-content:start;}
+  .player-chip{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;transition:all .4s;animation:chipIn .4s ease;}
+  @keyframes chipIn{from{opacity:0;transform:scale(.85);}to{opacity:1;transform:scale(1);}}
+  .player-chip.newest{border-color:var(--accent);background:rgba(245,197,24,.08);box-shadow:0 0 12px rgba(245,197,24,.2);}
+  .player-chip .pav{font-size:1.2rem;}
+  .player-chip .pname{font-family:var(--mono);font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .player-chip .pnew{font-size:.5rem;padding:2px 5px;background:var(--accent);color:#000;border-radius:3px;margin-left:auto;letter-spacing:.5px;flex-shrink:0;}
+
+  /* Right col: waiting message */
+  .lobby-right{padding:32px 28px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;border-left:1px solid var(--border);}
+  .wait-msg-big{font-family:var(--display);font-size:1.6rem;letter-spacing:3px;color:var(--muted);text-align:center;line-height:1.4;}
+  .wait-msg-big span{color:var(--accent);}
+  .wait-steps{display:flex;flex-direction:column;gap:10px;width:100%;}
+  .wait-step{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border-radius:8px;border:1px solid var(--border);}
+  .ws-num{font-family:var(--display);font-size:1.4rem;color:var(--accent);width:24px;flex-shrink:0;}
+  .ws-txt{font-family:var(--mono);font-size:.7rem;color:var(--muted);line-height:1.5;}
+
+  /* ─── GAME SCREEN ─── */
   #gameScreen{width:100%;height:100vh;display:none;flex-direction:column;}
-  .game-header{background:var(--surface);border-bottom:2px solid var(--accent);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-  .game-title{font-family:var(--display);font-size:2rem;letter-spacing:3px;color:var(--accent);}
-  .game-round{font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:2px;}
-  .timer-wrap{display:flex;align-items:center;gap:16px;}
+  .game-header{background:var(--surface);border-bottom:2px solid var(--accent);padding:12px 36px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .game-title{font-family:var(--display);font-size:1.9rem;letter-spacing:3px;color:var(--accent);}
+  .game-round{font-family:var(--mono);font-size:.7rem;color:var(--muted);letter-spacing:2px;}
+  .timer-wrap{display:flex;align-items:center;gap:14px;}
   .timer-num{font-family:var(--display);font-size:3.5rem;color:var(--accent2);letter-spacing:6px;min-width:100px;text-align:center;transition:color .3s;}
   .timer-num.ok{color:var(--accent3);}
   .timer-num.urgent{color:var(--accent2);animation:tpulse .4s infinite alternate;}
-  @keyframes tpulse{from{opacity:1;transform:scale(1);}to{opacity:.6;transform:scale(1.05);}}
-  .ans-counter{font-family:var(--mono);font-size:.75rem;color:var(--muted);text-align:right;letter-spacing:1px;}
-  .ans-counter span{color:var(--accent3);font-family:var(--display);font-size:1.2rem;}
-
+  @keyframes tpulse{from{opacity:1;transform:scale(1);}to{opacity:.6;transform:scale(1.04);}}
+  .ans-ctr{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:right;letter-spacing:1px;}
+  .ans-ctr span{color:var(--accent3);font-family:var(--display);font-size:1.2rem;}
   .progress-wrap{height:4px;background:var(--border);flex-shrink:0;}
   .progress-fill{height:100%;background:var(--accent);transition:width 1s linear;}
-
-  .game-body{flex:1;display:grid;grid-template-columns:1fr 360px;overflow:hidden;}
-  .question-panel{padding:32px 40px;overflow-y:auto;display:flex;flex-direction:column;gap:20px;border-right:1px solid var(--border);}
-  .q-diff{font-family:var(--mono);font-size:.7rem;letter-spacing:1px;margin-bottom:2px;}
-  .q-title-big{font-family:var(--display);font-size:2rem;letter-spacing:2px;color:var(--text);line-height:1.1;}
-  .q-box{background:rgba(245,197,24,.06);border-left:4px solid var(--accent);padding:14px 20px;font-family:var(--mono);font-size:1rem;color:var(--accent);border-radius:0 6px 6px 0;line-height:1.6;}
-  .steps-big{display:flex;flex-direction:column;gap:8px;}
-  .step-big{display:flex;gap:14px;padding:12px 16px;border-radius:6px;border:1px solid var(--border);background:var(--card);transition:all .5s;}
-  .step-big.highlight{border-color:var(--accent2);background:rgba(232,64,64,.1);animation:wrongPulse 1s ease;}
-  @keyframes wrongPulse{0%{transform:scale(1);}30%{transform:scale(1.015);}100%{transform:scale(1);}}
-  .step-big-num{font-family:var(--display);font-size:2rem;color:var(--border);width:32px;flex-shrink:0;}
+  .game-body{flex:1;display:grid;grid-template-columns:1fr 340px;overflow:hidden;}
+  .question-panel{padding:28px 36px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;border-right:1px solid var(--border);}
+  .q-diff{font-family:var(--mono);font-size:.68rem;letter-spacing:1px;}
+  .q-title-big{font-family:var(--display);font-size:1.9rem;letter-spacing:2px;color:var(--text);line-height:1.1;}
+  .q-box{background:rgba(245,197,24,.06);border-left:4px solid var(--accent);padding:12px 18px;font-family:var(--mono);font-size:.95rem;color:var(--accent);border-radius:0 6px 6px 0;line-height:1.6;}
+  .steps-big{display:flex;flex-direction:column;gap:7px;}
+  .step-big{display:flex;gap:12px;padding:11px 14px;border-radius:6px;border:1px solid var(--border);background:var(--card);transition:all .5s;}
+  .step-big.highlight{border-color:var(--accent2);background:rgba(232,64,64,.1);animation:wrongPulse .8s ease;}
+  @keyframes wrongPulse{0%{transform:scale(1);}40%{transform:scale(1.012);}100%{transform:scale(1);}}
+  .step-big-num{font-family:var(--display);font-size:1.8rem;color:var(--border);width:30px;flex-shrink:0;}
   .step-big.highlight .step-big-num{color:var(--accent2);}
-  .step-big-content{flex:1;}
-  .step-big-lbl{font-family:var(--mono);font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
-  .step-big-math{font-family:var(--mono);font-size:1.05rem;color:var(--text);line-height:1.5;}
-  .wrong-badge{font-size:.65rem;padding:3px 10px;background:var(--accent2);color:#fff;border-radius:4px;letter-spacing:.5px;margin-left:8px;white-space:nowrap;}
-
-  /* Reveal overlay */
-  .reveal-banner{display:none;background:rgba(61,214,140,.08);border:2px solid var(--accent3);border-radius:10px;padding:16px 22px;}
+  .step-big-lbl{font-family:var(--mono);font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+  .step-big-math{font-family:var(--mono);font-size:1rem;color:var(--text);line-height:1.5;}
+  .wrong-badge{font-size:.62rem;padding:3px 10px;background:var(--accent2);color:#fff;border-radius:4px;margin-left:8px;letter-spacing:.5px;white-space:nowrap;align-self:center;}
+  .reveal-banner{display:none;background:rgba(61,214,140,.07);border:2px solid var(--accent3);border-radius:10px;padding:14px 20px;}
   .reveal-banner.visible{display:block;animation:slideIn .4s ease;}
   @keyframes slideIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
-  .reveal-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent3);margin-bottom:6px;}
-  .reveal-text{font-family:var(--mono);font-size:.8rem;color:var(--muted);line-height:1.7;}
-
-  /* Right: live answers + leaderboard */
-  .side-panel{padding:20px 24px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;}
-  .side-title{font-family:var(--display);font-size:1.1rem;letter-spacing:2px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:8px;}
-  .live-answers{display:flex;flex-direction:column;gap:5px;max-height:220px;overflow:hidden;}
-  .la-row{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:5px;background:var(--card);border:1px solid var(--border);font-family:var(--mono);font-size:.75rem;animation:laIn .3s ease;}
-  @keyframes laIn{from{opacity:0;transform:translateX(12px);}to{opacity:1;transform:translateX(0);}}
+  .reveal-title{font-family:var(--display);font-size:1.3rem;letter-spacing:2px;color:var(--accent3);margin-bottom:5px;}
+  .reveal-text{font-family:var(--mono);font-size:.78rem;color:var(--muted);line-height:1.7;}
+  /* side panel */
+  .side-panel{padding:18px 22px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;}
+  .side-title{font-family:var(--display);font-size:1rem;letter-spacing:2px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:7px;}
+  .live-answers{display:flex;flex-direction:column;gap:4px;max-height:200px;overflow:hidden;}
+  .la-row{display:flex;align-items:center;gap:7px;padding:5px 9px;border-radius:4px;background:var(--card);border:1px solid var(--border);font-family:var(--mono);font-size:.72rem;animation:laIn .3s ease;}
+  @keyframes laIn{from{opacity:0;transform:translateX(10px);}to{opacity:1;transform:translateX(0);}}
   .la-row.ok{border-color:var(--accent3);background:rgba(61,214,140,.05);}
   .la-row.fail{border-color:var(--accent2);background:rgba(232,64,64,.05);}
   .la-name{flex:1;}
-  .la-time{font-family:var(--display);font-size:.95rem;color:var(--muted);letter-spacing:1px;}
+  .la-time{font-family:var(--display);font-size:.9rem;color:var(--muted);letter-spacing:1px;}
   .lb-rows{display:flex;flex-direction:column;gap:5px;}
-  .lb-row{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card);border-radius:5px;border:1px solid var(--border);transition:all .4s;}
+  .lb-row{display:flex;align-items:center;gap:7px;padding:7px 11px;background:var(--card);border-radius:5px;border:1px solid var(--border);transition:all .4s;}
   .lb-row.r1{border-color:var(--accent);background:rgba(245,197,24,.07);}
   .lb-row.r2{border-color:#999;}
   .lb-row.r3{border-color:#cd7f32;}
-  .lb-rank{font-family:var(--display);font-size:1.1rem;width:26px;color:var(--muted);}
+  .lb-rank{font-family:var(--display);font-size:1rem;width:24px;color:var(--muted);}
   .lb-row.r1 .lb-rank{color:var(--accent);}
-  .lb-name{flex:1;font-family:var(--mono);font-size:.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .lb-score{font-family:var(--display);font-size:1.15rem;color:var(--accent3);letter-spacing:1px;}
-  .empty{font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;padding:14px;}
+  .lb-name-cell{flex:1;font-family:var(--mono);font-size:.73rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lb-score{font-family:var(--display);font-size:1.1rem;color:var(--accent3);letter-spacing:1px;}
+  .empty{font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center;padding:12px;}
 </style>
 </head>
 <body>
 
-<!-- LOBBY -->
+<!-- ─── LOBBY ─── -->
 <div id="lobbyScreen">
   <div class="lobby-header">
     <div>
       <div class="lobby-title">🔍 HATA AVI</div>
       <div class="lobby-sub">MATEMATİK EKSENİNDE YAPAY ZEKA BULUŞMALARI</div>
     </div>
-    <div class="lobby-badge"><span class="dot"></span><span id="lobbyCount">0</span> katılımcı bağlandı</div>
+    <div class="lobby-conn"><span class="dot"></span><span id="lobbyCount">0</span> katılımcı bağlandı</div>
   </div>
+
   <div class="lobby-body">
+    <!-- LEFT: QR + PIN -->
     <div class="lobby-left">
-      <div class="qr-section">
-        <div class="qr-label">Telefonunuzdan katılın</div>
+      <div>
+        <div class="qr-lbl">Telefonunuzdan katılın</div>
         <div class="qr-box"><img id="qrImg" src="" alt="QR"></div>
-        <div class="qr-url" id="qrUrl">Yükleniyor...</div>
+        <div class="qr-url" id="qrUrl">—</div>
       </div>
-      <div class="join-instruction">QR'ı okutun veya<br><span id="shortUrl">adresi girin</span></div>
-      <div id="pinArea" style="margin-top:24px;text-align:center;display:none;">
-        <div style="font-family:var(--mono);font-size:.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Giriş Parolası</div>
-        <div id="projPin" style="font-family:'Bebas Neue',sans-serif;font-size:5rem;letter-spacing:20px;color:var(--accent);line-height:1;">——</div>
+      <div class="pin-box" id="pinBox" style="display:none;">
+        <div class="pin-lbl">🔐 Giriş Parolası</div>
+        <div class="pin-val" id="projPin">——</div>
+        <div class="pin-sublbl">Bu kodu girerek sisteme girin</div>
       </div>
     </div>
+
+    <!-- CENTER: Players -->
+    <div class="lobby-center">
+      <div class="lc-title">👥 KATILIMCILAR</div>
+      <div class="lc-count" id="lcCount">Bekleniyor...</div>
+      <div class="players-grid" id="playersGrid"></div>
+    </div>
+
+    <!-- RIGHT: Instructions -->
     <div class="lobby-right">
-      <div class="join-feed-title">👥 KATILIMCILAR</div>
-      <div class="join-count"><span id="feedCount">0</span> kişi hazır</div>
-      <div class="join-feed" id="joinFeed"></div>
+      <div class="wait-msg-big">Katılmak için<br><span>QR kodu okutun</span><br>veya adresi açın</div>
+      <div class="wait-steps">
+        <div class="wait-step"><div class="ws-num">1</div><div class="ws-txt">QR kodu okutun veya adresi tarayıcıya girin</div></div>
+        <div class="wait-step"><div class="ws-num">2</div><div class="ws-txt">Adınızı ve parolayı girin</div></div>
+        <div class="wait-step"><div class="ws-num">3</div><div class="ws-txt">Soruyu bu ekrandan okuyun, telefonda adımları seçin</div></div>
+        <div class="wait-step"><div class="ws-num">4</div><div class="ws-txt">En hızlı ve doğru cevap en çok puan kazanır!</div></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- GAME -->
-<div id="gameScreen" style="display:none;flex-direction:column;">
+<!-- ─── GAME ─── -->
+<div id="gameScreen">
   <div class="game-header">
     <div>
       <div class="game-round" id="gRoundLabel">TUR 1 / 6</div>
@@ -144,17 +166,13 @@
     </div>
     <div class="timer-wrap">
       <div>
-        <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:1px;text-align:center;margin-bottom:2px;">SÜRE</div>
+        <div style="font-family:var(--mono);font-size:.58rem;color:var(--muted);text-align:center;margin-bottom:2px;letter-spacing:1px;">SÜRE</div>
         <div class="timer-num" id="gTimer">—</div>
       </div>
-      <div class="ans-counter">
-        <span id="gAnsCount">0</span><br>
-        <span style="font-size:.6rem;">cevap</span>
-      </div>
+      <div class="ans-ctr"><span id="gAnsCount">0</span><br><span style="font-size:.58rem;">cevap</span></div>
     </div>
   </div>
   <div class="progress-wrap"><div class="progress-fill" id="gProgress" style="width:100%"></div></div>
-
   <div class="game-body">
     <div class="question-panel">
       <div>
@@ -164,7 +182,7 @@
       <div class="q-box" id="gQ"></div>
       <div class="steps-big" id="gStepsBig"></div>
       <div class="reveal-banner" id="revealBanner">
-        <div class="reveal-title">✅ CEVAP</div>
+        <div class="reveal-title">✅ CEVAP AÇIKLANDI</div>
         <div class="reveal-text" id="revealText"></div>
       </div>
     </div>
@@ -194,184 +212,157 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const DIFF_MAP={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🔴 ÇOK ZOR'};
+const AVATARS=['🧑‍💻','👨‍🎓','👩‍🎓','🧑‍🏫','👨‍🔬','👩‍🔬','🧑‍🎓','🎓','📐','🔢'];
 
-// QR & URL
-const joinUrl = window.location.href.replace('projeksiyon.html','').replace('projeksiyon.html','');
-const fullUrl = joinUrl.endsWith('/') ? joinUrl : joinUrl + '/';
-document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&bgcolor=ffffff&color=000000&data=${encodeURIComponent(fullUrl)}`;
-document.getElementById('qrUrl').textContent = fullUrl;
-// short display
-try {
-  const u = new URL(fullUrl);
-  document.getElementById('shortUrl').textContent = u.hostname + u.pathname;
-} catch(e) { document.getElementById('shortUrl').textContent = fullUrl; }
-
-// ── PIN display ──
-onValue(ref(db,'game/pin'), snap => {
-  const p = snap.val();
-  const area = document.getElementById('pinArea');
-  const el = document.getElementById('projPin');
-  if (p) { el.textContent = p; area.style.display = 'block'; }
-  else { area.style.display = 'none'; el.textContent = '——'; }
-});
+// ── QR ──
+const joinUrl = window.location.href.replace('projeksiyon.html','');
+const fullUrl = joinUrl.endsWith('/')?joinUrl:joinUrl+'/';
+document.getElementById('qrImg').src=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&bgcolor=ffffff&color=000000&data=${encodeURIComponent(fullUrl)}`;
+try{const u=new URL(fullUrl);document.getElementById('qrUrl').textContent=u.hostname+u.pathname;}
+catch(e){document.getElementById('qrUrl').textContent=fullUrl;}
 
 // ── LOBBY MUSIC ──
-const lobbyAudio = new Audio('lobby.mp3');
-lobbyAudio.loop = true; lobbyAudio.volume = 0.5;
-const playLobby = () => lobbyAudio.play().catch(() => {
-  const nudge = document.createElement('div');
-  nudge.id = 'audioNudge';
-  nudge.style.cssText = 'position:fixed;bottom:24px;right:24px;background:rgba(245,197,24,.15);border:1px solid rgba(245,197,24,.4);color:#f5c518;font-family:IBM Plex Mono,monospace;font-size:.7rem;padding:10px 16px;border-radius:8px;cursor:pointer;z-index:999;letter-spacing:1px;';
-  nudge.textContent = '🎵 MÜZİĞİ BAŞLAT';
-  nudge.onclick = () => { lobbyAudio.play(); nudge.remove(); };
-  document.body.appendChild(nudge);
+const lobbyAudio=new Audio('lobby.mp3');
+lobbyAudio.loop=true; lobbyAudio.volume=0.5;
+const playLobby=()=>lobbyAudio.play().catch(()=>{
+  const n=document.createElement('div');
+  n.id='audioNudge';
+  n.style.cssText='position:fixed;bottom:24px;right:24px;background:rgba(245,197,24,.15);border:1px solid rgba(245,197,24,.4);color:#f5c518;font-family:IBM Plex Mono,monospace;font-size:.7rem;padding:10px 16px;border-radius:8px;cursor:pointer;z-index:999;letter-spacing:1px;';
+  n.textContent='🎵 MÜZİĞİ BAŞLAT';
+  n.onclick=()=>{lobbyAudio.play();n.remove();};
+  document.body.appendChild(n);
 });
-document.addEventListener('click', () => { if(lobbyAudio.paused) lobbyAudio.play().catch(()=>{}); }, {once:true});
+document.addEventListener('click',()=>{if(lobbyAudio.paused)lobbyAudio.play().catch(()=>{});},{once:true});
 playLobby();
-function stopLobbyMusic() { lobbyAudio.pause(); lobbyAudio.currentTime=0; const n=document.getElementById('audioNudge'); if(n) n.remove(); }
+function stopLobbyMusic(){lobbyAudio.pause();lobbyAudio.currentTime=0;const n=document.getElementById('audioNudge');if(n)n.remove();}
 
-// ── LOBBY: connections → join feed ──
-let knownConnections = new Set();
-let connectionNames = {};
+// ── PIN ──
+onValue(ref(db,'game/pin'),snap=>{
+  const p=snap.val();
+  const box=document.getElementById('pinBox');
+  const el=document.getElementById('projPin');
+  if(p){el.textContent=p;box.style.display='block';}
+  else{box.style.display='none';}
+});
 
-onValue(ref(db,'game/connections'), snap => {
-  const conns = snap.val() || {};
-  const ids = Object.keys(conns);
-  const count = ids.length;
-  document.getElementById('lobbyCount').textContent = count;
-  document.getElementById('feedCount').textContent = count;
+// ── PHASE ──
+onValue(ref(db,'game/phase'),snap=>{
+  const phase=snap.val();
+  if(phase==='game'){
+    stopLobbyMusic();
+    document.getElementById('lobbyScreen').style.display='none';
+    document.getElementById('gameScreen').style.display='flex';
+    document.getElementById('gameScreen').style.flexDirection='column';
+  } else {
+    document.getElementById('lobbyScreen').style.display='flex';
+    document.getElementById('gameScreen').style.display='none';
+  }
+});
 
-  // find new ones
-  ids.forEach(id => {
-    if (!knownConnections.has(id)) {
-      knownConnections.add(id);
-      connectionNames[id] = conns[id].name || '?';
-      addToFeed(conns[id].name || '?');
+// ── CONNECTIONS ──
+let knownConnIds=new Set();
+let playerAvatarMap={};
+
+onValue(ref(db,'game/connections'),snap=>{
+  const conns=snap.val()||{};
+  const ids=Object.keys(conns);
+  const count=ids.length;
+  document.getElementById('lobbyCount').textContent=count;
+  document.getElementById('lcCount').textContent=count>0?`${count} kişi hazır`:'Bekleniyor...';
+
+  const grid=document.getElementById('playersGrid');
+
+  // remove disconnected
+  knownConnIds.forEach(id=>{
+    if(!conns[id]){
+      knownConnIds.delete(id);
+      const el=document.getElementById('pc-'+id);
+      if(el)el.remove();
     }
   });
+
+  // add new
+  ids.forEach(id=>{
+    if(!knownConnIds.has(id)){
+      knownConnIds.add(id);
+      if(!playerAvatarMap[id]) playerAvatarMap[id]=AVATARS[Math.floor(Math.random()*AVATARS.length)];
+      // remove previous newest highlights
+      grid.querySelectorAll('.player-chip.newest').forEach(c=>{
+        c.classList.remove('newest');
+        const b=c.querySelector('.pnew'); if(b)b.remove();
+      });
+      if(grid.querySelector('.empty')) grid.innerHTML='';
+      const chip=document.createElement('div');
+      chip.className='player-chip newest'; chip.id='pc-'+id;
+      chip.innerHTML=`<span class="pav">${playerAvatarMap[id]}</span><span class="pname">${conns[id].name||'?'}</span><span class="pnew">YENİ</span>`;
+      grid.appendChild(chip);
+      setTimeout(()=>{chip.classList.remove('newest');const b=chip.querySelector('.pnew');if(b)b.remove();},3000);
+    }
+  });
+  if(!ids.length) grid.innerHTML='<div class="empty" style="grid-column:1/-1;">Bekleniyor...</div>';
 });
 
-const AVATARS = ['🧑‍💻','👨‍🎓','👩‍🎓','🧑‍🏫','👨‍🔬','👩‍🔬','🧑‍🎓','👤'];
-function addToFeed(name) {
-  const feed = document.getElementById('joinFeed');
-  // remove 'newest' from previous
-  document.querySelectorAll('.join-item.newest').forEach(el => {
-    el.classList.remove('newest');
-    const badge = el.querySelector('.join-new-badge');
-    if (badge) badge.remove();
-  });
-  const item = document.createElement('div');
-  item.className = 'join-item newest';
-  const avatar = AVATARS[Math.floor(Math.random()*AVATARS.length)];
-  item.innerHTML = `<span class="join-avatar">${avatar}</span><span class="join-name">${name}</span><span class="join-new-badge">YENİ</span>`;
-  feed.appendChild(item);
-  // keep max 12 items
-  while (feed.children.length > 12) feed.removeChild(feed.firstChild);
-  // scroll to bottom
-  feed.scrollTop = feed.scrollHeight;
-}
-
-// ── GAME: round ──
-let currentRoundIndex = -1;
-let roundDuration = 90;
-
-onValue(ref(db,'game/currentRound'), snap => {
-  const round = snap.val();
-  if (!round) return;
-
-  // Switch lobby → game
-  document.getElementById('lobbyScreen').style.display = 'none';
-  document.getElementById('gameScreen').style.display = 'flex';
-  stopLobbyMusic();
-
-  roundDuration = round.duration || 90;
-
-  if (round.index !== currentRoundIndex) {
-    currentRoundIndex = round.index;
-    document.getElementById('revealBanner').className = 'reveal-banner';
-    document.getElementById('gProgress').style.width = '100%';
-
-    document.getElementById('gRoundLabel').textContent = `TUR ${round.index+1} / 6`;
-    document.getElementById('gTitle').textContent = round.title || '';
-    document.getElementById('gTitleBig').textContent = round.title || '';
-    document.getElementById('gDiff').textContent = DIFF_MAP[round.diff] || '';
-    document.getElementById('gQ').textContent = round.q || '';
-
-    const sb = document.getElementById('gStepsBig'); sb.innerHTML = '';
-    (round.steps||[]).forEach((s,i) => {
-      const d = document.createElement('div');
-      d.className = 'step-big'; d.id = 'step-proj-'+i;
-      d.innerHTML = `<div class="step-big-num">${i+1}</div><div class="step-big-content"><div class="step-big-lbl">${s.label}</div><div class="step-big-math">${s.math}</div></div>`;
+// ── ROUND ──
+let currentRoundIndex=-1, roundDuration=90;
+onValue(ref(db,'game/currentRound'),snap=>{
+  const round=snap.val(); if(!round)return;
+  roundDuration=round.duration||90;
+  if(round.index!==currentRoundIndex){
+    currentRoundIndex=round.index;
+    document.getElementById('revealBanner').className='reveal-banner';
+    document.getElementById('gProgress').style.width='100%';
+    document.getElementById('gRoundLabel').textContent=`TUR ${round.index+1} / 6`;
+    document.getElementById('gTitle').textContent=round.title||'';
+    document.getElementById('gTitleBig').textContent=round.title||'';
+    document.getElementById('gDiff').textContent=DIFF_MAP[round.diff]||'';
+    document.getElementById('gQ').textContent=round.q||'';
+    const sb=document.getElementById('gStepsBig'); sb.innerHTML='';
+    (round.steps||[]).forEach((s,i)=>{
+      const d=document.createElement('div');
+      d.className='step-big'; d.id='step-proj-'+i;
+      d.innerHTML=`<div class="step-big-num">${i+1}</div><div style="flex:1"><div class="step-big-lbl">${s.label}</div><div class="step-big-math">${s.math}</div></div>`;
       sb.appendChild(d);
     });
   }
-
-  if (round.revealed) {
-    // highlight wrong step
-    document.querySelectorAll('.step-big').forEach((el,i) => {
-      if (i === round.wrongStep) {
-        el.classList.add('highlight');
-        el.innerHTML += `<span class="wrong-badge">⚠️ HATA BURADA</span>`;
-      }
+  if(round.revealed){
+    document.querySelectorAll('.step-big').forEach((el,i)=>{
+      if(i===round.wrongStep){el.classList.add('highlight');if(!el.querySelector('.wrong-badge'))el.innerHTML+=`<span class="wrong-badge">⚠️ HATA BURADA</span>`;}
     });
-    document.getElementById('revealBanner').className = 'reveal-banner visible';
-    document.getElementById('revealText').textContent = round.explain || '';
+    document.getElementById('revealBanner').className='reveal-banner visible';
+    document.getElementById('revealText').textContent=round.explain||'';
   }
 });
 
-// ── Timer ──
-onValue(ref(db,'game/timer'), snap => {
-  const t = snap.val(); if (!t) return;
-  const el = document.getElementById('gTimer');
-  const pb = document.getElementById('gProgress');
-  if (t.value > 0) {
-    el.textContent = t.value;
-    el.className = 'timer-num' + (t.running ? (t.value<=10?' urgent':' ok') : '');
-    const pct = Math.max(0, Math.min(100, t.value / roundDuration * 100));
-    pb.style.width = pct + '%';
-    pb.style.background = t.value<=10 ? 'var(--accent2)' : 'var(--accent)';
-  } else {
-    el.textContent = '✓'; el.className = 'timer-num';
-    pb.style.width = '0%';
-  }
+// ── TIMER ──
+onValue(ref(db,'game/timer'),snap=>{
+  const t=snap.val(); if(!t)return;
+  const el=document.getElementById('gTimer');
+  const pb=document.getElementById('gProgress');
+  if(t.value>0){
+    el.textContent=t.value;
+    el.className='timer-num'+(t.running?(t.value<=10?' urgent':' ok'):'');
+    const pct=Math.max(0,Math.min(100,t.value/roundDuration*100));
+    pb.style.width=pct+'%';
+    pb.style.background=t.value<=10?'var(--accent2)':'var(--accent)';
+  } else {el.textContent='✓';el.className='timer-num';pb.style.width='0%';}
 });
 
-// ── Answers ──
-onValue(ref(db,'game/answers'), snap => {
-  const all = snap.val() || {};
-  const curAns = all[currentRoundIndex] || {};
-  const entries = Object.values(curAns);
-  document.getElementById('gAnsCount').textContent = entries.length;
-
-  const la = document.getElementById('liveAnswers');
-  if (!entries.length) { la.innerHTML = '<div class="empty">Bekleniyor...</div>'; }
-  else {
-    la.innerHTML = '';
-    [...entries].sort((a,b)=>a.elapsed-b.elapsed).slice(0,8).forEach(e => {
-      const d = document.createElement('div');
-      d.className = 'la-row ' + (e.correct?'ok':'fail');
-      d.innerHTML = `<span class="la-name">${e.name}</span><span class="la-time">${e.elapsed}s</span><span>${e.correct?'✅':'❌'}</span>`;
-      la.appendChild(d);
-    });
-  }
-
-  // leaderboard
-  const scores = {};
-  Object.values(all).forEach(ra => Object.values(ra||{}).forEach(e => {
-    if (!scores[e.name]) scores[e.name] = {name:e.name,score:0,correct:0,total:0};
-    scores[e.name].total++;
-    if (e.correct) { scores[e.name].correct++; scores[e.name].score+=(e.hintUsed?5:10); }
-  }));
-  const lb = Object.values(scores).sort((a,b)=>b.score-a.score);
-  const lbEl = document.getElementById('lbRows');
-  if (!lb.length) { lbEl.innerHTML = '<div class="empty">—</div>'; return; }
-  lbEl.innerHTML = '';
-  lb.slice(0,8).forEach((p,i) => {
-    const row = document.createElement('div');
-    row.className = 'lb-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');
-    row.innerHTML = `<div class="lb-rank">${i===0?'👑':i+1}</div><div class="lb-name">${p.name}</div><div class="lb-score">${p.score}</div>`;
-    lbEl.appendChild(row);
-  });
+// ── ANSWERS ──
+onValue(ref(db,'game/answers'),snap=>{
+  const all=snap.val()||{};
+  const curAns=all[currentRoundIndex]||{};
+  const entries=Object.values(curAns);
+  document.getElementById('gAnsCount').textContent=entries.length;
+  const la=document.getElementById('liveAnswers');
+  if(!entries.length){la.innerHTML='<div class="empty">Bekleniyor...</div>';}
+  else{la.innerHTML='';[...entries].sort((a,b)=>a.elapsed-b.elapsed).slice(0,7).forEach(e=>{const d=document.createElement('div');d.className='la-row '+(e.correct?'ok':'fail');d.innerHTML=`<span class="la-name">${e.name}</span><span class="la-time">${e.elapsed}s</span><span>${e.correct?'✅':'❌'}</span>`;la.appendChild(d);});}
+  const scores={};
+  Object.values(all).forEach(ra=>Object.values(ra||{}).forEach(e=>{if(!scores[e.name])scores[e.name]={name:e.name,score:0,correct:0,total:0};scores[e.name].total++;if(e.correct){scores[e.name].correct++;scores[e.name].score+=(e.hintUsed?5:10);}}));
+  const lb=Object.values(scores).sort((a,b)=>b.score-a.score);
+  const lbEl=document.getElementById('lbRows');
+  if(!lb.length){lbEl.innerHTML='<div class="empty">—</div>';return;}
+  lbEl.innerHTML='';
+  lb.slice(0,7).forEach((p,i)=>{const row=document.createElement('div');row.className='lb-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');row.innerHTML=`<div class="lb-rank">${i===0?'👑':i+1}</div><div class="lb-name-cell">${p.name}</div><div class="lb-score">${p.score}</div>`;lbEl.appendChild(row);});
 });
 </script>
 </body>
