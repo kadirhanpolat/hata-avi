@@ -10,8 +10,6 @@
     --c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;--c4:#a855f7;--c5:#f97316;}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;max-width:500px;margin:0 auto;display:flex;flex-direction:column;}
-
-  /* HEADER */
   .header{background:var(--surface);border-bottom:2px solid var(--accent);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
   .htitle{font-family:var(--display);font-size:1.3rem;letter-spacing:2px;color:var(--accent);}
   .hright{display:flex;align-items:center;gap:10px;}
@@ -21,14 +19,10 @@
   @keyframes tpulse{from{color:var(--accent2);}to{color:#ff6b6b;}}
   .timer-pill.done{background:var(--card);color:var(--muted);}
   .my-score{font-family:var(--display);font-size:.95rem;color:var(--accent3);letter-spacing:1px;}
-
-  /* PROGRESS BAR */
   .prog-wrap{height:3px;background:var(--border);flex-shrink:0;}
   .prog-fill{height:100%;background:var(--accent);transition:width 1s linear;}
-
   .screen{flex:1;padding:16px;display:flex;flex-direction:column;}
-
-  /* ── JOIN ── */
+  /* JOIN */
   .join-hero{text-align:center;padding:28px 16px 20px;}
   .join-icon{font-size:3rem;margin-bottom:10px;}
   .join-title{font-family:var(--display);font-size:2rem;letter-spacing:3px;color:var(--accent);margin-bottom:5px;}
@@ -41,48 +35,37 @@
   .pin-error{font-family:var(--mono);font-size:.65rem;color:var(--accent2);text-align:center;margin-top:7px;min-height:16px;}
   .btn-join{width:100%;margin-top:12px;font-family:var(--display);font-size:1.1rem;letter-spacing:3px;padding:13px;border:none;cursor:pointer;border-radius:8px;background:var(--accent);color:#000;transition:all .2s;}
   .btn-join:active{transform:scale(.97);}
-
-  /* ── WAIT ── */
+  /* WAIT */
   .wait-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;}
   .wait-icon{font-size:2.8rem;animation:bounce 1.8s infinite;}
   @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
   .wait-title{font-family:var(--display);font-size:1.7rem;letter-spacing:3px;color:var(--accent);}
   .wait-msg{font-family:var(--mono);font-size:.7rem;color:var(--muted);line-height:1.8;}
   .player-chip{background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);color:var(--accent);font-family:var(--mono);font-size:.78rem;padding:6px 16px;border-radius:20px;}
-
-  /* ── GAME ── */
+  /* GAME */
   .game-wrap{flex:1;display:flex;flex-direction:column;gap:10px;}
-
-  /* Round/question info bar */
   .round-bar{display:flex;align-items:center;justify-content:space-between;}
   .round-badge{font-family:var(--mono);font-size:.6rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;}
   .diff-badge{font-family:var(--mono);font-size:.58rem;padding:3px 8px;border-radius:3px;}
   .diff-easy{background:rgba(61,214,140,.1);color:var(--accent3);}
   .diff-mid{background:rgba(245,197,24,.1);color:var(--accent);}
   .diff-hard{background:rgba(232,64,64,.1);color:var(--accent2);}
-
-  /* Instruction */
+  .diff-vhard{background:rgba(168,85,247,.1);color:#a855f7;}
   .instruction{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;line-height:1.6;}
   .instruction strong{color:var(--accent);}
-
-  /* KAHOOT BUTTONS — 2x2 grid (or 3+) */
+  /* KAHOOT BUTTONS */
   .kahoot-grid{display:grid;gap:8px;flex:1;}
-  .kahoot-grid.cols2{grid-template-columns:1fr 1fr;}
-  .kahoot-grid.cols1{grid-template-columns:1fr;}
-
-  .kbtn{border:none;border-radius:10px;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0;flex-direction:column;transition:all .18s;position:relative;min-height:70px;}
-  .kbtn:active:not(:disabled){transform:scale(.95);}
+  .kahoot-grid.g2{grid-template-columns:1fr 1fr;}
+  .kahoot-grid.g3{grid-template-columns:1fr 1fr 1fr;}
+  .kbtn{border:none;border-radius:12px;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:all .18s;position:relative;min-height:80px;}
+  .kbtn:active:not(:disabled){transform:scale(.93);}
   .kbtn:disabled{cursor:not-allowed;}
-  .kbtn.selected{box-shadow:0 0 0 4px white;}
+  .kbtn.selected{box-shadow:0 0 0 4px rgba(255,255,255,.9);}
   .kbtn.reveal-correct{box-shadow:0 0 0 4px white;animation:correctPop .5s ease;}
-  @keyframes correctPop{0%{transform:scale(1);}40%{transform:scale(1.06);}100%{transform:scale(1);}}
-  .kbtn.reveal-wrong{filter:brightness(.35);}
-
-  .kbtn-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:12px 8px;border-radius:10px;}
-  .kbtn-shape{font-size:2.4rem;line-height:1;}
-  .kbtn-num{font-family:var(--display);font-size:3.5rem;letter-spacing:1px;line-height:1;}
-
-  /* Result card */
+  @keyframes correctPop{0%{transform:scale(1);}40%{transform:scale(1.07);}100%{transform:scale(1);}}
+  .kbtn.reveal-wrong{filter:brightness(.3);}
+  .kbtn-sym{font-size:2.8rem;line-height:1;color:#fff;/* ALL symbols always white */}
+  /* Result */
   .result-card{background:var(--card);border-radius:10px;padding:16px;display:none;animation:slu .35s ease;}
   .result-card.visible{display:block;}
   @keyframes slu{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
@@ -99,7 +82,6 @@
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="htitle">🔍 HATA AVI</div>
   <div class="hright">
@@ -110,7 +92,6 @@
 <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:100%"></div></div>
 
 <div class="screen" id="screen">
-
   <!-- JOIN -->
   <div id="joinScreen" style="display:flex;flex-direction:column;">
     <div class="join-hero">
@@ -125,36 +106,33 @@
       <button class="btn-join" onclick="joinGame()">OYUNA GİR →</button>
     </div>
   </div>
-
   <!-- WAIT -->
   <div id="waitScreen" style="display:none;">
     <div class="wait-wrap">
       <div class="wait-icon">⏳</div>
       <div class="wait-title">HAZIR!</div>
-      <div class="wait-msg">Moderatör yarışmayı başlatana kadar bekleyin.<br>Soruları büyük ekrandan okuyun.<br>Telefonunuzda sadece renk/numara seçin.</div>
+      <div class="wait-msg">Moderatör yarışmayı başlatana kadar bekleyin.<br>Soruları büyük ekrandan okuyun.<br>Telefonunuzda <strong style="color:var(--accent)">renk/sembol</strong> ile cevap verin.</div>
       <div class="player-chip" id="playerChip">👤 —</div>
     </div>
   </div>
-
   <!-- GAME -->
   <div id="gameScreen" style="display:none;">
     <div class="game-wrap">
       <div class="round-bar">
-        <div class="round-badge" id="gRound">TUR 1/6</div>
+        <div class="round-badge" id="gRound">SORU 1/—</div>
         <div class="diff-badge diff-easy" id="gDiff">🟢 KOLAY</div>
       </div>
-      <div class="instruction">Soruyu büyük ekrandan okuyun.<br><strong>Hatalı adımın rengini/numarasını seçin!</strong></div>
-      <div class="kahoot-grid cols2" id="kahootGrid"></div>
+      <div class="instruction">Soruyu büyük ekrandan okuyun.<br><strong>Hatalı adımın rengini/sembolünü seçin!</strong></div>
+      <div class="kahoot-grid g2" id="kahootGrid"></div>
       <div class="result-card" id="resultCard">
         <div class="res-emoji" id="resEmoji"></div>
         <div class="res-title" id="resTitle"></div>
         <div class="res-pts" id="resPts"></div>
         <div class="res-exp" id="resExp"></div>
       </div>
-      <div class="wait-next" id="waitNext" style="display:none;">⏳ Sonraki tur bekleniyor...</div>
+      <div class="wait-next" id="waitNext" style="display:none;">⏳ Sonraki soru bekleniyor...</div>
     </div>
   </div>
-
 </div>
 
 <script type="module">
@@ -170,11 +148,11 @@ const firebaseConfig = {
 const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);
 
+// Same colors/shapes as moderator + projeksiyon
 const COLORS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316'];
-const TEXT_COLORS=['#fff','#fff','#000','#000','#fff','#000'];
 const SHAPES=['▲','◆','●','■','★','♥'];
-const DIFF_MAP={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🔴 ÇOK ZOR'};
-const DIFF_CLS={easy:'diff-easy',mid:'diff-mid',hard:'diff-hard',vhard:'diff-hard'};
+const DIFF_MAP={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🟣 ÇOK ZOR'};
+const DIFF_CLS={easy:'diff-easy',mid:'diff-mid',hard:'diff-hard',vhard:'diff-vhard'};
 
 let playerName='',myScore=0,selectedStep=-1,answered=false;
 let currentRoundIndex=-1,roundStartTime=null,roundDuration=90;
@@ -209,8 +187,7 @@ onValue(ref(db,'game/phase'),snap=>{
 // TIMER
 onValue(ref(db,'game/timer'),snap=>{
   const t=snap.val();if(!t)return;
-  const pill=document.getElementById('timerPill');
-  const pb=document.getElementById('progFill');
+  const pill=document.getElementById('timerPill');const pb=document.getElementById('progFill');
   if(t.value>0&&t.running){
     pill.textContent=t.value;pill.className='timer-pill active'+(t.value<=10?' urgent':'');
     const pct=Math.max(0,Math.min(100,t.value/roundDuration*100));
@@ -222,53 +199,33 @@ onValue(ref(db,'game/timer'),snap=>{
 onValue(ref(db,'game/currentRound'),snap=>{
   const round=snap.val();if(!round||!playerName)return;
   roundDuration=round.duration||90;
-
   if(round.index!==currentRoundIndex){
-    currentRoundIndex=round.index;
-    selectedStep=-1;answered=false;
-    roundStartTime=round.timerStart;
-
+    currentRoundIndex=round.index;selectedStep=-1;answered=false;roundStartTime=round.timerStart;
     document.getElementById('waitScreen').style.display='none';
     document.getElementById('gameScreen').style.display='flex';
-
     const dEl=document.getElementById('gDiff');
     dEl.textContent=DIFF_MAP[round.diff]||'';dEl.className='diff-badge '+(DIFF_CLS[round.diff]||'diff-easy');
-    document.getElementById('gRound').textContent=`TUR ${round.index+1}/${round.totalRounds||6}`;
+    document.getElementById('gRound').textContent=`SORU ${round.index+1}/${round.totalRounds||'—'}`;
     document.getElementById('myScore').style.display='block';
     document.getElementById('myScore').textContent=myScore+' PT';
     const rc=document.getElementById('resultCard');rc.className='result-card';
     document.getElementById('waitNext').style.display='none';
-
     const grid=document.getElementById('kahootGrid');grid.innerHTML='';
     const cnt=(round.steps||[]).length;
-    grid.className='kahoot-grid '+(cnt<=4?'cols2':'cols2');
-
+    grid.className='kahoot-grid '+(cnt>4?'g3':'g2');
     (round.steps||[]).forEach((s,i)=>{
-      const bg=COLORS[i]||'#888';const tc=TEXT_COLORS[i]||'#fff';const sh=SHAPES[i]||String(i+1);
-      const btn=document.createElement('button');
-      btn.className='kbtn';btn.id='kb-'+i;
-      btn.style.background=bg;
-      btn.innerHTML=`<div class="kbtn-inner"><div class="kbtn-num" style="color:${tc};">${sh}</div></div>`;
-      btn.onclick=()=>{
-        if(answered)return;
-        selectedStep=i;
-        document.querySelectorAll('.kbtn').forEach(b=>b.classList.remove('selected'));
-        btn.classList.add('selected');
-        // auto-submit immediately on tap (Kahoot style)
-        submitAnswer();
-      };
+      const bg=COLORS[i]||'#888';const sh=SHAPES[i]||String(i+1);
+      const btn=document.createElement('button');btn.className='kbtn';btn.id='kb-'+i;btn.style.background=bg;
+      // Symbol always WHITE regardless of bg
+      btn.innerHTML=`<div class="kbtn-sym">${sh}</div>`;
+      btn.onclick=()=>{if(answered)return;selectedStep=i;document.querySelectorAll('.kbtn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');submitAnswer();};
       grid.appendChild(btn);
     });
   }
-
-  // REVEAL
+  // REVEAL (timeout or moderator reveals before player answered)
   if(round.revealed&&!answered){
     answered=true;
-    document.querySelectorAll('.kbtn').forEach((b,i)=>{
-      b.disabled=true;
-      if(i===round.wrongStep)b.classList.add('reveal-correct');
-      else b.classList.add('reveal-wrong');
-    });
+    document.querySelectorAll('.kbtn').forEach((b,i)=>{b.disabled=true;if(i===round.wrongStep)b.classList.add('reveal-correct');else b.classList.add('reveal-wrong');});
     showResult(false,0,round.explain,true);
   }
 });
@@ -282,14 +239,10 @@ function submitAnswer(){
     const elapsed=Math.max(1,Math.round((Date.now()-roundStartTime)/1000));
     const remaining=Math.max(0,(round.duration||90)-elapsed);
     const correct=selectedStep===round.wrongStep;
-    const pts=correct?remaining:0; // puan = kalan süre
+    const pts=correct?remaining:0;
     myScore+=pts;
-    set(ref(db,`game/answers/${round.index}/${playerName.replace(/[.#$/[\]]/g,'_')}`),
-      {name:playerName,correct,elapsed,pts,selectedStep});
-    document.querySelectorAll('.kbtn').forEach((b,i)=>{
-      if(i===round.wrongStep)b.classList.add('reveal-correct');
-      else{b.classList.remove('selected');b.classList.add('reveal-wrong');}
-    });
+    set(ref(db,`game/answers/${round.index}/${playerName.replace(/[.#$/[\]]/g,'_')}`),{name:playerName,correct,elapsed,pts,selectedStep});
+    document.querySelectorAll('.kbtn').forEach((b,i)=>{if(i===round.wrongStep)b.classList.add('reveal-correct');else{b.classList.remove('selected');b.classList.add('reveal-wrong');}});
     showResult(correct,pts,round.explain,false);
     document.getElementById('myScore').textContent=myScore+' PT';
   },{onlyOnce:true});
@@ -297,22 +250,9 @@ function submitAnswer(){
 
 function showResult(correct,pts,explain,timeout){
   const rc=document.getElementById('resultCard');
-  if(timeout){
-    rc.className='result-card visible fail';
-    document.getElementById('resEmoji').textContent='⏰';
-    document.getElementById('resTitle').innerHTML='<span style="color:var(--accent2)">SÜRE DOLDU</span>';
-    document.getElementById('resPts').className='res-pts zero';document.getElementById('resPts').textContent='0 PT';
-  }else if(correct){
-    rc.className='result-card visible ok';
-    document.getElementById('resEmoji').textContent='🎯';
-    document.getElementById('resTitle').innerHTML='<span style="color:var(--accent3)">DOĞRU!</span>';
-    document.getElementById('resPts').className='res-pts plus';document.getElementById('resPts').textContent='+'+pts+' PT';
-  }else{
-    rc.className='result-card visible fail';
-    document.getElementById('resEmoji').textContent='❌';
-    document.getElementById('resTitle').innerHTML='<span style="color:var(--accent2)">YANLIŞ</span>';
-    document.getElementById('resPts').className='res-pts zero';document.getElementById('resPts').textContent='0 PT';
-  }
+  if(timeout){rc.className='result-card visible fail';document.getElementById('resEmoji').textContent='⏰';document.getElementById('resTitle').innerHTML='<span style="color:var(--accent2)">SÜRE DOLDU</span>';document.getElementById('resPts').className='res-pts zero';document.getElementById('resPts').textContent='0 PT';}
+  else if(correct){rc.className='result-card visible ok';document.getElementById('resEmoji').textContent='🎯';document.getElementById('resTitle').innerHTML='<span style="color:var(--accent3)">DOĞRU!</span>';document.getElementById('resPts').className='res-pts plus';document.getElementById('resPts').textContent='+'+pts+' PT';}
+  else{rc.className='result-card visible fail';document.getElementById('resEmoji').textContent='❌';document.getElementById('resTitle').innerHTML='<span style="color:var(--accent2)">YANLIŞ</span>';document.getElementById('resPts').className='res-pts zero';document.getElementById('resPts').textContent='0 PT';}
   document.getElementById('resExp').textContent=explain||'';
   document.getElementById('waitNext').style.display='block';
 }

@@ -9,11 +9,10 @@
   :root{--bg:#0a0a0a;--surface:#111;--card:#161616;--border:#222;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--text:#f0f0f0;--muted:#555;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;}
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans);}
-
-  /* STEP COLORS */
+  /* COLORS */
   :root{--c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;--c4:#a855f7;--c5:#f97316;}
 
-  /* ─── LOBBY ─── */
+  /* ── LOBBY ── */
   #lobbyScreen{width:100%;height:100vh;display:flex;flex-direction:column;}
   .lobby-header{background:var(--surface);border-bottom:2px solid var(--accent);padding:18px 48px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
   .lobby-title{font-family:var(--display);font-size:2.8rem;letter-spacing:4px;color:var(--accent);}
@@ -22,7 +21,6 @@
   .dot{width:9px;height:9px;border-radius:50%;background:var(--accent3);display:inline-block;margin-right:7px;animation:blink 1.5s infinite;}
   @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
   .lobby-body{flex:1;display:grid;grid-template-columns:300px 1fr 300px;overflow:hidden;}
-  /* Left: QR+PIN */
   .lobby-left{padding:28px 24px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;border-right:1px solid var(--border);}
   .qr-lbl{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;text-align:center;}
   .qr-box{background:white;padding:12px;border-radius:10px;display:inline-block;}
@@ -32,7 +30,6 @@
   .pin-lbl{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
   .pin-val{font-family:var(--display);font-size:4rem;letter-spacing:14px;color:var(--accent);line-height:1;}
   .pin-sublbl{font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-top:5px;}
-  /* Center: Players grid */
   .lobby-center{padding:24px 28px;overflow:hidden;display:flex;flex-direction:column;}
   .lc-title{font-family:var(--display);font-size:1.5rem;letter-spacing:3px;color:var(--accent);margin-bottom:4px;}
   .lc-count{font-family:var(--mono);font-size:.72rem;color:var(--accent3);letter-spacing:1px;margin-bottom:14px;}
@@ -40,10 +37,8 @@
   .player-chip{display:flex;align-items:center;gap:7px;padding:9px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;animation:chipIn .4s ease;transition:all .4s;}
   @keyframes chipIn{from{opacity:0;transform:scale(.82);}to{opacity:1;transform:scale(1);}}
   .player-chip.newest{border-color:var(--accent);background:rgba(245,197,24,.08);box-shadow:0 0 14px rgba(245,197,24,.18);}
-  .pav{font-size:1.1rem;}
-  .pname{font-family:var(--mono);font-size:.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .pav{font-size:1.1rem;}.pname{font-family:var(--mono);font-size:.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .pnew{font-size:.48rem;padding:2px 5px;background:var(--accent);color:#000;border-radius:3px;margin-left:auto;flex-shrink:0;}
-  /* Right: instructions */
   .lobby-right{padding:28px 24px;display:flex;flex-direction:column;justify-content:center;gap:16px;border-left:1px solid var(--border);}
   .wait-big{font-family:var(--display);font-size:1.5rem;letter-spacing:3px;color:var(--muted);line-height:1.4;}
   .wait-big span{color:var(--accent);}
@@ -52,7 +47,7 @@
   .wsn{font-family:var(--display);font-size:1.3rem;color:var(--accent);width:22px;flex-shrink:0;}
   .wst{font-family:var(--mono);font-size:.67rem;color:var(--muted);line-height:1.5;}
 
-  /* ─── GAME ─── */
+  /* ── GAME ── */
   #gameScreen{width:100%;height:100vh;display:none;flex-direction:column;}
   .game-header{background:var(--surface);border-bottom:2px solid var(--accent);padding:10px 32px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
   .game-meta{display:flex;flex-direction:column;}
@@ -67,51 +62,44 @@
   .ans-ctr span{color:var(--accent3);font-family:var(--display);font-size:1.2rem;display:block;}
   .progress-wrap{height:5px;background:var(--border);flex-shrink:0;}
   .progress-fill{height:100%;background:var(--accent);transition:width 1s linear;}
-
-  .game-body{flex:1;display:flex;flex-direction:column;padding:16px 32px;gap:12px;overflow:hidden;}
-
-  /* Question area */
-  .question-area{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 22px;}
-  .q-diff{font-family:var(--mono);font-size:.65rem;letter-spacing:1px;margin-bottom:4px;}
-  .q-title-big{font-family:var(--display);font-size:1.6rem;letter-spacing:1px;margin-bottom:6px;}
+  .game-body{flex:1;display:flex;flex-direction:column;padding:14px 28px;gap:10px;overflow:hidden;}
+  .question-area{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 20px;}
+  .q-diff{font-family:var(--mono);font-size:.65rem;letter-spacing:1px;margin-bottom:3px;}
+  .q-title-big{font-family:var(--display);font-size:1.6rem;letter-spacing:1px;margin-bottom:5px;}
   .q-text{font-family:var(--mono);font-size:.9rem;color:var(--accent);line-height:1.5;}
-
-  /* KAHOOT GRID: 2 columns */
-  .steps-kahoot{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;}
-  .step-kahoot{border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:default;transition:all .5s;position:relative;}
-  .step-kahoot.revealed-wrong{filter:brightness(.4);}
-  .step-kahoot.revealed-correct{animation:correctPop .6s ease;box-shadow:0 0 30px rgba(255,255,255,.2);}
-  @keyframes correctPop{0%{transform:scale(1);}40%{transform:scale(1.04);}100%{transform:scale(1);}}
-  .step-num-k{font-family:var(--display);font-size:3rem;width:44px;flex-shrink:0;text-align:center;line-height:1;}
+  /* KAHOOT GRID */
+  .steps-kahoot{display:grid;gap:8px;flex:1;}
+  .steps-kahoot.g2{grid-template-columns:1fr 1fr;}
+  .steps-kahoot.g3{grid-template-columns:1fr 1fr 1fr;}
+  .step-kahoot{border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;transition:all .5s;position:relative;}
+  .step-kahoot.revealed-wrong{filter:brightness(.3);}
+  .step-kahoot.revealed-correct{animation:correctPop .6s ease;box-shadow:0 0 30px rgba(255,255,255,.15);}
+  @keyframes correctPop{0%{transform:scale(1);}40%{transform:scale(1.03);}100%{transform:scale(1);}}
+  .step-num-k{font-size:2.8rem;width:42px;flex-shrink:0;text-align:center;line-height:1;color:#fff;}
   .step-text-k{flex:1;}
-  .step-lbl-k{font-family:var(--mono);font-size:.55rem;opacity:.7;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
-  .step-math-k{font-family:var(--mono);font-size:.9rem;line-height:1.4;}
-  .wrong-chip{font-size:.6rem;padding:3px 10px;background:rgba(0,0,0,.3);border-radius:20px;position:absolute;top:10px;right:12px;letter-spacing:.5px;}
-
-  /* reveal banner */
+  .step-lbl-k{font-family:var(--mono);font-size:.55rem;opacity:.75;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;color:#fff;}
+  .step-math-k{font-family:var(--mono);font-size:.88rem;line-height:1.4;}
+  .wrong-chip{font-size:.58rem;padding:3px 10px;background:rgba(0,0,0,.35);border-radius:20px;position:absolute;top:9px;right:11px;letter-spacing:.5px;color:#fff;}
   .reveal-banner{display:none;background:rgba(61,214,140,.07);border:2px solid var(--accent3);border-radius:10px;padding:12px 18px;}
   .reveal-banner.visible{display:block;animation:sli .4s ease;}
   @keyframes sli{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
   .reveal-title{font-family:var(--display);font-size:1.2rem;letter-spacing:2px;color:var(--accent3);margin-bottom:4px;}
   .reveal-text{font-family:var(--mono);font-size:.75rem;color:var(--muted);line-height:1.7;}
-
-  /* Side leaderboard (shown during reveal) */
-  .lb-side{display:none;position:fixed;right:0;top:0;height:100vh;width:280px;background:rgba(10,10,10,.95);border-left:1px solid var(--border);padding:20px;overflow-y:auto;z-index:50;}
-  .lb-side.visible{display:flex;flex-direction:column;gap:8px;}
-  .lb-side-title{font-family:var(--display);font-size:1.1rem;letter-spacing:2px;color:var(--accent);margin-bottom:4px;}
-  .lbs-row{display:flex;align-items:center;gap:7px;padding:8px 12px;background:var(--card);border-radius:5px;border:1px solid var(--border);}
+  /* leaderboard side on reveal */
+  .lb-side{display:none;position:fixed;right:0;top:0;height:100vh;width:260px;background:rgba(10,10,10,.96);border-left:1px solid var(--border);padding:18px;overflow-y:auto;z-index:50;flex-direction:column;gap:7px;}
+  .lb-side.visible{display:flex;}
+  .lb-side-title{font-family:var(--display);font-size:1rem;letter-spacing:2px;color:var(--accent);margin-bottom:4px;border-bottom:1px solid var(--border);padding-bottom:7px;}
+  .lbs-row{display:flex;align-items:center;gap:7px;padding:7px 10px;background:var(--card);border-radius:5px;border:1px solid var(--border);}
   .lbs-row.r1{border-color:var(--accent);background:rgba(245,197,24,.07);}
-  .lbs-row.r2{border-color:#999;}
-  .lbs-row.r3{border-color:#cd7f32;}
+  .lbs-row.r2{border-color:#999;}.lbs-row.r3{border-color:#cd7f32;}
   .lbs-rank{font-family:var(--display);font-size:1rem;width:22px;color:var(--muted);}
   .lbs-row.r1 .lbs-rank{color:var(--accent);}
-  .lbs-name{flex:1;font-family:var(--mono);font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .lbs-score{font-family:var(--display);font-size:1.1rem;color:var(--accent3);}
+  .lbs-name{flex:1;font-family:var(--mono);font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lbs-score{font-family:var(--display);font-size:1rem;color:var(--accent3);}
   .empty{font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center;padding:12px;}
 </style>
 </head>
 <body>
-
 <!-- LOBBY -->
 <div id="lobbyScreen">
   <div class="lobby-header">
@@ -134,7 +122,7 @@
         <div class="ws"><div class="wsn">1</div><div class="wst">QR kodu okutun veya adresi açın</div></div>
         <div class="ws"><div class="wsn">2</div><div class="wst">Adınızı ve parolayı girin</div></div>
         <div class="ws"><div class="wsn">3</div><div class="wst">Soruyu bu ekrandan okuyun</div></div>
-        <div class="ws"><div class="wsn">4</div><div class="wst">Telefonunuzda renk/numara ile cevap verin</div></div>
+        <div class="ws"><div class="wsn">4</div><div class="wst">Telefonunuzda renk/sembol ile cevap verin</div></div>
       </div>
     </div>
   </div>
@@ -144,7 +132,7 @@
 <div id="gameScreen">
   <div class="game-header">
     <div class="game-meta">
-      <div class="game-round-lbl" id="gRoundLbl">TUR 1 / 6</div>
+      <div class="game-round-lbl" id="gRoundLbl">SORU 1 / —</div>
       <div class="game-title" id="gTitle">—</div>
     </div>
     <div class="timer-wrap">
@@ -153,14 +141,13 @@
     </div>
   </div>
   <div class="progress-wrap"><div class="progress-fill" id="gProgress" style="width:100%"></div></div>
-
   <div class="game-body">
     <div class="question-area">
       <div class="q-diff" id="gDiff"></div>
       <div class="q-title-big" id="gTitleBig">—</div>
       <div class="q-text" id="gQ"></div>
     </div>
-    <div class="steps-kahoot" id="gSteps"></div>
+    <div class="steps-kahoot g2" id="gSteps"></div>
     <div class="reveal-banner" id="revealBanner">
       <div class="reveal-title">✅ CEVAP AÇIKLANDI</div>
       <div class="reveal-text" id="revealText"></div>
@@ -168,7 +155,6 @@
   </div>
 </div>
 
-<!-- LEADERBOARD SIDE (on reveal) -->
 <div class="lb-side" id="lbSide">
   <div class="lb-side-title">🏆 SIRALAMA</div>
   <div id="lbSideRows"></div>
@@ -190,7 +176,7 @@ const db=getDatabase(app);
 const COLORS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316'];
 const TEXT_COLORS=['#fff','#fff','#000','#000','#fff','#000'];
 const SHAPES=['▲','◆','●','■','★','♥'];
-const DIFF_MAP={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🔴 ÇOK ZOR'};
+const DIFF_MAP={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🟣 ÇOK ZOR'};
 const AVATARS=['🧑‍💻','👨‍🎓','👩‍🎓','🧑‍🏫','👨‍🔬','👩‍🔬','🧑‍🎓','🎓'];
 
 // QR
@@ -200,11 +186,10 @@ document.getElementById('qrImg').src=`https://api.qrserver.com/v1/create-qr-code
 try{const u=new URL(fullUrl);document.getElementById('qrUrl').textContent=u.hostname+u.pathname;}catch(e){document.getElementById('qrUrl').textContent=fullUrl;}
 
 // LOBBY MUSIC
-const lobbyAudio=new Audio('lobby.mp3');
-lobbyAudio.loop=true;lobbyAudio.volume=0.5;
+const lobbyAudio=new Audio('lobby.mp3');lobbyAudio.loop=true;lobbyAudio.volume=0.5;
 const playLobby=()=>lobbyAudio.play().catch(()=>{
-  const n=document.createElement('div');
-  n.id='audioNudge';n.style.cssText='position:fixed;bottom:20px;right:20px;background:rgba(245,197,24,.15);border:1px solid rgba(245,197,24,.4);color:#f5c518;font-family:IBM Plex Mono,monospace;font-size:.68rem;padding:9px 14px;border-radius:8px;cursor:pointer;z-index:999;letter-spacing:1px;';
+  const n=document.createElement('div');n.id='audioNudge';
+  n.style.cssText='position:fixed;bottom:20px;right:20px;background:rgba(245,197,24,.15);border:1px solid rgba(245,197,24,.4);color:#f5c518;font-family:IBM Plex Mono,monospace;font-size:.68rem;padding:9px 14px;border-radius:8px;cursor:pointer;z-index:999;letter-spacing:1px;';
   n.textContent='🎵 MÜZİĞİ BAŞLAT';n.onclick=()=>{lobbyAudio.play();n.remove();};document.body.appendChild(n);
 });
 document.addEventListener('click',()=>{if(lobbyAudio.paused)lobbyAudio.play().catch(()=>{});},{once:true});
@@ -212,23 +197,13 @@ playLobby();
 function stopLobbyMusic(){lobbyAudio.pause();lobbyAudio.currentTime=0;const n=document.getElementById('audioNudge');if(n)n.remove();}
 
 // PIN
-onValue(ref(db,'game/pin'),snap=>{
-  const p=snap.val();const box=document.getElementById('pinBox');const el=document.getElementById('projPin');
-  if(p){el.textContent=p;box.style.display='block';}else{box.style.display='none';}
-});
+onValue(ref(db,'game/pin'),snap=>{const p=snap.val();const box=document.getElementById('pinBox');const el=document.getElementById('projPin');if(p){el.textContent=p;box.style.display='block';}else{box.style.display='none';}});
 
 // PHASE
 onValue(ref(db,'game/phase'),snap=>{
   const phase=snap.val();
-  if(phase==='game'){
-    stopLobbyMusic();
-    document.getElementById('lobbyScreen').style.display='none';
-    document.getElementById('gameScreen').style.display='flex';
-    document.getElementById('gameScreen').style.flexDirection='column';
-  } else {
-    document.getElementById('lobbyScreen').style.display='flex';
-    document.getElementById('gameScreen').style.display='none';
-  }
+  if(phase==='game'){stopLobbyMusic();document.getElementById('lobbyScreen').style.display='none';document.getElementById('gameScreen').style.display='flex';document.getElementById('gameScreen').style.flexDirection='column';}
+  else{document.getElementById('lobbyScreen').style.display='flex';document.getElementById('gameScreen').style.display='none';}
 });
 
 // CONNECTIONS
@@ -241,14 +216,12 @@ onValue(ref(db,'game/connections'),snap=>{
   knownConnIds.forEach(id=>{if(!conns[id]){knownConnIds.delete(id);const el=document.getElementById('pc-'+id);if(el)el.remove();}});
   ids.forEach(id=>{
     if(!knownConnIds.has(id)){
-      knownConnIds.add(id);
-      if(!playerAvatarMap[id])playerAvatarMap[id]=AVATARS[Math.floor(Math.random()*AVATARS.length)];
+      knownConnIds.add(id);if(!playerAvatarMap[id])playerAvatarMap[id]=AVATARS[Math.floor(Math.random()*AVATARS.length)];
       grid.querySelectorAll('.player-chip.newest').forEach(c=>{c.classList.remove('newest');const b=c.querySelector('.pnew');if(b)b.remove();});
       if(grid.querySelector('.empty'))grid.innerHTML='';
       const chip=document.createElement('div');chip.className='player-chip newest';chip.id='pc-'+id;
       chip.innerHTML=`<span class="pav">${playerAvatarMap[id]}</span><span class="pname">${conns[id].name||'?'}</span><span class="pnew">YENİ</span>`;
-      grid.appendChild(chip);
-      setTimeout(()=>{chip.classList.remove('newest');const b=chip.querySelector('.pnew');if(b)b.remove();},3000);
+      grid.appendChild(chip);setTimeout(()=>{chip.classList.remove('newest');const b=chip.querySelector('.pnew');if(b)b.remove();},3000);
     }
   });
   if(!ids.length)grid.innerHTML='<div class="empty" style="grid-column:1/-1">Bekleniyor...</div>';
@@ -264,28 +237,23 @@ onValue(ref(db,'game/currentRound'),snap=>{
     document.getElementById('revealBanner').className='reveal-banner';
     document.getElementById('lbSide').className='lb-side';
     document.getElementById('gProgress').style.width='100%';
-    const total=round.totalRounds||6;
-    document.getElementById('gRoundLbl').textContent=`TUR ${round.index+1} / ${total}`;
+    document.getElementById('gRoundLbl').textContent=`SORU ${round.index+1} / ${round.totalRounds||'—'}`;
     document.getElementById('gTitle').textContent=round.title||'';
     document.getElementById('gTitleBig').textContent=round.title||'';
     document.getElementById('gDiff').textContent=DIFF_MAP[round.diff]||'';
     document.getElementById('gQ').textContent=round.q||'';
     const sb=document.getElementById('gSteps');sb.innerHTML='';
+    const cnt=(round.steps||[]).length;
+    sb.className='steps-kahoot '+(cnt>4?'g3':'g2');
     (round.steps||[]).forEach((s,i)=>{
       const bg=COLORS[i]||'#888';const tc=TEXT_COLORS[i]||'#fff';const sh=SHAPES[i]||String(i+1);
-      const d=document.createElement('div');
-      d.className='step-kahoot';d.id='sk-'+i;
-      d.style.background=bg;d.style.color=tc;
-      d.innerHTML=`<div class="step-num-k" style="color:${tc};opacity:.9;">${sh}</div><div class="step-text-k"><div class="step-lbl-k">${s.label}</div><div class="step-math-k">${s.math}</div></div>`;
+      const d=document.createElement('div');d.className='step-kahoot';d.id='sk-'+i;d.style.background=bg;
+      d.innerHTML=`<div class="step-num-k">${sh}</div><div class="step-text-k"><div class="step-lbl-k">${s.label}</div><div class="step-math-k" style="color:${tc};">${s.math}</div></div>`;
       sb.appendChild(d);
     });
   }
   if(round.revealed){
-    (round.steps||[]).forEach((_,i)=>{
-      const el=document.getElementById('sk-'+i);if(!el)return;
-      if(i===round.wrongStep){el.classList.add('revealed-correct');el.innerHTML+=`<span class="wrong-chip">⚠️ HATA</span>`;}
-      else el.classList.add('revealed-wrong');
-    });
+    (round.steps||[]).forEach((_,i)=>{const el=document.getElementById('sk-'+i);if(!el)return;if(i===round.wrongStep){el.classList.add('revealed-correct');if(!el.querySelector('.wrong-chip'))el.innerHTML+=`<span class="wrong-chip">⚠️ HATA</span>`;}else el.classList.add('revealed-wrong');});
     document.getElementById('revealBanner').className='reveal-banner visible';
     document.getElementById('revealText').textContent=round.explain||'';
     document.getElementById('lbSide').className='lb-side visible';
@@ -296,33 +264,21 @@ onValue(ref(db,'game/currentRound'),snap=>{
 onValue(ref(db,'game/timer'),snap=>{
   const t=snap.val();if(!t)return;
   const el=document.getElementById('gTimer');const pb=document.getElementById('gProgress');
-  if(t.value>0){
-    el.textContent=t.value;
-    el.className='timer-num'+(t.running?(t.value<=10?' urgent':' ok'):'');
-    const pct=Math.max(0,Math.min(100,t.value/roundDuration*100));
-    pb.style.width=pct+'%';pb.style.background=t.value<=10?'var(--accent2)':'var(--accent)';
-  }else{el.textContent='✓';el.className='timer-num';pb.style.width='0%';}
+  if(t.value>0){el.textContent=t.value;el.className='timer-num'+(t.running?(t.value<=10?' urgent':' ok'):'');const pct=Math.max(0,Math.min(100,t.value/roundDuration*100));pb.style.width=pct+'%';pb.style.background=t.value<=10?'var(--accent2)':'var(--accent)';}
+  else{el.textContent='✓';el.className='timer-num';pb.style.width='0%';}
 });
 
-// ANSWERS + LEADERBOARD
+// ANSWERS + LB
 onValue(ref(db,'game/answers'),snap=>{
-  const all=snap.val()||{};
-  const curAns=all[currentRoundIndex]||{};
+  const all=snap.val()||{};const curAns=all[currentRoundIndex]||{};
   document.getElementById('gAnsCount').textContent=Object.keys(curAns).length;
   const scores={};
-  Object.values(all).forEach(ra=>Object.values(ra||{}).forEach(e=>{
-    if(!scores[e.name])scores[e.name]={name:e.name,score:0};
-    if(e.correct)scores[e.name].score+=e.pts;
-  }));
+  Object.values(all).forEach(ra=>Object.values(ra||{}).forEach(e=>{if(!scores[e.name])scores[e.name]={name:e.name,score:0};if(e.correct)scores[e.name].score+=e.pts;}));
   const lb=Object.values(scores).sort((a,b)=>b.score-a.score);
   const lbEl=document.getElementById('lbSideRows');
   if(!lb.length){lbEl.innerHTML='<div class="empty">—</div>';return;}
   lbEl.innerHTML='';
-  lb.slice(0,10).forEach((p,i)=>{
-    const row=document.createElement('div');row.className='lbs-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');
-    row.innerHTML=`<div class="lbs-rank">${i===0?'👑':i+1}</div><div class="lbs-name">${p.name}</div><div class="lbs-score">${p.score}</div>`;
-    lbEl.appendChild(row);
-  });
+  lb.slice(0,10).forEach((p,i)=>{const row=document.createElement('div');row.className='lbs-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');row.innerHTML=`<div class="lbs-rank">${i===0?'👑':i+1}</div><div class="lbs-name">${p.name}</div><div class="lbs-score">${p.score}</div>`;lbEl.appendChild(row);});
 });
 </script>
 </body>

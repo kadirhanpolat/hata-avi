@@ -7,12 +7,13 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
   :root{--bg:#0d0d0d;--surface:#141414;--card:#1a1a1a;--border:#2a2a2a;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--text:#f0f0f0;--muted:#666;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;
-    --c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;}
+    --c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;--c4:#a855f7;--c5:#f97316;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;}
   .header{background:var(--surface);border-bottom:2px solid var(--accent);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
   .htitle{font-family:var(--display);font-size:1.7rem;letter-spacing:2px;color:var(--accent);}
   .hsub{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:1px;}
+  .hright{display:flex;align-items:center;gap:10px;}
   .conn-badge{font-family:var(--mono);font-size:.68rem;padding:5px 12px;border-radius:20px;background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.25);color:var(--accent3);}
   .dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);display:inline-block;margin-right:5px;animation:blink 1.5s infinite;}
   @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
@@ -36,20 +37,13 @@
   .qdiff{font-family:var(--mono);font-size:.6rem;letter-spacing:1px;margin-bottom:5px;}
   .qtitle{font-family:var(--display);font-size:1.2rem;letter-spacing:1px;margin-bottom:8px;}
   .qtext{font-family:var(--mono);font-size:.73rem;color:var(--accent);padding:8px 12px;background:rgba(245,197,24,.06);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;margin-bottom:10px;line-height:1.5;}
-  .steps{display:flex;flex-direction:column;gap:4px;}
-  .srow{display:flex;gap:8px;padding:6px 10px;border-radius:4px;border:1px solid var(--border);font-family:var(--mono);font-size:.71rem;align-items:flex-start;}
-  .srow.wrong-row{border-color:var(--accent2);background:rgba(232,64,64,.06);}
-  .snum{color:var(--muted);width:16px;flex-shrink:0;padding-top:1px;}
+  .steps{display:flex;flex-direction:column;gap:5px;}
+  .srow{display:flex;gap:8px;padding:7px 10px;border-radius:4px;border:1px solid var(--border);font-family:var(--mono);font-size:.71rem;align-items:flex-start;border-left-width:3px;}
+  .srow.wrong-row{background:rgba(232,64,64,.06);}
+  .snum{font-family:var(--display);font-size:1.1rem;width:22px;flex-shrink:0;}
   .stext{flex:1;line-height:1.4;}
   .slabel{font-size:.53rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:1px;}
   .wtag{font-size:.53rem;padding:2px 6px;background:var(--accent2);color:#fff;border-radius:3px;margin-left:4px;white-space:nowrap;}
-  /* step color indicators */
-  .srow-c0{border-left:3px solid var(--c0);}
-  .srow-c1{border-left:3px solid var(--c1);}
-  .srow-c2{border-left:3px solid var(--c2);}
-  .srow-c3{border-left:3px solid var(--c3);}
-  .srow-c4{border-left:3px solid #a855f7;}
-  .srow-c5{border-left:3px solid #f97316;}
   .timer-row{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:14px;}
   .timer-big{font-family:var(--display);font-size:2.6rem;color:var(--accent2);letter-spacing:4px;min-width:76px;transition:color .3s;}
   .timer-big.running{color:var(--accent3);}
@@ -122,12 +116,16 @@
   .confirm-btns{display:flex;gap:10px;justify-content:center;}
   .game-controls{transition:opacity .3s;}
   .game-controls.locked{opacity:.35;pointer-events:none;}
+  .no-questions{font-family:var(--mono);font-size:.75rem;color:var(--muted);text-align:center;padding:20px;line-height:1.8;}
 </style>
 </head>
 <body>
 <div class="header">
   <div><div class="htitle">🔍 HATA AVI — MODERATÖR</div><div class="hsub">MATEMATİK EKSENİNDE YAPAY ZEKA BULUŞMALARI</div></div>
-  <span class="conn-badge"><span class="dot"></span><span id="connCount">0</span> bağlı</span>
+  <div class="hright">
+    <button class="btn btn-ghost btn-sm" onclick="location.href='editor.html'">📝 SORU EDİTÖRÜ</button>
+    <span class="conn-badge"><span class="dot"></span><span id="connCount">0</span> bağlı</span>
+  </div>
 </div>
 <div class="phase-banner">
   <div><div class="phase-lbl">Mevcut Aşama</div><div class="phase-val lobby" id="phaseVal">⏳ LOBİ</div></div>
@@ -141,18 +139,18 @@
   <div class="left">
     <div class="game-controls locked" id="gameControls">
       <div class="sec">
-        <div class="sec-title">TURLAR</div>
+        <div class="sec-title">SORULAR</div>
         <div class="rnav" id="roundNav"></div>
+        <div id="noQMsg" class="no-questions" style="display:none;">Henüz soru yok.<br><a href="editor.html" style="color:var(--accent);">Editörden soru ekleyin →</a></div>
       </div>
       <div class="sec">
         <div class="sec-title">⏱ SÜRE</div>
         <div class="timer-row">
           <div>
             <div class="timer-lbl">Kalan Süre</div>
-            <div class="timer-big" id="timerDisp">90</div>
+            <div class="timer-big" id="timerDisp">—</div>
             <div class="timer-inp-row">
-              <input class="timer-inp" id="timerInput" type="number" value="90" min="10" max="300">
-              <span class="timer-inp-lbl">sn · puan = kalan süre</span>
+              <span class="timer-inp-lbl" style="color:var(--muted);">Soruda ayarlanan süre kullanılır · puan = kalan sn</span>
             </div>
           </div>
           <div style="margin-left:auto;"><button class="btn btn-ghost btn-sm" id="stopBtn" onclick="stopTimer()" style="display:none;">⏹ DURDUR</button></div>
@@ -179,7 +177,7 @@
       </div>
       <div class="sec">
         <div class="ctrl-row">
-          <button class="btn btn-primary" id="publishBtn" onclick="publishRound()">📡 TURU YAYINLA</button>
+          <button class="btn btn-primary" id="publishBtn" onclick="publishRound()" disabled>📡 TURU YAYINLA</button>
           <button class="btn btn-danger" id="revealBtn" onclick="revealAnswer()" disabled>✅ CEVABI GÖSTER</button>
           <button class="btn btn-ghost" onclick="nextRound()">SONRAKİ →</button>
         </div>
@@ -244,35 +242,28 @@ const firebaseConfig = {
 const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);
 
-const STEP_COLORS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316'];
-const DIFF={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🔴 ÇOK ZOR'};
+const COLORS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316'];
+const TEXT_COLORS=['#fff','#fff','#000','#000','#fff','#000'];
+const SHAPES=['▲','◆','●','■','★','♥'];
+const DIFF={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🟣 ÇOK ZOR'};
 const MUSIC_FILES=[{id:'01',name:'Müzik 1',icon:'🎵'},{id:'02',name:'Müzik 2',icon:'🎸'},{id:'03',name:'Müzik 3',icon:'🎹'},{id:'04',name:'Müzik 4',icon:'🥁'},{id:'05',name:'Müzik 5',icon:'🎺'},{id:'06',name:'Müzik 6',icon:'🎻'}];
 
-const rounds=[
-  {title:"⭐ Hatalı Kare Alma",diff:"easy",q:"(a + b)² ifadesini açın, a=3 ve b=4 için hesaplayın",
-   steps:[{label:"Problem",math:"(a+b)² ile a=3,b=4"},{label:"Adım 1",math:"(a+b)²=a²+b²"},{label:"Adım 2",math:"=3²+4²=9+16"},{label:"Adım 3",math:"=25"}],
-   wrong:1,hint:"Çift çarpım terimi (2ab) unutulmuş.",explain:"Adım 1'de hata! (a+b)²=a²+2ab+b². Doğru: 9+24+16=49"},
-  {title:"🧠 Hatalı Mantık",diff:"easy",q:"'Tüm kareler dikdörtgendir.' ve 'ABCD dikdörtgendir.' → YZ ne çıkardı?",
-   steps:[{label:"Öncül 1",math:"∀x: Kare(x)→Dikdörtgen(x)"},{label:"Öncül 2",math:"Dikdörtgen(ABCD)"},{label:"YZ Dönüşümü",math:"∀x: Dikdörtgen(x)→Kare(x)"},{label:"Sonuç",math:"∴ ABCD karedir."}],
-   wrong:2,hint:"Önerme tersine çevrilebilir mi?",explain:"Adım 3'te hata — Affirming the Consequent yanılgısı!"},
-  {title:"⭐⭐ Hatalı Türev",diff:"mid",q:"f(x) = x³·ln(x) fonksiyonunun türevini bulun",
-   steps:[{label:"Problem",math:"f(x)=x³·ln(x)"},{label:"Çarpım Kuralı",math:"f′(x)=(x³)′·ln(x)+x³·(lnx)′"},{label:"Türevler",math:"(x³)′=3x²  (lnx)′=1/x"},{label:"Yerine Koyma",math:"f′(x)=3x²·ln(x)+x³·x"},{label:"Sadeleştirme",math:"f′(x)=3x²ln(x)+x⁴"}],
-   wrong:3,hint:"x³·(1/x) sadeleştirince ne olur?",explain:"Adım 3'te hata! x³·(1/x)=x². Doğru: f′(x)=3x²ln(x)+x²"},
-  {title:"⭐⭐ Hatalı Matris",diff:"mid",q:"A·B=?  A=[[2,1],[0,3]]  B=[[1,4],[2,0]]",
-   steps:[{label:"Problem",math:"A·B=[[2,1],[0,3]]·[[1,4],[2,0]]"},{label:"c₁₁",math:"c₁₁=2·1+1·2=4 ✓"},{label:"c₁₂",math:"c₁₂=2·4+1·0=9"},{label:"c₂₁",math:"c₂₁=0·1+3·2=6 ✓"},{label:"c₂₂",math:"c₂₂=0·4+3·0=0 ✓"},{label:"Sonuç",math:"A·B=[[4,9],[6,0]]"}],
-   wrong:2,hint:"c₁₂=2·4+1·0=?",explain:"Adım 2'de hata! c₁₂=8. Doğru: [[4,8],[6,0]]"},
-  {title:"⭐⭐⭐ Hatalı Limit",diff:"hard",q:"lim(x→0) [sin(x)/x] = ?",
-   steps:[{label:"Problem",math:"lim(x→0) sin(x)/x"},{label:"Yerine Koyma",math:"0/0 belirsiz"},{label:"L'Hôpital",math:"lim sin′(x)/1"},{label:"Türev",math:"sin′(x)=−cos(x)"},{label:"Sonuç",math:"−cos(0)=−1"}],
-   wrong:3,hint:"sin′(x) işareti?",explain:"Adım 3'te hata! sin′(x)=+cos(x). Doğru: +1"},
-  {title:"⭐⭐⭐⭐ Koşullu Olasılık",diff:"vhard",q:"Hastalık:%1. Test:%99 doğru. Pozitif çıkınca hasta olma ihtimali?",
-   steps:[{label:"Veriler",math:"P(H)=0.01, P(+|H)=0.99, P(+|¬H)=0.01"},{label:"YZ Cevabı",math:"≈%99"},{label:"Bayes",math:"P(H|+)=P(+|H)·P(H)/P(+)"},{label:"P(+)",math:"0.99·0.01+0.01·0.99=0.0198"},{label:"Sonuç",math:"0.0099/0.0198=0.50 → %50!"}],
-   wrong:1,hint:"Base rate göz ardı mı?",explain:"Adım 1'de hata — Base Rate Neglect! Gerçek: ~%50"},
-];
-
+let questions=[];
 let curRound=0,timerVal=90,timerInt=null,timerRunning=false;
-let roundDone=Array(rounds.length).fill(false);
+let roundDone=[];
 let selectedMusic='01',currentAudio=null,roundMusicMap={};
 let isGamePhase=false,knownConnIds=new Set();
+
+// Load questions from Firebase
+onValue(ref(db,'questions'),snap=>{
+  const data=snap.val()||{};
+  questions=Object.entries(data).map(([id,q])=>({id,...q})).sort((a,b)=>(a.order||0)-(b.order||0));
+  roundDone=Array(questions.length).fill(false);
+  renderNav();
+  if(questions.length>0&&curRound<questions.length) renderRound();
+  document.getElementById('noQMsg').style.display=questions.length?'none':'block';
+  document.getElementById('publishBtn').disabled=questions.length===0;
+});
 
 // PIN
 window.generatePin=function(){const p=String(Math.floor(1000+Math.random()*9000));document.getElementById('pinDisplay').textContent=p;document.getElementById('pinStatus').textContent='✅ Aktif.';set(ref(db,'game/pin'),p);};
@@ -283,14 +274,12 @@ onValue(ref(db,'game/pin'),snap=>{const p=snap.val();if(p){document.getElementBy
 window.confirmReset=function(){document.getElementById('confirmOverlay').classList.add('visible');};
 window.closeConfirm=function(){document.getElementById('confirmOverlay').classList.remove('visible');};
 window.doReset=async function(){
-  closeConfirm(); stopTimer(); stopMusic();
-  await remove(ref(db,'game/answers'));
-  await remove(ref(db,'game/currentRound'));
-  await remove(ref(db,'game/connections'));
-  await remove(ref(db,'game/timer'));
+  closeConfirm();stopTimer();stopMusic();
+  await remove(ref(db,'game/answers'));await remove(ref(db,'game/currentRound'));
+  await remove(ref(db,'game/connections'));await remove(ref(db,'game/timer'));
   await set(ref(db,'game/phase'),'lobby');
-  curRound=0; roundDone=Array(rounds.length).fill(false); knownConnIds=new Set();
-  setLobbyPhase(); renderRound();
+  curRound=0;roundDone=Array(questions.length).fill(false);knownConnIds=new Set();
+  setLobbyPhase();if(questions.length)renderRound();
   document.getElementById('lobbyPlayers').innerHTML='<div class="empty">Henüz kimse katılmadı</div>';
   document.getElementById('lobbyPlayerCount').textContent='0 katılımcı';
   document.getElementById('statusMsg').textContent='Lobi sıfırlandı.';
@@ -312,8 +301,7 @@ onValue(ref(db,'game/connections'),snap=>{
   ids.forEach(id=>{
     if(!knownConnIds.has(id)){
       knownConnIds.add(id);
-      list.querySelectorAll('.lp-new').forEach(b=>b.remove());
-      list.querySelectorAll('.lp-row').forEach(r=>r.classList.remove('newest'));
+      list.querySelectorAll('.lp-new').forEach(b=>b.remove());list.querySelectorAll('.lp-row').forEach(r=>r.classList.remove('newest'));
       if(list.querySelector('.empty'))list.innerHTML='';
       const row=document.createElement('div');row.className='lp-row newest';row.id='lp-'+id;
       const avs=['🧑‍💻','👨‍🎓','👩‍🎓','🧑‍🏫'];const av=avs[Math.floor(Math.random()*avs.length)];
@@ -335,15 +323,19 @@ window.stopMusic=function(){if(currentAudio){currentAudio.pause();currentAudio.c
 
 // ROUND
 function renderRound(){
-  const r=rounds[curRound];
+  if(!questions.length)return;
+  const r=questions[curRound];if(!r)return;
   document.getElementById('qDiff').textContent=DIFF[r.diff]||'';
-  document.getElementById('qTitle').textContent=r.title;
-  document.getElementById('qText').textContent=r.q;
+  document.getElementById('qTitle').textContent=r.title||'';
+  document.getElementById('qText').textContent=r.q||'';
+  document.getElementById('timerDisp').textContent=r.duration||90;
   const sl=document.getElementById('stepsList');sl.innerHTML='';
-  r.steps.forEach((s,i)=>{
+  (r.steps||[]).forEach((s,i)=>{
+    const color=COLORS[i]||'#888';const tc=TEXT_COLORS[i]||'#fff';const sh=SHAPES[i]||String(i+1);
     const d=document.createElement('div');
-    d.className='srow srow-c'+i+(i===r.wrong?' wrong-row':'');
-    d.innerHTML=`<span class="snum" style="color:${STEP_COLORS[i]||'#888'};font-family:var(--display);font-size:1rem;">${i+1}</span><span class="stext"><span class="slabel">${s.label}</span>${s.math}</span>${i===r.wrong?'<span class="wtag">HATA</span>':''}`;
+    d.className='srow'+(i===r.wrong?' wrong-row':'');
+    d.style.borderLeftColor=color;
+    d.innerHTML=`<span class="snum" style="color:${color};">${sh}</span><span class="stext"><span class="slabel">${s.label}</span>${s.math}</span>${i===r.wrong?'<span class="wtag">HATA</span>':''}`;
     sl.appendChild(d);
   });
   document.getElementById('publishBtn').disabled=false;
@@ -353,13 +345,19 @@ function renderRound(){
 }
 function renderNav(){
   const nav=document.getElementById('roundNav');nav.innerHTML='';
-  const diff=['🟢','🟢','🟡','🟡','🔴','🔴'];
-  rounds.forEach((r,i)=>{const b=document.createElement('button');b.className='rbtn'+(i===curRound?' active':'')+(roundDone[i]?' done':'');b.textContent=`${diff[i]} ${i+1}`;b.onclick=()=>{stopTimer();curRound=i;renderRound();};nav.appendChild(b);});
+  const diff=['🟢','🟢','🟡','🟡','🔴','🔴','🟣'];
+  questions.forEach((r,i)=>{
+    const d=r.diff==='easy'?'🟢':r.diff==='mid'?'🟡':r.diff==='hard'?'🔴':'🟣';
+    const b=document.createElement('button');
+    b.className='rbtn'+(i===curRound?' active':'')+(roundDone[i]?' done':'');
+    b.textContent=`${d} ${i+1}`;b.onclick=()=>{stopTimer();curRound=i;renderRound();};
+    nav.appendChild(b);
+  });
 }
 
 // TIMER
-function startTimer(){
-  timerVal=parseInt(document.getElementById('timerInput').value)||90;
+function startTimer(duration){
+  timerVal=duration||90;
   document.getElementById('timerDisp').textContent=timerVal;
   timerRunning=true;
   const el=document.getElementById('timerDisp');el.className='timer-big running';
@@ -376,38 +374,31 @@ window.stopTimer=function(){clearInterval(timerInt);timerRunning=false;document.
 
 // PUBLISH
 window.publishRound=async function(){
-  if(!isGamePhase)return;
-  const r=rounds[curRound];
-  const duration=parseInt(document.getElementById('timerInput').value)||90;
+  if(!isGamePhase||!questions.length)return;
+  const r=questions[curRound];const duration=r.duration||90;
   stopTimer();stopMusic();
-  await set(ref(db,'game/currentRound'),{index:curRound,title:r.title,q:r.q,steps:r.steps,diff:r.diff,revealed:false,timerStart:Date.now(),duration,hint:r.hint,totalRounds:rounds.length});
+  await set(ref(db,'game/currentRound'),{index:curRound,title:r.title,q:r.q,steps:r.steps,diff:r.diff,revealed:false,timerStart:Date.now(),duration,hint:r.hint,totalRounds:questions.length});
   await remove(ref(db,'game/answers/'+curRound));
-  document.getElementById('publishBtn').disabled=true;
-  document.getElementById('revealBtn').disabled=false;
-  document.getElementById('statusMsg').textContent=`✅ Tur ${curRound+1} yayınlandı!`;
-  timerVal=duration;document.getElementById('timerDisp').textContent=timerVal;
-  startTimer();
+  document.getElementById('publishBtn').disabled=true;document.getElementById('revealBtn').disabled=false;
+  document.getElementById('statusMsg').textContent=`✅ Soru ${curRound+1} yayınlandı!`;
+  startTimer(duration);
   if(selectedMusic){currentAudio=new Audio(selectedMusic+'.mp3');currentAudio.loop=true;currentAudio.volume=0.5;currentAudio.play().catch(()=>{});const mc=document.getElementById('mc-'+selectedMusic);if(mc)mc.classList.add('playing');const ms=document.getElementById('ms-'+selectedMusic);if(ms)ms.textContent='▶';}
 };
 
 // REVEAL
 window.revealAnswer=async function(){
-  const r=rounds[curRound];stopTimer();stopMusic();
+  const r=questions[curRound];stopTimer();stopMusic();
   await update(ref(db,'game/currentRound'),{revealed:true,wrongStep:r.wrong,explain:r.explain});
-  roundDone[curRound]=true;renderNav();
-  document.getElementById('revealBtn').disabled=true;
+  roundDone[curRound]=true;renderNav();document.getElementById('revealBtn').disabled=true;
   document.getElementById('statusMsg').textContent='🔍 Cevap gösterildi!';
 };
-window.nextRound=function(){if(curRound<rounds.length-1){stopTimer();curRound++;renderRound();}};
+window.nextRound=function(){if(curRound<questions.length-1){stopTimer();curRound++;renderRound();}};
 
 // ANSWERS
 onValue(ref(db,'game/answers'),snap=>{
-  const all=snap.val()||{};
-  const cur=all[curRound]||{};
-  const entries=Object.values(cur);
+  const all=snap.val()||{};const cur=all[curRound]||{};const entries=Object.values(cur);
   const total=entries.length,correct=entries.filter(e=>e.correct).length;
-  document.getElementById('sCevap').textContent=total;
-  document.getElementById('sDoğru').textContent=correct;
+  document.getElementById('sCevap').textContent=total;document.getElementById('sDoğru').textContent=correct;
   document.getElementById('sOran').textContent=total?Math.round(correct/total*100)+'%':'—';
   const al=document.getElementById('answersLive');
   if(!total){al.innerHTML='<div class="empty">Henüz cevap yok</div>';}
@@ -417,11 +408,10 @@ onValue(ref(db,'game/answers'),snap=>{
   const lb=Object.values(scores).sort((a,b)=>b.score-a.score);
   const lbEl=document.getElementById('lbList');
   if(!lb.length){lbEl.innerHTML='<div class="empty">—</div>';return;}
-  lbEl.innerHTML='';
-  lb.forEach((p,i)=>{const row=document.createElement('div');row.className='lb-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');row.innerHTML=`<div class="lb-rank">${i===0?'👑':i+1}</div><div class="lb-name">${p.name}</div><div class="lb-score">${p.score}</div><div class="lb-detail">${p.correct}/${p.total}</div>`;lbEl.appendChild(row);});
+  lbEl.innerHTML='';lb.forEach((p,i)=>{const row=document.createElement('div');row.className='lb-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');row.innerHTML=`<div class="lb-rank">${i===0?'👑':i+1}</div><div class="lb-name">${p.name}</div><div class="lb-score">${p.score}</div><div class="lb-detail">${p.correct}/${p.total}</div>`;lbEl.appendChild(row);});
 });
 
-renderMusicGrid();renderRound();setLobbyPhase();
+renderMusicGrid();setLobbyPhase();
 </script>
 </body>
 </html>
