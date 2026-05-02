@@ -536,7 +536,11 @@ function renderOpts(){
     const row=document.createElement('div');
     row.className='opt-row'+(o.isCorrect?' is-correct':'');
     row.style.borderLeftColor=COLORS[i]||'#888';
-    row.innerHTML=`<div class="opt-color" style="background:${COLORS[i]||'#888'};"></div><div class="opt-shape">${SHAPES[i]||i+1}</div><input class="opt-inp" value="${escHtml(o.text)}" placeholder="Şık ${String.fromCharCode(65+i)} — $...$ ile LaTeX" oninput="updateOpt(${i},'text',this.value)"><button class="opt-correct-btn ${o.isCorrect?'correct':''}" onclick="setCorrect(${i})">${o.isCorrect?'✅ DOĞRU':'Doğru?'}</button>${curOpts.length>2?`<button class="opt-del" onclick="removeOpt(${i})">✕</button>`:''}`;
+    // Build row WITHOUT value in HTML to avoid escaping issues with LaTeX/backslashes
+    row.innerHTML=`<div class="opt-color" style="background:${COLORS[i]||'#888'};"></div><div class="opt-shape">${SHAPES[i]||i+1}</div><input class="opt-inp" placeholder="Şık ${String.fromCharCode(65+i)} — $...$ ile LaTeX" oninput="updateOpt(${i},'text',this.value)"><button class="opt-correct-btn ${o.isCorrect?'correct':''}" onclick="setCorrect(${i})">${o.isCorrect?'✅ DOĞRU':'Doğru?'}</button>${curOpts.length>2?`<button class="opt-del" onclick="removeOpt(${i})">✕</button>`:''}`;
+    // Set value via JS property AFTER innerHTML to correctly handle LaTeX, backslashes, quotes
+    const inp=row.querySelector('.opt-inp');
+    if(inp) inp.value=o.text||'';
     list.appendChild(row);
   });
   updateAiWrongSelect();
@@ -659,13 +663,19 @@ function updatePreview(){
   // AI info
   const model=document.getElementById('fAiModel').value;
   const year=document.getElementById('fAiYear').value;
-  const aiWrong=document.getElementById('fAiWrong').value;
+  const aiWrongVal=document.getElementById('fAiWrong').value;
   const aiReason=document.getElementById('fAiReason').value;
   document.getElementById('pvAiModel').textContent=model||'—';
   document.getElementById('pvAiYear').textContent=year||'—';
-  document.getElementById('pvAiWrong').textContent=aiWrong!==''?`${SHAPES[aiWrong]} Şık ${String.fromCharCode(65+parseInt(aiWrong))}`:'—';
-  const pvAiR=document.getElementById('pvAiReason');pvAiR.textContent=aiReason||'—';
-  waitKatex(()=>renderKatex(pvAiR));
+  document.getElementById('pvAiWrong').textContent=aiWrongVal!==''?`${SHAPES[parseInt(aiWrongVal)]} Şık ${String.fromCharCode(65+parseInt(aiWrongVal))}`:'—';
+  // Set aiReason: use innerHTML with text nodes to avoid KaTeX overwrite
+  const pvAiR=document.getElementById('pvAiReason');
+  pvAiR.textContent=aiReason||'(açıklama eklenmemiş)';
+  waitKatex(()=>{
+    // re-set text before rendering in case it was cleared
+    if(pvAiR.textContent!==aiReason) pvAiR.textContent=aiReason||'(açıklama eklenmemiş)';
+    renderKatex(pvAiR);
+  });
 
   // Summary
   document.getElementById('pvDur').textContent=dur+'s';
