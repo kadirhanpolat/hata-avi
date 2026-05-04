@@ -293,6 +293,50 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   </div>
 </div>
 
+<!-- OVERLAYS -->
+<div class="overlay" id="confirmOverlay">
+  <div class="overlay-box" style="text-align:center;">
+    <div class="qtitle">⚠️ EMIN MISINIZ?</div>
+    <div class="card-sub" style="margin-bottom:20px;">Tüm oyun verileri, cevaplar ve sıralama sıfırlanacak. Bu işlem geri alınamaz.</div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-ghost" style="flex:1;" onclick="document.getElementById('confirmOverlay').classList.remove('visible')">İPTAL</button>
+      <button class="btn btn-danger" style="flex:1;" onclick="doReplay(); document.getElementById('confirmOverlay').classList.remove('visible')">EVET, SIFIRLA</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="analyticsOverlay">
+  <div class="overlay-box" style="max-width:800px; width:95%; height:90vh; overflow-y:auto; display:block;">
+    <div style="display:flex; align-items:center; margin-bottom:20px;">
+      <div class="qtitle" style="margin:0;">📊 DETAYLI ANALİZ</div>
+      <button class="btn btn-ghost btn-sm" style="margin-left:auto;" onclick="closeAnalytics()">KAPAT</button>
+    </div>
+    <div class="live-stats" style="margin-bottom:20px;">
+      <div class="ls-card"><div class="ls-val" id="stParticipants">0</div><div class="ls-lbl">Katılımcı</div></div>
+      <div class="ls-card"><div class="ls-val" id="stAvgSuccess">0%</div><div class="ls-lbl">Ort. Başarı</div></div>
+      <div class="ls-card"><div class="ls-val" id="stAvgTime">0s</div><div class="ls-lbl">Ort. Süre</div></div>
+    </div>
+    <div class="pin-card" style="margin-bottom:20px;">
+      <div class="slbl">🎯 EN ZORLU SORU</div>
+      <div id="hqcTitle" style="font-weight:600; font-size:1.1rem; color:var(--accent); margin:10px 0;">-</div>
+      <div id="hqcStats" class="flow-step-lbl" style="font-size:0.7rem;">Doğru cevaplanma oranı: - · Ortalama süre: -</div>
+    </div>
+    <table style="width:100%; border-collapse:collapse; font-family:var(--mono); font-size:0.75rem;">
+      <thead>
+        <tr style="text-align:left; color:var(--muted); border-bottom:1px solid var(--border);">
+          <th style="padding:10px 5px;">#</th>
+          <th style="padding:10px 5px;">SORU BAŞLIĞI</th>
+          <th style="padding:10px 5px;">DOĞRU</th>
+          <th style="padding:10px 5px;">YANLIŞ</th>
+          <th style="padding:10px 5px;">SÜRE</th>
+        </tr>
+      </thead>
+      <tbody id="analyticsTableBody"></tbody>
+    </table>
+    <div id="analyticsMeta" style="margin-top:20px; font-size:0.6rem; color:var(--muted); text-align:right;">-</div>
+  </div>
+</div>
+
 <script type="module">
   import { db, ref, fbGet, fbSet, fbUpdate, auth, onValue } from "./js/core/firebase.js";
   import { requireModeratorSession, doLogout } from "./js/core/auth.js";
@@ -332,6 +376,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   window.revealAnswer = revealAnswer;
   window.nextRound = nextRound;
   window.loadModSet = loadModSet;
+  window.confirmReset = () => document.getElementById('confirmOverlay').classList.add('visible');
+  window.doReplay = doReplay;
+  window.closeAnalytics = closeAnalytics;
+  window.openAnalytics = openAnalytics;
 
   initGameListeners();
   initListeners({

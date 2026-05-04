@@ -5,10 +5,10 @@ import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https:/
 
 // Default admin credentials
 const DEFAULT_USER = 'admin';
-const DEFAULT_PASS_HASH = '80931536b3342f1b4020c6a8f6d65509741a46b9a89c9c9c9c9c9c9c9c9c9c9c'; // 'nimda' (placeholder, will be recomputed if needed)
+const DEFAULT_PASS_HASH = 'e81a88ee61034df23c8738bf1452d1f8f0c8023d57d16d063dcd4a8c9005c3d6'; // '.admin.'
 
 async function getAdminHash() {
-  return await sha256('nimda');
+  return await sha256('.admin.');
 }
 
 export async function ensureDefaults() {

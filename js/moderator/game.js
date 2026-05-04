@@ -25,7 +25,7 @@ export function setLobby() {
   const pv = document.getElementById('phaseVal');
   if (pv) {
     pv.textContent = '⌛ LOBİ';
-    pv.className = 'phase-val lobby';
+    pv.className = 'phase-pill lobby';
   }
   const gc = document.getElementById('gameControls');
   if (gc) gc.classList.add('locked');

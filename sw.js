@@ -1,4 +1,4 @@
-const CACHE = 'usev-v3.5';
+const CACHE = 'usev-v3.6';
 const SHELL = [
   './',
   './index.html',
