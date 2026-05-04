@@ -4,395 +4,772 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Usev — Moderatör</title>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f5c518">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Usev">
+<link rel="apple-touch-icon" href="icon-apple.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
-:root{--bg:#0d0d0d;--surface:#141414;--card:#1a1a1a;--border:#2a2a2a;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--purple:#a855f7;--text:#f0f0f0;--muted:#666;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;
---c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;--c4:#a855f7;--c5:#f97316;}
+:root{
+  --bg:#07070a;--surface:#0e0e14;--card:#131319;--card2:#1a1a22;--border:#1f1f2a;
+  --accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--purple:#a855f7;
+  --text:#f0f0f0;--muted:#52526a;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;
+  --c0:#e84040;--c1:#3b82f6;--c2:#f5c518;--c3:#3dd68c;--c4:#a855f7;--c5:#f97316;
+  --col-left:260px;--col-right:290px;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;}
-/* Change password modal */
-.pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;}
-.pw-overlay.visible{display:flex;}
-.pw-box{background:var(--surface);border:2px solid var(--accent);border-radius:12px;padding:32px;max-width:400px;width:90%;}
-.pw-title{font-family:var(--display);font-size:1.5rem;letter-spacing:2px;color:var(--accent);margin-bottom:6px;}
-.pw-sub{font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:20px;line-height:1.6;}
-.pw-field{margin-bottom:12px;}
-.pw-label{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;display:block;}
-.pw-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;font-family:var(--mono);font-size:.85rem;border-radius:6px;outline:none;transition:border-color .2s;letter-spacing:1px;}
-.pw-inp:focus{border-color:var(--accent);}
-.pw-err{font-family:var(--mono);font-size:.62rem;color:var(--accent2);margin-top:8px;min-height:16px;}
-.pw-ok{font-family:var(--mono);font-size:.62rem;color:var(--accent3);margin-top:8px;min-height:16px;}
-.pw-btns{display:flex;gap:8px;margin-top:16px;}
-.user-badge{font-family:var(--mono);font-size:.65rem;padding:4px 11px;border-radius:20px;background:rgba(245,197,24,.08);border:1px solid rgba(245,197,24,.2);color:var(--accent);cursor:pointer;transition:all .2s;}
-.user-badge:hover{background:rgba(245,197,24,.15);}
-.header{background:var(--surface);border-bottom:2px solid var(--accent);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
-.htitle{font-family:var(--display);font-size:1.7rem;letter-spacing:2px;color:var(--accent);}
-.hsub{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:1px;}
-.hright{display:flex;align-items:center;gap:8px;}
-.conn-badge{font-family:var(--mono);font-size:.65rem;padding:4px 11px;border-radius:20px;background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.25);color:var(--accent3);}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);display:inline-block;margin-right:5px;animation:blink 1.5s infinite;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
-.phase-banner{padding:10px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
-.phase-lbl{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-.phase-val{font-family:var(--display);font-size:1.1rem;letter-spacing:2px;}
-.phase-val.lobby{color:var(--accent3);}.phase-val.game{color:var(--accent);}
-.phase-actions{display:flex;gap:8px;}
-.layout{display:grid;grid-template-columns:1fr 340px;min-height:calc(100vh - 98px);}
-.left{padding:22px;overflow-y:auto;border-right:1px solid var(--border);}
-.right{background:var(--surface);padding:18px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;}
-.sec{margin-bottom:18px;}
-.sec-title{font-family:var(--display);font-size:1rem;letter-spacing:2px;color:var(--accent);margin-bottom:8px;}
-.sec-lbl{font-family:var(--mono);font-size:.56rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
-.rnav{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
-.rbtn{font-family:var(--mono);font-size:.6rem;padding:4px 9px;background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:4px;cursor:pointer;transition:all .2s;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);overflow:hidden;}
+.katex{font-size:.88em;}
+
+/* ══════════════════════════════ 
+   HEADER
+══════════════════════════════  */
+.hdr{
+  background:var(--surface);
+  border-bottom:2px solid var(--accent);
+  height:56px;padding:0 18px;
+  display:flex;align-items:center;gap:12px;
+  flex-shrink:0;position:relative;z-index:30;
+}
+.hdr-logo{font-family:var(--display);font-size:1.6rem;letter-spacing:4px;color:var(--accent);flex-shrink:0;}
+.hdr-divider{width:1px;height:28px;background:var(--border);flex-shrink:0;}
+.phase-pill{
+  font-family:var(--display);font-size:1rem;letter-spacing:3px;
+  padding:4px 14px;border-radius:20px;flex-shrink:0;
+  transition:all .3s;
+}
+.phase-pill.lobby{background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.25);color:var(--accent3);}
+.phase-pill.game{background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);color:var(--accent);}
+.hdr-spacer{flex:1;}
+/* Timer in header */
+.hdr-timer{
+  font-family:var(--display);font-size:1.8rem;letter-spacing:4px;
+  min-width:64px;text-align:center;padding:3px 12px;
+  border-radius:10px;border:2px solid var(--border);
+  background:var(--card);color:var(--muted);
+  transition:all .3s;flex-shrink:0;
+}
+.hdr-timer.running{border-color:var(--accent3);background:rgba(61,214,140,.07);color:var(--accent3);}
+.hdr-timer.urgent{border-color:var(--accent2);background:rgba(232,64,64,.12);color:var(--accent2);animation:htp .45s infinite alternate;}
+@keyframes htp{from{transform:scale(1);}to{transform:scale(1.05);}}
+/* Conn badge */
+.conn-badge{
+  display:flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:.62rem;
+  padding:4px 11px;border-radius:20px;
+  background:rgba(61,214,140,.08);border:1px solid rgba(61,214,140,.2);
+  color:var(--accent3);flex-shrink:0;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.15;}}
+.user-badge{
+  font-family:var(--mono);font-size:.62rem;padding:4px 10px;border-radius:20px;
+  background:rgba(245,197,24,.07);border:1px solid rgba(245,197,24,.18);
+  color:var(--accent);cursor:pointer;flex-shrink:0;transition:background .15s;
+}
+.user-badge:hover{background:rgba(245,197,24,.14);}
+.hdr-btn{
+  font-family:var(--mono);font-size:.6rem;padding:5px 11px;
+  border:1px solid var(--border);background:var(--card);color:var(--muted);
+  border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.hdr-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Phase actions bar */
+.phase-bar{
+  height:46px;padding:0 18px;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.phase-bar .spacer{flex:1;}
+.status-pill{
+  font-family:var(--mono);font-size:.6rem;color:var(--muted);
+  padding:3px 10px;background:var(--card);border:1px solid var(--border);
+  border-radius:4px;flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+
+/* ══════════════════════════════ 
+   3-COLUMN LAYOUT
+══════════════════════════════  */
+.workspace{
+  display:grid;
+  grid-template-columns:var(--col-left) 1fr var(--col-right);
+  height:calc(100vh - 102px);/* hdr 56 + phase-bar 46 */
+  overflow:hidden;
+}
+.col{overflow-y:auto;overflow-x:hidden;}
+.col::-webkit-scrollbar{width:4px;}
+.col::-webkit-scrollbar-track{background:transparent;}
+.col::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+/* ── LEFT COLUMN ── */
+.col-left{
+  border-right:1px solid var(--border);
+  background:var(--surface);
+  padding:14px;display:flex;flex-direction:column;gap:10px;
+}
+/* Section label */
+.slbl{
+  font-family:var(--mono);font-size:.55rem;color:var(--muted);
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;
+  display:flex;align-items:center;gap:6px;
+}
+.slbl-badge{
+  font-size:.5rem;padding:1px 6px;border-radius:10px;
+  background:rgba(245,197,24,.1);color:var(--accent);
+  border:1px solid rgba(245,197,24,.2);
+}
+/* PIN card */
+.pin-card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px;}
+.pin-val{font-family:var(--display);font-size:2.8rem;letter-spacing:12px;color:var(--accent);text-align:center;background:var(--bg);border-radius:6px;padding:6px 0;margin:6px 0;}
+.pin-actions{display:flex;gap:5px;}
+/* Round nav */
+.rnav{display:flex;gap:4px;flex-wrap:wrap;}
+.rbtn{
+  font-family:var(--mono);font-size:.58rem;padding:4px 8px;
+  background:var(--card);border:1px solid var(--border);color:var(--muted);
+  border-radius:5px;cursor:pointer;transition:all .15s;
+}
 .rbtn:hover,.rbtn.active{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.07);}
 .rbtn.done{border-color:var(--accent3);color:var(--accent3);}
-.qcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px;}
-.qdiff{font-family:var(--mono);font-size:.58rem;letter-spacing:1px;margin-bottom:4px;}
-.qtitle{font-family:var(--display);font-size:1.1rem;letter-spacing:1px;margin-bottom:7px;}
-.qtext{font-family:var(--mono);font-size:.75rem;color:var(--accent);padding:7px 11px;background:rgba(245,197,24,.06);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;margin-bottom:10px;line-height:1.6;}
-.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
-.opt-card{border-radius:7px;padding:9px 12px;display:flex;align-items:center;gap:8px;position:relative;}
-.opt-shape{font-size:1.4rem;color:#fff;flex-shrink:0;}
-.opt-math{font-family:var(--mono);font-size:.7rem;line-height:1.3;flex:1;}
-.opt-correct-tag{font-size:.5rem;padding:2px 6px;background:rgba(0,0,0,.3);border-radius:10px;color:#fff;position:absolute;top:5px;right:7px;}
-.ai-summary{background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.2);border-radius:6px;padding:10px 12px;margin-top:8px;}
-.ai-summary-title{font-family:var(--mono);font-size:.58rem;color:var(--purple);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase;}
-.ai-summary-row{font-family:var(--mono);font-size:.65rem;color:var(--muted);line-height:1.6;}
-.ai-summary-row span{color:var(--purple);}
-.timer-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:12px;}
-.timer-big{font-family:var(--display);font-size:2.4rem;color:var(--accent2);letter-spacing:4px;min-width:70px;transition:color .3s;}
-.timer-big.running{color:var(--accent3);}.timer-big.urgent{color:var(--accent2);animation:tp .5s infinite alternate;}
-@keyframes tp{from{opacity:1;}to{opacity:.5;}}
-.timer-lbl{font-family:var(--mono);font-size:.54rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
-.music-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px;}
-.music-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:7px 9px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;}
-.music-card:hover{border-color:var(--accent);}
-.music-card.selected{border-color:var(--accent);background:rgba(245,197,24,.08);}
-.music-card.playing{border-color:var(--accent3);background:rgba(61,214,140,.08);}
-.music-icon{font-size:1rem;}.music-name{font-family:var(--mono);font-size:.6rem;flex:1;}
-.music-file{font-size:.5rem;color:var(--muted);display:block;}
+/* Set selector */
+.set-btns{display:flex;gap:4px;flex-wrap:wrap;}
+.mod-set-btn{
+  font-family:var(--mono);font-size:.56rem;padding:3px 8px;
+  border-radius:4px;border:1px solid var(--border);
+  background:var(--card);color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.mod-set-btn:hover{border-color:rgba(245,197,24,.4);color:var(--accent);}
+.mod-set-btn.active{border-color:var(--accent);background:rgba(245,197,24,.08);color:var(--accent);}
+/* Cat filter */
+#catFilterMod{display:flex;flex-wrap:wrap;gap:4px;}
+/* Lobby mini */
+.lobby-mini{max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:3px;}
+.lp-row{
+  display:flex;align-items:center;gap:6px;padding:5px 8px;
+  background:var(--card);border-radius:5px;border:1px solid var(--border);
+  animation:fi .3s ease;
+}
+.lp-row.newest{border-color:var(--accent);background:rgba(245,197,24,.05);}
+.lp-name{font-family:var(--mono);font-size:.65rem;flex:1;}
+.lp-new{font-size:.46rem;padding:1px 4px;background:var(--accent);color:#000;border-radius:3px;}
+@keyframes fi{from{opacity:0;transform:translateX(6px);}to{opacity:1;transform:translateX(0);}}
+/* Sound accordion */
+.accordion{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.acc-hdr{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;user-select:none;}
+.acc-hdr-lbl{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:1px;flex:1;}
+.acc-hdr-arrow{font-size:.65rem;color:var(--muted);transition:transform .2s;}
+.acc-hdr.open .acc-hdr-arrow{transform:rotate(90deg);}
+.acc-body{display:none;padding:10px 12px;border-top:1px solid var(--border);}
+.acc-body.open{display:block;}
+.sound-toggles{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
+.sound-toggle-btn{
+  font-family:var(--mono);font-size:.58rem;padding:3px 9px;border-radius:4px;
+  border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .15s;
+}
+.sound-toggle-btn.on{border-color:var(--accent3);color:var(--accent3);}
+.vol-row{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+.vol-lbl{font-family:var(--mono);font-size:.58rem;color:var(--muted);flex-shrink:0;}
+.vol-slider{flex:1;height:3px;accent-color:var(--accent);cursor:pointer;}
+.vol-val{font-family:var(--display);font-size:.75rem;color:var(--accent);width:30px;text-align:right;}
+.music-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px;}
+.music-card{
+  background:var(--card2);border:1px solid var(--border);border-radius:5px;
+  padding:6px 8px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;
+}
+.music-card:hover,.music-card.selected{border-color:var(--accent);}
+.music-card.playing{border-color:var(--accent3);}
+.music-icon{font-size:.9rem;flex-shrink:0;}
+.music-name{font-family:var(--mono);font-size:.58rem;flex:1;}
 .music-status{font-size:.5rem;font-family:var(--mono);color:var(--accent3);}
-.music-ctrl{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap;}
-.btn{font-family:var(--display);letter-spacing:2px;padding:8px 18px;border:none;cursor:pointer;border-radius:4px;transition:all .2s;font-size:.85rem;}
-.btn-primary{background:var(--accent);color:#000;}.btn-primary:hover{background:#ffd43b;transform:translateY(-1px);}
-.btn-primary:disabled{background:#2a2a2a;color:var(--muted);cursor:not-allowed;transform:none;}
-.btn-green{background:var(--accent3);color:#000;}.btn-green:hover{background:#5fffaa;}
-.btn-green:disabled{background:#2a2a2a;color:var(--muted);cursor:not-allowed;}
-.btn-danger{background:var(--accent2);color:#fff;}.btn-danger:hover{background:#ff6060;}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:.63rem;letter-spacing:1px;padding:8px 13px;}
+.music-card-desc{display:none;}
+.music-ctrl{display:flex;gap:4px;}
+
+/* ══ MİNİ PODYUM ══ */
+.col-mid{padding:16px;display:flex;flex-direction:column;gap:12px;}
+/* Flow steps */
+.flow-steps{
+  display:flex;align-items:center;gap:0;background:var(--card);
+  border:1px solid var(--border);border-radius:10px;overflow:hidden;flex-shrink:0;
+}
+.flow-step{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px 4px;text-align:center;border-right:1px solid var(--border);
+  transition:background .2s;
+}
+.flow-step:last-child{border-right:none;}
+.flow-step.active{background:rgba(245,197,24,.07);}
+.flow-step.done-step{background:rgba(61,214,140,.04);}
+.flow-step-icon{font-size:1.1rem;margin-bottom:2px;}
+.flow-step-lbl{font-family:var(--mono);font-size:.52rem;color:var(--muted);letter-spacing:.5px;}
+.flow-step.active .flow-step-lbl{color:var(--accent);}
+.flow-step.done-step .flow-step-lbl{color:var(--accent3);}
+/* Control buttons — big */
+.ctrl-wrap{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:14px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;
+}
+.ctrl-main{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.ctrl-sub{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.btn{font-family:var(--display);letter-spacing:2px;padding:8px 18px;border:none;cursor:pointer;border-radius:6px;transition:all .18s;font-size:.88rem;}
+.btn-primary{background:var(--accent);color:#000;}
+.btn-primary:hover{background:#ffd33a;}
+.btn-primary:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
+.btn-green{background:var(--accent3);color:#000;}
+.btn-green:hover{background:#5bffa8;}
+.btn-green:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
+.btn-danger{background:var(--accent2);color:#fff;}
+.btn-danger:hover{background:#ff5252;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:.62rem;letter-spacing:1px;padding:7px 13px;}
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
-.btn-sm{padding:5px 11px;font-size:.73rem;}
-.ctrl-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
-.status-msg{font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-top:6px;line-height:1.6;min-height:16px;}
-.lb-title{font-family:var(--display);font-size:1.05rem;letter-spacing:2px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:7px;}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
-.stat-box{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center;}
-.stat-val{font-family:var(--display);font-size:1.3rem;color:var(--accent);letter-spacing:1px;}
-.stat-lbl{font-family:var(--mono);font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:1px;}
-.ans-list{display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;}
-.ans-row{display:flex;align-items:center;padding:5px 9px;background:var(--card);border-radius:4px;border:1px solid var(--border);animation:fi .3s ease;}
-@keyframes fi{from{opacity:0;transform:translateX(7px);}to{opacity:1;transform:translateX(0);}}
-.ans-row.ok{border-color:var(--accent3);background:rgba(61,214,140,.05);}
-.ans-row.fail{border-color:var(--accent2);background:rgba(232,64,64,.05);}
-.ans-name{font-family:var(--mono);font-size:.68rem;flex:1;}
-.ans-pts{font-family:var(--display);font-size:.85rem;color:var(--accent3);letter-spacing:1px;margin:0 5px;}
-.lb-list{display:flex;flex-direction:column;gap:4px;}
-.lb-row{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--card);border-radius:4px;border:1px solid var(--border);transition:all .3s;animation:fi .3s ease;}
-.lb-row.r1{border-color:var(--accent);background:rgba(245,197,24,.06);}
-.lb-row.r2{border-color:#999;}.lb-row.r3{border-color:#cd7f32;}
-.lb-rank{font-family:var(--display);font-size:.95rem;width:20px;color:var(--muted);}
+.btn-sm{padding:5px 11px;font-size:.75rem;}
+.btn-signal{background:linear-gradient(135deg,var(--accent),#f97316);color:#000;}
+.btn-signal:hover{filter:brightness(1.1);}
+.auto-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.auto-lbl{font-family:var(--mono);font-size:.57rem;color:var(--muted);}
+.auto-sel{
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  font-family:var(--mono);font-size:.65rem;padding:4px 8px;border-radius:5px;
+  outline:none;cursor:pointer;
+}
+/* Status msg */
+.status-msg{font-family:var(--mono);font-size:.6rem;color:var(--muted);line-height:1.6;min-height:15px;}
+/* Question card */
+.qcard{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;flex:1;display:flex;flex-direction:column;
+}
+.qcard-top{padding:14px 16px;border-bottom:1px solid var(--border);}
+.qcard-diff-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.qdiff{font-family:var(--mono);font-size:.58rem;letter-spacing:1px;}
+.qtype-tag{font-family:var(--mono);font-size:.55rem;padding:2px 8px;border-radius:3px;letter-spacing:.5px;}
+.cat-tag{font-family:var(--mono);font-size:.55rem;padding:2px 8px;border-radius:10px;letter-spacing:.5px;}
+.qtitle{font-family:var(--display);font-size:1.3rem;letter-spacing:1px;margin-bottom:8px;line-height:1.3;}
+.qtext{
+  font-family:var(--mono);font-size:.78rem;color:var(--accent);
+  padding:9px 13px;background:rgba(245,197,24,.05);
+  border-left:3px solid var(--accent);border-radius:0 6px 6px 0;
+  line-height:1.65;
+}
+.qcard-body{padding:14px 16px;flex:1;overflow-y:auto;}
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.opt-card{border-radius:8px;padding:10px 13px;display:flex;align-items:center;gap:8px;position:relative;overflow:hidden;}
+.opt-shape{font-size:1.5rem;color:#fff;flex-shrink:0;}
+.opt-math{font-family:var(--mono);font-size:.72rem;line-height:1.35;flex:1;color:#fff;}
+.opt-correct-tag{font-size:.5rem;padding:2px 6px;background:rgba(0,0,0,.3);border-radius:10px;color:#fff;position:absolute;top:6px;right:8px;}
+.ai-summary{background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.18);border-radius:8px;padding:10px 13px;margin-top:10px;}
+.ai-summary-title{font-family:var(--mono);font-size:.56rem;color:var(--purple);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase;}
+.ai-summary-row{font-family:var(--mono);font-size:.63rem;color:var(--muted);line-height:1.65;}
+.ai-summary-row span{color:var(--purple);}
+
+/* ── RIGHT COLUMN ── */
+.col-right{
+  border-left:1px solid var(--border);
+  background:var(--surface);
+  padding:14px;display:flex;flex-direction:column;gap:10px;
+}
+/* Stats donut cards */
+.live-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
+.ls-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center;}
+.ls-val{font-family:var(--display);font-size:1.6rem;color:var(--accent);letter-spacing:1px;line-height:1;}
+.ls-lbl{font-family:var(--mono);font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.ls-card.green .ls-val{color:var(--accent3);}
+.ls-card.red .ls-val{color:var(--accent2);}
+/* Accuracy bar */
+.acc-bar-wrap{margin-top:4px;}
+.acc-bar-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.acc-bar-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+/* Answers live */
+.ans-list{display:flex;flex-direction:column;gap:3px;max-height:200px;overflow-y:auto;}
+.ans-row{display:flex;align-items:center;padding:5px 8px;background:var(--card);border-radius:5px;border:1px solid var(--border);animation:fi .3s ease;}
+.ans-row.ok{border-color:var(--accent3);background:rgba(61,214,140,.04);}
+.ans-row.fail{border-color:var(--accent2);background:rgba(232,64,64,.04);}
+.ans-row.pending{border-color:rgba(168,85,247,.35);}
+.ans-name{font-family:var(--mono);font-size:.65rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ans-pts{font-family:var(--display);font-size:.82rem;color:var(--accent3);letter-spacing:1px;margin:0 4px;}
+.ans-open-row{flex-direction:column;align-items:flex-start;gap:4px;padding:6px 8px;}
+.ans-open-text{font-family:var(--sans);font-size:.7rem;color:var(--text);line-height:1.5;word-break:break-word;}
+.ans-open-ctrl{display:flex;align-items:center;gap:5px;width:100%;}
+.oe-approve{border:none;border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:.57rem;cursor:pointer;background:rgba(61,214,140,.13);color:var(--accent3);border:1px solid var(--accent3);}
+.oe-reject{border:none;border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:.57rem;cursor:pointer;background:rgba(232,64,64,.1);color:var(--accent2);border:1px solid var(--accent2);}
+.oe-pts-inp{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.62rem;padding:3px 5px;border-radius:4px;width:50px;outline:none;}
+.oe-pts-lbl{font-family:var(--mono);font-size:.56rem;color:var(--muted);}
+.oe-bulk{display:flex;gap:5px;margin-bottom:5px;}
+.oe-bulk-btn{flex:1;border:none;border-radius:4px;padding:4px 7px;font-family:var(--mono);font-size:.58rem;cursor:pointer;}
+/* Leaderboard */
+.lb-list{display:flex;flex-direction:column;gap:3px;max-height:200px;overflow-y:auto;}
+.lb-row{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--card);border-radius:5px;border:1px solid var(--border);transition:all .3s;animation:fi .3s ease;}
+.lb-row.r1{border-color:var(--accent);background:rgba(245,197,24,.05);}
+.lb-row.r2{border-color:#777;}
+.lb-row.r3{border-color:#b87333;}
+.lb-rank{font-family:var(--display);font-size:.9rem;width:18px;color:var(--muted);flex-shrink:0;}
 .lb-row.r1 .lb-rank{color:var(--accent);}
-.lb-name{flex:1;font-family:var(--mono);font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.lb-score{font-family:var(--display);font-size:1rem;color:var(--accent3);letter-spacing:1px;}
-.lb-detail{font-family:var(--mono);font-size:.54rem;color:var(--muted);margin-left:3px;}
-.empty{font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center;padding:14px;}
-.lobby-players{display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;}
-.lp-row{display:flex;align-items:center;gap:7px;padding:6px 10px;background:var(--card);border-radius:4px;border:1px solid var(--border);animation:fi .3s ease;}
-.lp-row.newest{border-color:var(--accent);background:rgba(245,197,24,.07);}
-.lp-name{font-family:var(--mono);font-size:.72rem;flex:1;}
-.lp-new{font-size:.5rem;padding:2px 5px;background:var(--accent);color:#000;border-radius:3px;}
-.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;}
+.lb-name{flex:1;font-family:var(--mono);font-size:.65rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-score{font-family:var(--display);font-size:.95rem;color:var(--accent3);letter-spacing:1px;}
+.lb-detail{font-family:var(--mono);font-size:.52rem;color:var(--muted);margin-left:2px;}
+/* Team scores */
+.team-score-row{display:flex;align-items:center;gap:7px;padding:6px 9px;background:var(--card);border-radius:6px;border:2px solid transparent;animation:fi .3s ease;}
+.team-score-name{flex:1;font-family:var(--mono);font-size:.7rem;}
+.team-score-pts{font-family:var(--display);font-size:1.05rem;letter-spacing:1px;}
+/* game controls locked */
+.game-controls{transition:opacity .3s;}
+.game-controls.locked{opacity:.3;pointer-events:none;}
+/* misc */
+.empty{font-family:var(--mono);font-size:.62rem;color:var(--muted);text-align:center;padding:12px;}
+.no-q{font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;padding:20px;line-height:1.8;}
+.filteredCount-lbl{font-family:var(--mono);font-size:.56rem;color:var(--muted);}
+#autoAdvanceCountdown{font-family:var(--display);font-size:1rem;color:var(--accent3);letter-spacing:1px;display:none;}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   OVERLAYS (modals)
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.overlay-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;align-items:center;justify-content:center;}
+.overlay-bg.visible{display:flex;}
+.overlay-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:28px;max-width:460px;width:93%;max-height:90vh;overflow-y:auto;}
+.overlay-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent);margin-bottom:4px;}
+.overlay-sub{font-family:var(--mono);font-size:.63rem;color:var(--muted);margin-bottom:18px;line-height:1.65;}
+.field{margin-bottom:11px;}
+.field-lbl{font-family:var(--mono);font-size:.57rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block;}
+.field-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;font-family:var(--mono);font-size:.82rem;border-radius:7px;outline:none;transition:border-color .2s;letter-spacing:1px;}
+.field-inp:focus{border-color:var(--accent);}
+.overlay-err{font-family:var(--mono);font-size:.62rem;color:var(--accent2);min-height:15px;margin-top:4px;}
+.overlay-ok{font-family:var(--mono);font-size:.62rem;color:var(--accent3);min-height:15px;margin-top:4px;}
+.overlay-btns{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;}
+/* Confirm overlay */
+.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:250;align-items:center;justify-content:center;}
 .confirm-overlay.visible{display:flex;}
-.confirm-box{background:var(--surface);border:2px solid var(--accent2);border-radius:12px;padding:34px;max-width:400px;width:90%;text-align:center;}
+.confirm-box{background:var(--surface);border:2px solid var(--accent2);border-radius:14px;padding:32px;max-width:380px;width:90%;text-align:center;}
 .confirm-icon{font-size:2.2rem;margin-bottom:10px;}
 .confirm-title{font-family:var(--display);font-size:1.5rem;letter-spacing:2px;color:var(--accent2);margin-bottom:7px;}
-.confirm-msg{font-family:var(--mono);font-size:.7rem;color:var(--muted);line-height:1.7;margin-bottom:20px;}
+.confirm-msg{font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.7;margin-bottom:20px;}
 .confirm-btns{display:flex;gap:8px;justify-content:center;}
-.game-controls{transition:opacity .3s;}.game-controls.locked{opacity:.35;pointer-events:none;}
-.no-q{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:center;padding:18px;line-height:1.8;}
-.katex{font-size:.9em;}
-
-/* ── Hesap Yönetimi ── */
-.acc-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:300;align-items:center;justify-content:center;}
+/* Account management */
+.acc-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:300;align-items:center;justify-content:center;}
 .acc-overlay.visible{display:flex;}
-.acc-box{background:var(--surface);border:2px solid var(--accent);border-radius:12px;padding:28px;width:520px;max-width:95vw;max-height:85vh;overflow-y:auto;}
+.acc-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:26px;width:530px;max-width:95vw;max-height:88vh;overflow-y:auto;}
 .acc-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent);margin-bottom:4px;}
-.acc-sub{font-family:var(--mono);font-size:.62rem;color:var(--muted);margin-bottom:18px;line-height:1.6;}
-.acc-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
-.acc-row{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;}
-.acc-row.is-you{border-color:var(--accent);background:rgba(245,197,24,.05);}
-.acc-avatar{font-size:1.2rem;flex-shrink:0;}
+.acc-sub{font-family:var(--mono);font-size:.61rem;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+.acc-list{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.acc-row{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--card);border:1px solid var(--border);border-radius:7px;}
+.acc-row.is-you{border-color:var(--accent);background:rgba(245,197,24,.04);}
+.acc-avatar{font-size:1.1rem;flex-shrink:0;}
 .acc-info{flex:1;min-width:0;}
-.acc-name{font-family:var(--mono);font-size:.75rem;color:var(--text);}
-.acc-meta{font-family:var(--mono);font-size:.55rem;color:var(--muted);margin-top:1px;}
-.role-badge{font-family:var(--mono);font-size:.52rem;padding:2px 7px;border-radius:3px;letter-spacing:.5px;}
-.role-admin{background:rgba(245,197,24,.12);color:var(--accent);border:1px solid rgba(245,197,24,.25);}
-.role-mod{background:rgba(61,214,140,.1);color:var(--accent3);border:1px solid rgba(61,214,140,.2);}
-.acc-actions{display:flex;gap:5px;flex-shrink:0;}
-.acc-add-form{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px;}
-.acc-add-title{font-family:var(--display);font-size:.9rem;letter-spacing:1px;color:var(--accent3);margin-bottom:10px;}
-.acc-field{margin-bottom:10px;}
-.acc-lbl{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block;}
-.acc-inp{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 11px;font-family:var(--mono);font-size:.78rem;border-radius:6px;outline:none;transition:border-color .2s;}
+.acc-name{font-family:var(--mono);font-size:.72rem;}
+.acc-meta{font-family:var(--mono);font-size:.52rem;color:var(--muted);margin-top:1px;}
+.role-badge{font-family:var(--mono);font-size:.5rem;padding:2px 6px;border-radius:3px;letter-spacing:.5px;}
+.role-admin{background:rgba(245,197,24,.1);color:var(--accent);border:1px solid rgba(245,197,24,.22);}
+.role-mod{background:rgba(61,214,140,.08);color:var(--accent3);border:1px solid rgba(61,214,140,.18);}
+.acc-actions{display:flex;gap:4px;flex-shrink:0;}
+.acc-add-form{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px;margin-bottom:10px;}
+.acc-add-title{font-family:var(--display);font-size:.88rem;letter-spacing:1px;color:var(--accent3);margin-bottom:9px;}
+.acc-field{margin-bottom:9px;}
+.acc-lbl{font-family:var(--mono);font-size:.56rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block;}
+.acc-inp{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:var(--mono);font-size:.76rem;border-radius:6px;outline:none;transition:border-color .2s;}
 .acc-inp:focus{border-color:var(--accent);}
-.acc-role-sel{display:flex;gap:6px;}
-.acc-role-btn{font-family:var(--mono);font-size:.65rem;padding:5px 12px;border-radius:4px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .15s;}
-.acc-role-btn.sel-admin{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.08);}
-.acc-role-btn.sel-mod{border-color:var(--accent3);color:var(--accent3);background:rgba(61,214,140,.08);}
-.acc-err{font-family:var(--mono);font-size:.62rem;color:var(--accent2);margin-top:6px;min-height:15px;}
-.acc-ok{font-family:var(--mono);font-size:.62rem;color:var(--accent3);margin-top:6px;min-height:15px;}
-/* Reset pw mini form */
-.reset-form{display:none;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px;margin-top:6px;}
+.acc-role-sel{display:flex;gap:5px;}
+.acc-role-btn{font-family:var(--mono);font-size:.63rem;padding:5px 11px;border-radius:4px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .14s;}
+.acc-role-btn.sel-admin{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.07);}
+.acc-role-btn.sel-mod{border-color:var(--accent3);color:var(--accent3);background:rgba(61,214,140,.07);}
+.acc-err{font-family:var(--mono);font-size:.61rem;color:var(--accent2);margin-top:5px;min-height:14px;}
+.acc-ok{font-family:var(--mono);font-size:.61rem;color:var(--accent3);margin-top:5px;min-height:14px;}
+.reset-form{display:none;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px;margin-top:5px;}
 .reset-form.visible{display:block;}
-.team-toggle{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;}
-.team-toggle-lbl{font-family:var(--mono);font-size:.68rem;color:var(--text);flex:1;}
-.toggle-sw{position:relative;width:38px;height:20px;cursor:pointer;}
+/* Team toggles */
+.toggle-sw{position:relative;width:36px;height:19px;cursor:pointer;}
 .toggle-sw input{opacity:0;width:0;height:0;}
 .toggle-track{position:absolute;inset:0;background:var(--border);border-radius:20px;transition:.3s;}
 .toggle-sw input:checked+.toggle-track{background:var(--accent3);}
-.toggle-knob{position:absolute;top:3px;left:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:.3s;}
-.toggle-sw input:checked~.toggle-knob{transform:translateX(18px);}
-.teams-list{display:flex;flex-direction:column;gap:5px;margin-bottom:8px;}
-.team-row{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--card);border:1px solid var(--border);border-radius:6px;}
-.team-color-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:border-color .15s;}
+.toggle-knob{position:absolute;top:2.5px;left:2.5px;width:14px;height:14px;background:#fff;border-radius:50%;transition:.3s;}
+.toggle-sw input:checked~.toggle-knob{transform:translateX(17px);}
+.team-toggle{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;}
+.team-toggle-lbl{font-family:var(--mono);font-size:.66rem;color:var(--text);flex:1;}
+.teams-list{display:flex;flex-direction:column;gap:4px;margin-bottom:7px;}
+.team-row{display:flex;align-items:center;gap:5px;padding:6px 9px;background:var(--card);border:1px solid var(--border);border-radius:6px;}
+.team-color-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:border-color .14s;}
 .team-color-dot:hover{border-color:#fff;}
-.team-name-inp{flex:1;background:transparent;border:none;color:var(--text);font-family:var(--mono);font-size:.72rem;outline:none;}
-.team-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.8rem;padding:2px;}
+.team-name-inp{flex:1;background:transparent;border:none;color:var(--text);font-family:var(--mono);font-size:.7rem;outline:none;}
+.team-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.78rem;padding:2px;}
 .team-del:hover{color:var(--accent2);}
-.team-score-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card);border-radius:6px;border:2px solid transparent;animation:fi .3s ease;}
-.team-score-name{flex:1;font-family:var(--mono);font-size:.72rem;}
-.team-score-pts{font-family:var(--display);font-size:1.1rem;letter-spacing:1px;}
+
+/* pw-overlay alias */
+.pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:300;align-items:center;justify-content:center;}
+.pw-overlay.visible{display:flex;}
+.pw-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:30px;max-width:400px;width:90%;}
+.pw-title{font-family:var(--display);font-size:1.5rem;letter-spacing:2px;color:var(--accent);margin-bottom:5px;}
+.pw-sub{font-family:var(--mono);font-size:.63rem;color:var(--muted);margin-bottom:18px;line-height:1.6;}
+.pw-field{margin-bottom:11px;}
+.pw-label{font-family:var(--mono);font-size:.56rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block;}
+.pw-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 11px;font-family:var(--mono);font-size:.83rem;border-radius:6px;outline:none;transition:border-color .2s;letter-spacing:1px;}
+.pw-inp:focus{border-color:var(--accent);}
+.pw-err{font-family:var(--mono);font-size:.61rem;color:var(--accent2);margin-top:7px;min-height:15px;}
+.pw-ok{font-family:var(--mono);font-size:.61rem;color:var(--accent3);margin-top:7px;min-height:15px;}
+.pw-btns{display:flex;gap:8px;margin-top:14px;}
+/* set overlay */
+.set-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:220;align-items:center;justify-content:center;}
+.set-overlay.visible{display:flex;}
+.set-ov-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:24px;max-width:520px;width:95%;max-height:85vh;overflow-y:auto;}
+.set-ov-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent);margin-bottom:14px;}
+.set-q-list{display:flex;flex-direction:column;gap:4px;margin:9px 0 14px;max-height:280px;overflow-y:auto;}
+.set-q-item{display:flex;align-items:center;gap:8px;padding:6px 9px;background:var(--card);border-radius:6px;border:1px solid var(--border);cursor:pointer;transition:border-color .14s;}
+.set-q-item:hover{border-color:rgba(245,197,24,.3);}
+.set-q-item.checked{border-color:var(--accent);background:rgba(245,197,24,.04);}
+.set-q-cb{width:14px;height:14px;border-radius:3px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.58rem;transition:all .14s;}
+.set-q-item.checked .set-q-cb{border-color:var(--accent);background:var(--accent);color:#000;}
+.set-q-title{font-family:var(--mono);font-size:.65rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.set-q-diff{font-family:var(--mono);font-size:.48rem;padding:1px 5px;border-radius:3px;flex-shrink:0;}
+.set-sel-all{font-family:var(--mono);font-size:.58rem;color:var(--muted);cursor:pointer;text-decoration:underline;}
+.set-sel-all:hover{color:var(--accent);}
+.set-import-btn{font-family:var(--mono);font-size:.6rem;padding:5px 10px;border-radius:4px;border:1px dashed var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .14s;width:100%;text-align:center;margin-top:3px;}
+.set-import-btn:hover{border-color:var(--accent);color:var(--accent);}
+/* CSV overlay alias */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;align-items:center;justify-content:center;}
+.overlay.visible{display:flex;}
+/* inp alias */
+.inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;font-family:var(--mono);font-size:.82rem;border-radius:7px;outline:none;transition:border-color .2s;letter-spacing:.5px;}
+.inp:focus{border-color:var(--accent);}
+.fg{margin-bottom:10px;}
+.flbl{font-family:var(--mono);font-size:.57rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.fhint{font-family:var(--mono);font-size:.5rem;color:var(--muted);}
+/* set item */
+.set-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;transition:border-color .16s;}
+.set-item:hover{border-color:rgba(245,197,24,.35);}
+.set-item.active-set{border-color:var(--accent);background:rgba(245,197,24,.04);}
+.set-item-top{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.set-name{font-family:var(--mono);font-size:.7rem;flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.set-count{font-family:var(--display);font-size:.8rem;color:var(--accent);letter-spacing:1px;flex-shrink:0;}
+.set-actions{display:flex;gap:4px;flex-wrap:wrap;}
+.set-btn{font-family:var(--mono);font-size:.54rem;padding:3px 7px;border-radius:4px;border:1px solid var(--border);background:var(--card2);color:var(--muted);cursor:pointer;transition:all .14s;white-space:nowrap;}
+.set-btn:hover{border-color:var(--accent);color:var(--accent);}
+.set-btn.danger:hover{border-color:var(--accent2);color:var(--accent2);}
+.set-btn.active{border-color:var(--accent3);color:var(--accent3);}
+/* cat pills */
+.cat-pill{font-family:var(--mono);font-size:.56rem;padding:3px 8px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .14s;white-space:nowrap;}
+.cat-pill.active-cat{border-color:var(--purple);color:var(--purple);background:rgba(168,85,247,.07);}
+.cat-pill:first-child.active-cat{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.07);}
+/* ── Kısayol Pill (v2.19) ── */
+.shortcut-pill{
+  position:fixed;bottom:18px;right:18px;z-index:100;
+  font-family:var(--mono);font-size:.58rem;padding:5px 12px;
+  background:var(--card);border:1px solid var(--border);color:var(--muted);
+  border-radius:20px;cursor:pointer;transition:all .2s;
+}
+.shortcut-pill:hover{border-color:var(--accent);color:var(--accent);}
+.shortcut-overlay{
+  display:none;position:fixed;bottom:52px;right:18px;z-index:101;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:14px 18px;min-width:230px;
+  box-shadow:0 8px 32px rgba(0,0,0,.6);
+  animation:shortcutIn .2s ease;
+}
+@keyframes shortcutIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.shortcut-overlay.visible{display:block;}
+.sc-title{font-family:var(--display);font-size:.85rem;letter-spacing:2px;color:var(--accent);margin-bottom:9px;}
+.sc-row{display:flex;align-items:center;gap:10px;padding:3px 0;}
+.sc-key{font-family:var(--mono);font-size:.6rem;padding:2px 7px;border-radius:4px;border:1px solid var(--border);background:var(--card);color:var(--accent);min-width:22px;text-align:center;}
+.sc-lbl{font-family:var(--mono);font-size:.62rem;color:var(--muted);}
+/* ── MODE SELECTOR ── */
+.mode-selector{display:flex;background:rgba(255,255,255,0.05);padding:3px;border-radius:30px;border:1px solid var(--border);gap:2px;}
+.mode-btn{border:none;background:transparent;color:var(--muted);font-family:var(--mono);font-size:.52rem;padding:6px 14px;border-radius:20px;cursor:pointer;transition:all .3s;letter-spacing:1px;white-space:nowrap;}
+.mode-btn:hover{color:var(--text);}
+.mode-btn.active{background:var(--accent);color:#000;box-shadow:0 0 15px var(--accent);}
+.mode-btn.active::after{content:' ✓';font-weight:bold;}
+.mode-btn[data-mode="academy"].active{background:var(--accent3);box-shadow:0 0 15px var(--accent3);}
+.mode-btn[data-mode="turbo"].active{background:var(--accent2);color:#fff;box-shadow:0 0 15px var(--accent2);}
+
+
+/* Kısayol flash animasyonu */
+.shortcut-flash{animation:kflash .3s ease!important;}
+@keyframes kflash{0%{filter:brightness(1);}50%{filter:brightness(1.5);}100%{filter:brightness(1);}}
 </style>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}</script>
 </head>
 <body>
-<div class="header">
-  <div><div class="htitle">⚡ USEV — MODERATÖR</div><div class="hsub">Düşün, yarış, kazan.</div></div>
-  <div class="hright">
-    <button class="btn btn-ghost btn-sm" onclick="location.href='editor.html'">📝 EDITÖR</button>
-    <button class="btn btn-ghost btn-sm" id="accMgmtBtn" onclick="openAccMgmt()" style="display:none;">👥 HESAPLAR</button>
-    <span class="user-badge" id="userBadge" onclick="openChangePw()" title="Parolayı değiştir">👤 admin</span>
-    <button class="btn btn-ghost btn-sm" onclick="doLogout()">Çıkış</button>
-    <span class="conn-badge"><span class="dot"></span><span id="connCount">0</span> bağlı</span>
-  </div>
-</div>
 
-<!-- HESAP YÖNETİMİ MODALI -->
-<div class="acc-overlay" id="accOverlay">
-  <div class="acc-box">
-    <div class="acc-title">👥 HESAP YÖNETİMİ</div>
-    <div class="acc-sub">Moderatör hesaplarını ekle, sil veya şifrelerini sıfırla.<br>Sadece admin rolündeki hesaplar bu panele erişebilir.</div>
-
-    <div class="acc-list" id="accList">
-      <div style="font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;padding:12px;">Yükleniyor...</div>
-    </div>
-
-    <!-- Yeni hesap ekle -->
-    <div class="acc-add-form">
-      <div class="acc-add-title">+ YENİ HESAP EKLE</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div class="acc-field">
-          <label class="acc-lbl">Kullanıcı Adı</label>
-          <input class="acc-inp" id="newAccUser" placeholder="moderator1">
-        </div>
-        <div class="acc-field">
-          <label class="acc-lbl">Parola</label>
-          <input class="acc-inp" id="newAccPass" type="password" placeholder="••••••">
-        </div>
-      </div>
-      <div class="acc-field">
-        <label class="acc-lbl">Rol</label>
-        <div class="acc-role-sel" id="newAccRoleSel">
-          <button class="acc-role-btn sel-mod" data-role="moderator" onclick="selectNewRole('moderator')">🎛 Moderatör</button>
-          <button class="acc-role-btn" data-role="admin" onclick="selectNewRole('admin')">⭐ Admin</button>
-        </div>
-      </div>
-      <div class="acc-err" id="accErr"></div>
-      <div class="acc-ok" id="accOk"></div>
-      <div style="display:flex;gap:8px;margin-top:10px;">
-        <button class="btn btn-green btn-sm" onclick="addAccount()">💾 EKLE</button>
+<!-- â•â•â•â• HEADER â•â•â•â• -->
+<div class="hdr">
+  <div class="header-main">
+    <div class="header-logo" onclick="location.reload()">⚡ USEV <span>MOD</span></div>
+    <div style="flex:1;display:flex;justify-content:center;">
+      <div class="mode-selector" id="modeSelector">
+        <button class="mode-btn active" data-mode="academy" onclick="setGameMode('academy')" title="Eğitim Modu">ğŸ“ AKADEMİ</button>
+        <button class="mode-btn" data-mode="showtime" onclick="setGameMode('showtime')" title="Etkinlik Modu">âœ¨ SHOWTIME</button>
+        <button class="mode-btn" data-mode="turbo" onclick="setGameMode('turbo')" title="Eğlence Modu">🚀 TURBO</button>
       </div>
     </div>
-
-    <div style="display:flex;justify-content:flex-end;margin-top:8px;">
-      <button class="btn btn-ghost" onclick="closeAccOverlay()">KAPAT</button>
+    <div id="connStatus" class="conn-status online">
+      <span class="dot"></span> <span id="connStatusText">ONLINE</span>
+    </div>
+    <div class="header-conn">
+      <div class="phase-pill lobby" id="phaseVal">â³ LOBİ</div>
+      <div class="hdr-timer" id="timerDisp">—</div>
+      <div class="hdr-divider"></div>
+      <div class="conn-badge"><div class="dot"></div><span id="connCount">0</span> bağlı</div>
+      <span class="user-badge" id="userBadge" onclick="openChangePw()" title="Parolayı değiştir">ğŸ‘¤ admin</span>
+      <button class="hdr-btn" onclick="goRoom('editor.html')">ğŸ“ Editör</button>
+      <button class="hdr-btn" onclick="goRoom('istatistik.html')">📊 İstatistik</button>
+      <button class="hdr-btn" id="accMgmtBtn" onclick="openAccMgmt()" style="display:none;">👥 Hesaplar</button>
+      <button class="hdr-btn" id="modPwaBtn" onclick="modInstallPwa()" style="display:none;" title="Ana ekrana ekle">⚡ Ekle</button>
+      <button class="hdr-btn" onclick="openAnalytics()" style="background:var(--card);color:var(--accent);">📊 Analiz</button>
+      <button class="hdr-btn" onclick="doLogout()">Çıkış</button>
     </div>
   </div>
 </div>
 
-<!-- CHANGE PASSWORD MODAL -->
-<div class="pw-overlay" id="pwOverlay">
-  <div class="pw-box">
-    <div class="pw-title">🔑 PAROLA DEĞİŞTİR</div>
-    <div class="pw-sub">Yeni parolanızı belirleyin.<br>Değişiklik anında aktif olur.</div>
-    <div class="pw-field">
-      <label class="pw-label">Mevcut Parola</label>
-      <input class="pw-inp" id="pwCurrent" type="password" placeholder="••••••" autocomplete="current-password">
-    </div>
-    <div class="pw-field">
-      <label class="pw-label">Yeni Parola</label>
-      <input class="pw-inp" id="pwNew" type="password" placeholder="••••••" autocomplete="new-password">
-    </div>
-    <div class="pw-field">
-      <label class="pw-label">Yeni Parola (Tekrar)</label>
-      <input class="pw-inp" id="pwConfirm" type="password" placeholder="••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')saveNewPw()">
-    </div>
-    <div class="pw-err" id="pwErr"></div>
-    <div class="pw-ok" id="pwOk"></div>
-    <div class="pw-btns">
-      <button class="btn btn-primary" onclick="saveNewPw()">💾 KAYDET</button>
-      <button class="btn btn-ghost" onclick="closePwOverlay()">İPTAL</button>
-    </div>
-  </div>
+<!-- â•â•â•â• PHASE BAR â•â•â•â• -->
+<div class="phase-bar">
+  <button class="btn btn-danger btn-sm" onclick="confirmReset()">ğŸ—‘ Sıfırla</button>
+  <button class="btn btn-green btn-sm" id="startBtn" onclick="startGame()" disabled style="letter-spacing:2px;">🚀 YARIÅMAYI BAÅLAT</button>
+  <button class="btn btn-ghost btn-sm" id="finishBtn" onclick="confirmFinish()" style="display:none;">ğŸ Bitir</button>
+  <button class="btn btn-primary btn-sm" id="replayBtn" onclick="confirmReplay()" style="display:none;">ğŸ”„ Yeniden</button>
+  <button class="btn btn-ghost btn-sm" id="exportBtn" onclick="exportResults()" style="display:none;">ğŸ“¥ CSV</button>
+  <button class="btn btn-primary btn-sm" id="analyticsBtn" onclick="openAnalytics()" style="display:none;">📊 Rapor</button>
+  <div class="spacer"></div>
+  <div class="status-pill" id="statusMsg">Yarışmayı başlatmak için butonu kullanın.</div>
 </div>
-<div class="phase-banner">
-  <div><div class="phase-lbl">Aşama</div><div class="phase-val lobby" id="phaseVal">⏳ LOBİ</div></div>
-  <div class="phase-actions">
-    <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑 LOBİYİ SIFIRLA</button>
-    <button class="btn btn-green" id="startBtn" onclick="startGame()" disabled>🚀 YARIŞMAYI BAŞLAT</button>
-    <button class="btn btn-ghost btn-sm" id="finishBtn" onclick="confirmFinish()" style="display:none;">🏁 OYUNU BİTİR</button>
-    <button class="btn btn-primary btn-sm" id="replayBtn" onclick="confirmReplay()" style="display:none;">🔄 YENİDEN OYNA</button>
-    <button class="btn btn-ghost btn-sm" id="exportBtn" onclick="exportResults()" style="display:none;">📥 SONUÇLARI İNDİR</button>
-  </div>
-</div>
-<div class="layout">
-  <div class="left">
+
+<!-- â•â•â•â• WORKSPACE â•â•â•â• -->
+<div class="workspace">
+
+  <!-- ─── LEFT COLUMN ─── -->
+  <div class="col col-left">
+
+    <!-- PIN -->
+    <div>
+      <div class="slbl">ğŸ” Giriş Parolası</div>
+      <div class="pin-card">
+        <div class="pin-val" id="pinDisplay">——</div>
+        <div class="pin-actions">
+          <button class="btn btn-primary btn-sm" onclick="generatePin()" style="flex:1;">ğŸ² Yeni</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearPin()" style="flex:1;">ğŸ—‘ Sil</button>
+        </div>
+        <div style="font-family:var(--mono);font-size:.54rem;color:var(--muted);text-align:center;margin-top:6px;" id="pinStatus">Projeksiyon ekranında gösterilir.</div>
+      </div>
+    </div>
+
+    <!-- SORU NAVIGASYON -->
     <div class="game-controls locked" id="gameControls">
-      <div class="sec">
-        <div class="sec-title">SORULAR</div>
-        <div id="catFilterMod" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;"></div>
-        <div style="font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-bottom:8px;" id="filteredCount"></div>
-        <div class="rnav" id="roundNav"></div>
-        <div id="noQMsg" class="no-q" style="display:none;">Henüz soru yok.<br><a href="editor.html" style="color:var(--accent);">Editörden ekleyin →</a></div>
+      <div class="slbl">
+        📋 Sorular
+        <span id="activeSetModBadge" style="display:none;font-family:var(--mono);font-size:.52rem;padding:1px 6px;border-radius:10px;background:rgba(245,197,24,.1);color:var(--accent);border:1px solid rgba(245,197,24,.25);"></span>
       </div>
-      <div class="sec">
-        <div class="sec-title">⏱ SÜRE</div>
-        <div class="timer-row">
-          <div><div class="timer-lbl">Kalan Süre</div><div class="timer-big" id="timerDisp">—</div><div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);margin-top:4px;">Soruda ayarlanan süre · puan = kalan sn</div></div>
-          <div style="margin-left:auto;"><button class="btn btn-ghost btn-sm" id="stopBtn" onclick="stopTimer()" style="display:none;">⏹ DUR</button></div>
+      <!-- Set selector -->
+      <div id="setSelectorMod">
+        <div style="font-family:var(--mono);font-size:.52rem;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">ğŸ“¦ Set</div>
+        <div class="set-btns" id="setButtonsMod">
+          <button class="mod-set-btn active" id="setAllBtn" onclick="loadModSet(null)">Tümü</button>
         </div>
       </div>
-      <div class="sec">
-        <div class="sec-title">🎵 MÜZİK</div>
-        <div class="music-grid" id="musicGrid"></div>
-        <div class="music-ctrl">
-          <button class="btn btn-ghost btn-sm" onclick="previewMusic()">▶ ÖNİZLE</button>
-          <button class="btn btn-ghost btn-sm" onclick="stopMusic()">⏹ DUR</button>
-          <button class="btn btn-ghost btn-sm" onclick="selectNoMusic()">🔇 YOK</button>
-        </div>
-      </div>
-      <div class="sec">
-        <div class="sec-title">MEVCUT SORU</div>
-        <div class="qcard" id="qCard">
-          <div class="qdiff" id="qDiff"></div>
-          <div class="qtitle" id="qTitle">—</div>
-          <div class="qtext" id="qText"></div>
-          <div class="opts-grid" id="optsGrid"></div>
-          <div class="ai-summary" id="aiSummary" style="display:none;">
-            <div class="ai-summary-title">🤖 YZ Bilgisi</div>
-            <div class="ai-summary-row" id="aiSummaryContent"></div>
-          </div>
-        </div>
-      </div>
-      <div class="sec">
-        <div class="ctrl-row">
-          <button class="btn btn-ghost btn-sm" id="previewBtn" onclick="previewRound()" disabled
-            title="Soruyu süre başlamadan göster">📖 GÖSTER</button>
-          <button class="btn btn-primary" id="publishBtn" onclick="publishRound()" disabled>📡 YAYINLA + BAŞLAT</button>
-          <button class="btn btn-green btn-sm" id="openAnswerBtn" onclick="openAnswering()" disabled style="display:none;">▶ CEVAPLAMAYA BAŞLA</button>
-          <button class="btn btn-danger" id="revealBtn" onclick="revealAnswer()" disabled>✅ CEVABI GÖSTER</button>
-          <button class="btn btn-ghost" onclick="nextRound()">SONRAKİ →</button>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
-          <span style="font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.5px;">Otomatik İlerle:</span>
-          <select id="autoAdvanceSel" style="background:var(--card);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.68rem;padding:4px 8px;border-radius:4px;outline:none;cursor:pointer;">
-            <option value="0">Kapalı</option>
-            <option value="5">5 saniye</option>
-            <option value="10" selected>10 saniye</option>
-            <option value="15">15 saniye</option>
-            <option value="20">20 saniye</option>
-          </select>
-          <div id="autoAdvanceCountdown" style="font-family:var(--display);font-size:1rem;color:var(--accent3);letter-spacing:1px;display:none;"></div>
-        </div>
-        <div class="status-msg" id="statusMsg">Yarışmayı başlatmak için sağ üstteki butonu kullanın.</div>
-      </div>
-    </div>
-  </div>
-  <div class="right">
-    <div class="lb-title">🔐 PAROLA</div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;">
-      <div class="sec-lbl" style="margin-bottom:7px;">4 haneli katılım parolası</div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div id="pinDisplay" style="font-family:var(--display);font-size:2.6rem;letter-spacing:10px;color:var(--accent);flex:1;text-align:center;background:var(--bg);border-radius:6px;padding:5px 0;">——</div>
-        <div style="display:flex;flex-direction:column;gap:4px;">
-          <button class="btn btn-primary btn-sm" onclick="generatePin()">🎲 YENİ</button>
-          <button class="btn btn-ghost btn-sm" onclick="clearPin()">🗑 SİL</button>
-        </div>
-      </div>
-      <div style="font-family:var(--mono);font-size:.56rem;color:var(--muted);margin-top:7px;text-align:center;line-height:1.6;" id="pinStatus">Projeksiyon ekranında gösterilir.</div>
+      <!-- Category filter -->
+      <div id="catFilterMod" style="display:flex;flex-wrap:wrap;gap:4px;"></div>
+      <div class="filteredCount-lbl" id="filteredCount"></div>
+      <!-- Round nav -->
+      <div class="rnav" id="roundNav"></div>
+      <div id="noQMsg" class="no-q" style="display:none;">Henüz soru yok.<br><a href="editor.html" style="color:var(--accent);">Editörden ekleyin →</a></div>
     </div>
 
     <!-- TAKIM MODU -->
-    <div class="lb-title">👥 TAKIM MODU</div>
-    <div class="team-toggle">
-      <span class="team-toggle-lbl">Takım modunu aktifleştir</span>
-      <label class="toggle-sw">
-        <input type="checkbox" id="teamModeChk" onchange="toggleTeamMode()">
-        <div class="toggle-track"></div>
-        <div class="toggle-knob"></div>
-      </label>
-    </div>
-    <div id="teamSetup" style="display:none;">
-      <div class="teams-list" id="teamsList"></div>
-      <button class="btn btn-ghost btn-sm" onclick="addTeam()" style="width:100%;margin-bottom:8px;">+ Takım Ekle</button>
-      <button class="btn btn-primary btn-sm" onclick="saveTeams()" style="width:100%;">💾 Takımları Kaydet</button>
-      <div id="teamSaveStatus" style="font-family:var(--mono);font-size:.6rem;color:var(--accent3);text-align:center;margin-top:6px;min-height:14px;"></div>
-    </div>
-    <div id="teamScoreSection" style="display:none;">
-      <div class="sec-lbl">Takım Skorları</div>
-      <div id="teamScoreList" style="display:flex;flex-direction:column;gap:4px;"></div>
+    <div>
+      <div class="slbl">👥 Takım Modu</div>
+      <div class="team-toggle">
+        <span class="team-toggle-lbl">Takımları aktifleştir</span>
+        <label class="toggle-sw">
+          <input type="checkbox" id="teamModeChk" onchange="toggleTeamMode()">
+          <div class="toggle-track"></div>
+          <div class="toggle-knob"></div>
+        </label>
+      </div>
+      <div id="teamSetup" style="display:none;">
+        <div class="teams-list" id="teamsList"></div>
+        <button class="btn btn-ghost btn-sm" onclick="addTeam()" style="width:100%;margin-bottom:5px;">+ Takım Ekle</button>
+        <button class="btn btn-primary btn-sm" onclick="saveTeams()" style="width:100%;">ğŸ’¾ Kaydet</button>
+        <div id="teamSaveStatus" style="font-family:var(--mono);font-size:.58rem;color:var(--accent3);text-align:center;margin-top:5px;min-height:13px;"></div>
+      </div>
+      <div id="teamScoreSection" style="display:none;">
+        <div class="slbl" style="margin-top:6px;">Takım Skorları</div>
+        <div id="teamScoreList" style="display:flex;flex-direction:column;gap:3px;"></div>
+      </div>
     </div>
 
-    <div class="lb-title">🧑 LOBİ</div>
-    <div class="lobby-players" id="lobbyPlayers"><div class="empty">Kimse katılmadı</div></div>
-    <div style="font-family:var(--mono);font-size:.58rem;color:var(--muted);text-align:center;" id="lobbyCount2">0 katılımcı</div>
-    <div id="liveSection" style="display:none;">
-      <div class="lb-title" style="margin-top:4px;">📊 CANLI</div>
-      <div class="stats-grid">
-        <div class="stat-box"><div class="stat-val" id="sCevap">0</div><div class="stat-lbl">Cevap</div></div>
-        <div class="stat-box"><div class="stat-val" id="sDoğru">0</div><div class="stat-lbl">Doğru</div></div>
-        <div class="stat-box"><div class="stat-val" id="sOran">—</div><div class="stat-lbl">Oran</div></div>
+    <!-- SES & MÜZİK -->
+    <div class="accordion">
+      <div class="acc-hdr" onclick="toggleAcc(this)">
+        <div class="acc-hdr-lbl">ğŸ”Š Ses & Müzik</div>
+        <div class="acc-hdr-arrow">â–¶</div>
       </div>
-      <div class="sec-lbl">Bu Soruya Cevaplar</div>
+      <div class="acc-body">
+        <div class="sound-toggles">
+          <button class="sound-toggle-btn on" id="sfxToggle" onclick="toggleSfx()">ğŸµ SFX</button>
+          <button class="sound-toggle-btn on" id="musicToggle" onclick="toggleMusicEnabled()">ğŸ¶ Müzik</button>
+        </div>
+        <div class="vol-row">
+          <span class="vol-lbl">ğŸ”Š</span>
+          <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="70" oninput="setVolume(this.value)">
+          <span class="vol-val" id="volVal">70%</span>
+        </div>
+        <div class="vol-row">
+          <span class="vol-lbl" style="font-size:.55rem;">ğŸ¨ TEMA</span>
+          <select class="auto-sel" id="themeSel" onchange="changeTheme(this.value)" style="flex:1;">
+            <option value="classic">Klasik</option>
+            <option value="retro">Retro Arcade</option>
+            <option value="future">Gelecek / Sci-Fi</option>
+          </select>
+        </div>
+        <div class="music-grid" id="musicGrid"></div>
+        <div class="music-ctrl">
+          <button class="btn btn-ghost btn-sm" onclick="previewMusic()">â–¶ Dinle</button>
+          <button class="btn btn-ghost btn-sm" onclick="stopMusic()">â¹ Dur</button>
+          <button class="btn btn-ghost btn-sm" onclick="selectNoMusic()">ğŸ”‡ Yok</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOBI -->
+    <div>
+      <div class="slbl">ğŸ‘¤ Lobi <span id="lobbyCount2" style="color:var(--accent3);font-family:var(--display);font-size:.8rem;letter-spacing:1px;">0</span></div>
+      <div class="lobby-mini lobby-players" id="lobbyPlayers"><div class="empty">Kimse katılmadı</div></div>
+    </div>
+
+  </div><!-- /col-left -->
+
+  <!-- ─── MIDDLE COLUMN ─── -->
+  <div class="col col-mid">
+
+    <!-- Flow indicator -->
+    <div class="flow-steps" id="flowSteps">
+      <div class="flow-step" id="fs-show">
+        <div class="flow-step-icon">ğŸ“–</div>
+        <div class="flow-step-lbl">GÖSTER</div>
+      </div>
+      <div class="flow-step" id="fs-answer">
+        <div class="flow-step-icon">â–¶</div>
+        <div class="flow-step-lbl">CEVAPLA</div>
+      </div>
+      <div class="flow-step" id="fs-signal">
+        <div class="flow-step-icon">🚀</div>
+        <div class="flow-step-lbl">SİNYAL</div>
+      </div>
+      <div class="flow-step" id="fs-reveal">
+        <div class="flow-step-icon">✅</div>
+        <div class="flow-step-lbl">CÜ GÖSTER</div>
+      </div>
+      <div class="flow-step" id="fs-next">
+        <div class="flow-step-icon">→</div>
+        <div class="flow-step-lbl">SONRAKİ</div>
+      </div>
+    </div>
+
+    <!-- Control buttons -->
+    <div class="ctrl-wrap game-controls locked" id="gameControls2" style="pointer-events:none;">
+      <div class="ctrl-main">
+        <button class="btn btn-ghost btn-sm" id="previewBtn" onclick="previewRound()" disabled title="Soruyu süre başlamadan göster">ğŸ“– GÖSTER</button>
+        <button class="btn btn-primary" id="publishBtn" onclick="publishRound()" disabled>ğŸ“¡ YAYINLA</button>
+        <button class="btn btn-green btn-sm" id="openAnswerBtn" onclick="openAnswering()" disabled style="display:none;">â–¶ BAÅLAT</button>
+        <button class="btn btn-signal btn-sm" id="reactionSignalBtn" onclick="sendReactionSignal()" disabled style="display:none;">🚀 SİNYAL!</button>
+        <button class="btn btn-danger" id="revealBtn" onclick="revealAnswer()" disabled>✅ CEVAP</button>
+        <button class="btn btn-ghost btn-sm" onclick="nextRound()">→ SONRAKI</button>
+      </div>
+      <div class="ctrl-sub">
+        <div class="auto-row">
+          <span class="auto-lbl">Oto ilerleme:</span>
+          <select class="auto-sel" id="autoAdvanceSel">
+            <option value="0">Kapalı</option>
+            <option value="5">5s</option>
+            <option value="10" selected>10s</option>
+            <option value="15">15s</option>
+            <option value="20">20s</option>
+          </select>
+          <div id="autoAdvanceCountdown"></div>
+          <button class="btn btn-ghost btn-sm" id="stopBtn" onclick="stopTimer()" style="display:none;">â¹</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question card -->
+    <div class="qcard">
+      <div class="qcard-top">
+        <div class="qcard-diff-row">
+          <div class="qdiff" id="qDiff"></div>
+        </div>
+        <div class="qtitle" id="qTitle">—</div>
+        <div class="qtext" id="qText">Soru metnini görmek için bir soru seçin.</div>
+      </div>
+      <div class="qcard-body">
+        <div class="opts-grid" id="optsGrid"></div>
+        <div class="ai-summary" id="aiSummary" style="display:none;">
+          <div class="ai-summary-title">🤖 YZ Bilgisi</div>
+          <div class="ai-summary-row" id="aiSummaryContent"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /col-mid -->
+
+  <!-- ─── RIGHT COLUMN ─── -->
+  <div class="col col-right">
+
+    <!-- Live stats -->
+    <div id="liveSection" style="display:none;">
+      <div class="slbl">📊 Canlı</div>
+      <div class="live-stats">
+        <div class="ls-card"><div class="ls-val" id="sCevap">0</div><div class="ls-lbl">Cevap</div></div>
+        <div class="ls-card green"><div class="ls-val" id="sDoğru">0</div><div class="ls-lbl">Doğru</div></div>
+        <div class="ls-card"><div class="ls-val" id="sOran">—</div><div class="ls-lbl">Oran</div></div>
+      </div>
+      <!-- Accuracy bar -->
+      <div class="acc-bar-wrap" id="accBarWrap">
+        <div class="acc-bar-track">
+          <div class="acc-bar-fill" id="accBarFill" style="width:0%;background:var(--accent3);"></div>
+        </div>
+      </div>
+      <!-- Open ended bulk -->
+      <div id="openEndedBulk" style="display:none;" class="oe-bulk" style="margin-top:6px;">
+        <button class="oe-bulk-btn" style="background:rgba(61,214,140,.13);color:var(--accent3);border:1px solid var(--accent3);" onclick="bulkApprove()">✅ Tümünü Onayla</button>
+        <button class="oe-bulk-btn" style="background:rgba(232,64,64,.1);color:var(--accent2);border:1px solid var(--accent2);" onclick="bulkReject()">âŒ Tümünü Reddet</button>
+      </div>
+      <!-- Answers -->
+      <div class="slbl" style="margin-top:6px;">Bu Tura Cevaplar</div>
       <div class="ans-list" id="answersLive"><div class="empty">Henüz cevap yok</div></div>
-      <div class="sec-lbl">Bireysel Sıralama</div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div>
+      <div class="slbl">ğŸ† Sıralama</div>
       <div class="lb-list" id="lbList"><div class="empty">—</div></div>
+    </div>
+
+  </div><!-- /col-right -->
+
+</div><!-- /workspace -->
+
+<!-- â•â•â•â• OVERLAYS â•â•â•â• -->
+
+<!-- Confirm reset -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">âš ï¸</div>
+    <div class="confirm-title">SIFIRLA?</div>
+    <div class="confirm-msg">Tüm veriler ve bağlantılar silinecek.</div>
+    <div class="confirm-btns">
+      <button class="btn btn-danger" onclick="doReset()">EVET</button>
+      <button class="btn btn-ghost" onclick="closeConfirm()">İPTAL</button>
     </div>
   </div>
 </div>
-<div class="confirm-overlay" id="confirmOverlay">
-  <div class="confirm-box">
-    <div class="confirm-icon">⚠️</div><div class="confirm-title">SIFIRLA?</div>
-    <div class="confirm-msg">Tüm veriler ve bağlantılar silinecek.</div>
-    <div class="confirm-btns"><button class="btn btn-danger" onclick="doReset()">EVET</button><button class="btn btn-ghost" onclick="closeConfirm()">İPTAL</button></div>
-  </div>
-</div>
+
+<!-- Confirm finish -->
 <div class="confirm-overlay" id="finishOverlay">
   <div class="confirm-box">
-    <div class="confirm-icon">🏁</div><div class="confirm-title">OYUNU BİTİR?</div>
+    <div class="confirm-icon">ğŸ</div>
+    <div class="confirm-title">OYUNU BİTİR?</div>
     <div class="confirm-msg">Podyum ekranı gösterilecek.<br>Tüm sonuçlar kaydedilir.</div>
     <div class="confirm-btns">
       <button class="btn btn-primary" onclick="doFinish()">EVET, BİTİR</button>
@@ -400,737 +777,301 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
   </div>
 </div>
+
+<!-- Confirm replay -->
 <div class="confirm-overlay" id="replayOverlay">
-  <div class="confirm-box" style="border-color:var(--accent3);">
-    <div class="confirm-icon">🔄</div>
-    <div class="confirm-title" style="color:var(--accent3);">YENİDEN OYNA?</div>
-    <div class="confirm-msg">
-      Skorlar ve cevaplar sıfırlanır.<br>
-      <strong style="color:var(--accent3);">Katılımcılar bağlı kalır</strong> — sayfayı yenilemek zorunda değiller.<br><br>
-      Aynı soru seti baştan oynanacak.
-    </div>
+  <div class="confirm-box">
+    <div class="confirm-icon">ğŸ”„</div>
+    <div class="confirm-title">YENİDEN OYNA?</div>
+    <div class="confirm-msg">Mevcut bağlantılar korunacak.<br>Skorlar sıfırlanacak.</div>
     <div class="confirm-btns">
-      <button class="btn btn-green" onclick="doReplay()">🔄 BAŞLAT</button>
+      <button class="btn btn-primary" onclick="doReplay()">EVET</button>
       <button class="btn btn-ghost" onclick="document.getElementById('replayOverlay').classList.remove('visible')">İPTAL</button>
     </div>
   </div>
 </div>
+
+<!-- Change password -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <div class="pw-title">ğŸ”‘ PAROLA DEÄİÅTİR</div>
+    <div class="pw-sub">Yeni parolanızı belirleyin.<br>Değişiklik anında aktif olur.</div>
+    <div class="pw-field">
+      <label class="pw-label">Mevcut Parola</label>
+      <input class="pw-inp" id="pwCurrent" type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="current-password">
+    </div>
+    <div class="pw-field">
+      <label class="pw-label">Yeni Parola</label>
+      <input class="pw-inp" id="pwNew" type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="new-password">
+    </div>
+    <div class="pw-field">
+      <label class="pw-label">Yeni Parola (Tekrar)</label>
+      <input class="pw-inp" id="pwConfirm" type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="new-password" onkeydown="if(event.key==='Enter')saveNewPw()">
+    </div>
+    <div class="pw-err" id="pwErr"></div>
+    <div class="pw-ok" id="pwOk"></div>
+    <div class="pw-btns">
+      <button class="btn btn-primary" onclick="saveNewPw()">ğŸ’¾ KAYDET</button>
+      <button class="btn btn-ghost" onclick="closePwOverlay()">İPTAL</button>
+    </div>
+  </div>
+</div>
+
+<!-- Account management -->
+<div class="acc-overlay" id="accOverlay">
+  <div class="acc-box">
+    <div class="acc-title">👥 HESAP YÖNETİMİ</div>
+    <div class="acc-sub" id="accSub">Moderatör hesaplarını ekle, sil veya şifrelerini sıfırla.<br>Sadece admin rolündeki hesaplar bu panele erişebilir.</div>
+    <div class="acc-add-form" style="margin-bottom:12px;">
+      <div class="acc-add-title">ORGANIZASYONLAR</div>
+      <div class="acc-list" id="orgList" style="margin-bottom:9px;"><div style="font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center;padding:8px;">Yukleniyor...</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+        <div class="acc-field"><label class="acc-lbl">Org ID</label><input class="acc-inp" id="newOrgId" placeholder="abc-universitesi"></div>
+        <div class="acc-field"><label class="acc-lbl">Ad</label><input class="acc-inp" id="newOrgName" placeholder="ABC Universitesi"></div>
+      </div>
+      <button class="btn btn-green btn-sm" onclick="addOrg()">+ ORG EKLE</button>
+    </div>
+    <div class="acc-list" id="accList"><div style="font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center;padding:12px;">Yükleniyor...</div></div>
+    <div class="acc-add-form">
+      <div class="acc-add-title">+ YENİ HESAP EKLE</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+        <div class="acc-field"><label class="acc-lbl">Kullanıcı Adı</label><input class="acc-inp" id="newAccUser" placeholder="moderator1"></div>
+        <div class="acc-field"><label class="acc-lbl">Parola</label><input class="acc-inp" id="newAccPass" type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+        <div class="acc-field"><label class="acc-lbl">Firebase Auth E-posta</label><input class="acc-inp" id="newAccEmail" type="email" placeholder="moderator@example.com"></div>
+        <div class="acc-field"><label class="acc-lbl">Firebase Auth UID</label><input class="acc-inp" id="newAccAuthUid" placeholder="Opsiyonel UID"></div>
+      </div>
+      <div class="acc-field">
+        <label class="acc-lbl">Rol</label>
+        <div class="acc-role-sel" id="newAccRoleSel">
+          <button class="acc-role-btn sel-mod" data-role="moderator" onclick="selectNewRole('moderator')">ğŸ› Moderatör</button>
+          <button class="acc-role-btn" data-role="admin" onclick="selectNewRole('admin')">â­ Admin</button>
+        </div>
+      </div>
+      <div class="acc-field">
+        <label class="acc-lbl">Organizasyon Yetkileri</label>
+        <select class="acc-inp" id="newAccOrg" multiple size="3" style="height:auto;"></select>
+        <div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);margin-top:4px;">Admin icin tum organizasyonlar secilebilir. Ctrl ile coklu secim.</div>
+      </div>
+      <div class="acc-err" id="accErr"></div>
+      <div class="acc-ok" id="accOk"></div>
+      <div style="display:flex;gap:8px;margin-top:9px;">
+        <button class="btn btn-green btn-sm" onclick="addAccount()">ğŸ’¾ EKLE</button>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+      <button class="btn btn-ghost" onclick="closeAccOverlay()">KAPAT</button>
+    </div>
+  </div>
+</div>
+
+<!-- ANALYTICS OVERLAY (v3.3) -->
+<div class="analytics-overlay" id="analyticsOverlay">
+  <div class="analytics-box">
+    <div class="analytics-hdr">
+      <div class="analytics-title">📊 ETKİNLİK ANALİZ RAPORU</div>
+      <div id="analyticsMeta" style="font-family:var(--mono);font-size:.65rem;color:var(--muted);"></div>
+    </div>
+    <div class="analytics-body">
+      <div class="analytics-grid">
+        <div class="stat-card">
+          <div class="stat-val" id="stParticipants">0</div>
+          <div class="stat-lbl">Katılımcı</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="stAvgSuccess">0%</div>
+          <div class="stat-lbl">Başarı Oranı</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="stAvgTime">0s</div>
+          <div class="stat-lbl">Ort. Cevap Süresi</div>
+        </div>
+      </div>
+
+      <div class="analytics-sec">
+        <div class="analytics-sec-title">🧠± EN ZOR SORU</div>
+        <div class="hardest-q-card">
+          <div class="hqc-icon">🧠±</div>
+          <div class="hqc-body">
+            <div class="hqc-title" id="hqcTitle">Soru yüklenemedi</div>
+            <div class="hqc-text" id="hqcStats">Doğru cevaplanma oranı: 0%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="analytics-sec">
+        <div class="analytics-sec-title">ğŸ† SORU BAZLI DETAYLAR</div>
+        <table class="analytics-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Soru</th>
+              <th>Doğru %</th>
+              <th>Yanlış %</th>
+              <th>Ort. Süre</th>
+            </tr>
+          </thead>
+          <tbody id="analyticsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="analytics-ftr">
+      <button class="btn btn-ghost" onclick="closeAnalytics()">KAPAT</button>
+      <button class="btn btn-primary" onclick="downloadAnalyticsReport()">ğŸ“¥ HTML RAPOR İNDİR</button>
+    </div>
+  </div>
+</div>
+
+<!-- Set overlay (from editor) -->
+<div class="overlay" id="setOverlay">
+  <div class="set-ov-box">
+    <div class="set-ov-title" id="setOvTitle">ğŸ“¦ YENİ SET OLUÅTUR</div>
+    <div class="fg"><div class="flbl">Set Adı <span style="color:var(--accent2);">*</span></div>
+      <input class="inp" id="setNameInp" placeholder="Örn: YZ Soruları..." maxlength="60">
+    </div>
+    <div class="flbl">Soruları Seç</div>
+    <span class="set-sel-all" onclick="toggleSelectAll()">Tümünü seç / kaldır</span>
+    <div class="set-q-list" id="setQList"></div>
+    <div style="font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-bottom:13px;" id="setSelCount">0 soru seçildi</div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeSetOverlay()">İPTAL</button>
+      <button class="btn btn-primary" onclick="saveSet()" id="saveSetBtn">ğŸ’¾ KAYDET</button>
+    </div>
+  </div>
+</div>
+
+<!-- CSV Import overlay (from editor) -->
+<div class="overlay" id="csvOverlay">
+  <div class="set-ov-box">
+    <div class="set-ov-title">ğŸ“¥ CSV AKTARIM</div>
+    <div style="font-family:var(--mono);font-size:.63rem;color:var(--muted);line-height:1.7;margin-bottom:14px;">CSV dosyasını seçin. Her satır bir soru.<br>Şablonu indirmek için aşağıdaki butonu kullanın.</div>
+    <label style="cursor:pointer;display:block;background:var(--card);border:1px dashed var(--border);border-radius:8px;padding:16px;text-align:center;font-family:var(--mono);font-size:.65rem;color:var(--muted);transition:border-color .15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+      ğŸ“„ CSV Dosyası Seç
+      <input type="file" accept=".csv" id="csvFileInput" style="display:none;" onchange="importCsv(event)">
+    </label>
+    <div style="margin-top:8px;display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+      <button class="btn btn-ghost btn-sm" onclick="downloadTemplate()">â¬‡ Şablon İndir</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('csvOverlay').classList.remove('visible')">KAPAT</button>
+    </div>
+    <div id="csvStatus" style="font-family:var(--mono);font-size:.62rem;color:var(--accent3);margin-top:8px;min-height:15px;"></div>
+  </div>
+</div>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get as fbGet, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const FC={apiKey:"AIzaSyAPbvuN7IA6e78-fym8nF6m5gW1fUPf7lw",authDomain:"hata-avi.firebaseapp.com",databaseURL:"https://hata-avi-default-rtdb.europe-west1.firebasedatabase.app",projectId:"hata-avi",storageBucket:"hata-avi.firebasestorage.app",messagingSenderId:"725079545594",appId:"1:725079545594:web:040eb5d99bf55567a81b43"};
-const app=initializeApp(FC);const db=getDatabase(app);
+  import { db, ref, fbGet, fbSet, fbUpdate, auth } from "./js/core/firebase.js";
+  import { requireModeratorSession, doLogout } from "./js/core/auth.js";
+  import { roomId, orgId, gameRef, orgRef } from "./js/core/paths.js";
+  import { sha256 } from "./js/utils/crypto.js";
+  import { openAccMgmt, addAccount, deleteAccount, toggleResetForm, resetPassword, addOrg, selectNewRole } from "./js/moderator/account.js";
+  import { getCatColorMod, rk, updateFlowStep, updateConnectionsList } from "./js/moderator/ui.js";
+  import { gameStore, setLobby, startGame, initGameListeners, doReplay, finishGame, exportResults, stopTimer, previewRound, openAnswering, publishRound, revealAnswer, renderRound, renderNav, nextRound, setBtnsPreview, setBtnsAnswering, renderCatFilterMod, setGameMode, generatePin, clearPin, initPinListener, toggleTeamMode, addTeam, saveTeams, loadModSet, sendReactionSignal } from "./js/moderator/game.js";
+  import { initListeners } from "./js/moderator/listeners.js";
+  import { initShortcuts } from "./js/moderator/shortcuts.js";
+  import { openAnalytics, closeAnalytics, updateLiveAnswers } from "./js/moderator/stats.js";
 
-// ── AUTH ──
-async function sha256(str){
-  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-if(sessionStorage.getItem('modAuth')!=='1'){window.location.href='login.html';}
-const modUser=sessionStorage.getItem('modUser')||'admin';
-const modRole=sessionStorage.getItem('modRole')||'moderator';
-const isAdmin=modRole==='admin';
+  if (!(await requireModeratorSession())) throw new Error('Auth required');
 
-document.getElementById('userBadge').textContent='👤 '+modUser+(isAdmin?' ⭐':'');
-// Admin ise "Hesaplar" butonu görünsün
-if(isAdmin)document.getElementById('accMgmtBtn').style.display='block';
+  const modUser = sessionStorage.getItem('modUser') || 'admin';
+  const modRole = sessionStorage.getItem('modRole') || 'moderator';
+  const isAdmin = modRole === 'admin';
+  
+  document.getElementById('userBadge').textContent = `👤 ${modUser}${isAdmin ? ' ⭐ ' : ''} 🏢 Org: ${orgId} 🚪 Oda: ${roomId}`;
+  if (isAdmin) document.getElementById('accMgmtBtn').style.display = 'block';
 
-window.doLogout=function(){
-  sessionStorage.removeItem('modAuth');
-  sessionStorage.removeItem('modUser');
-  sessionStorage.removeItem('modRole');
-  window.location.href='login.html';
-};
+  window.toggleAcc = function(hdr) {
+    hdr.classList.toggle('open');
+    const body = hdr.nextElementSibling;
+    if (body) body.classList.toggle('open');
+  };
 
-window.openChangePw=function(){
-  document.getElementById('pwCurrent').value='';
-  document.getElementById('pwNew').value='';
-  document.getElementById('pwConfirm').value='';
-  document.getElementById('pwErr').textContent='';
-  document.getElementById('pwOk').textContent='';
-  document.getElementById('pwOverlay').classList.add('visible');
-};
-window.closePwOverlay=function(){document.getElementById('pwOverlay').classList.remove('visible');};
+  window.openChangePw = () => { ['pwCurrent', 'pwNew', 'pwConfirm'].forEach(id => document.getElementById(id).value = ''); document.getElementById('pwOverlay').classList.add('visible'); };
+  window.closePwOverlay = () => document.getElementById('pwOverlay').classList.remove('visible');
+  window.doLogout = () => doLogout();
+  window.saveNewPw = () => saveNewPw(modUser);
 
-window.saveNewPw=async function(){
-  const current=document.getElementById('pwCurrent').value;
-  const nw=document.getElementById('pwNew').value;
-  const confirm=document.getElementById('pwConfirm').value;
-  const errEl=document.getElementById('pwErr');const okEl=document.getElementById('pwOk');
-  errEl.textContent='';okEl.textContent='';
-  if(!current||!nw||!confirm){errEl.textContent='Tüm alanları doldurun.';return;}
-  if(nw!==confirm){errEl.textContent='Yeni parolalar eşleşmiyor.';return;}
-  if(nw.length<4){errEl.textContent='Parola en az 4 karakter olmalı.';return;}
-  const currentHash=await sha256(current);
-  // Yeni çok-hesaplı yapıda bu kullanıcıyı bul
-  const snap=await fbGet(ref(db,'config/moderators'));
-  const mods=snap.val()||{};
-  let foundKey=null;
-  Object.entries(mods).forEach(([k,m])=>{if(m.username===modUser&&m.passwordHash===currentHash)foundKey=k;});
-  // Eski yapıya bak
-  if(!foundKey){
-    const oldSnap=await fbGet(ref(db,'config/adminAuth'));
-    const old=oldSnap.val();
-    if(old&&old.username===modUser&&old.passwordHash===currentHash)foundKey='__legacy__';
-  }
-  if(!foundKey){errEl.textContent='❌ Mevcut parola hatalı.';return;}
-  const newHash=await sha256(nw);
-  if(foundKey==='__legacy__'){
-    // Eski yapıdan yeni yapıya taşı
-    await set(ref(db,`config/moderators/admin`),{username:modUser,passwordHash:newHash,role:'admin',createdAt:Date.now()});
-  } else {
-    await set(ref(db,`config/moderators/${foundKey}/passwordHash`),newHash);
-  }
-  okEl.textContent='✅ Parola başarıyla değiştirildi!';
-  setTimeout(()=>closePwOverlay(),2000);
-};
+  // Window Mappings for UI
+  window.startGame = startGame;
+  window.doReplay = doReplay;
+  window.doFinish = () => finishGame(renderRound);
+  window.exportResults = exportResults;
+  window.stopTimer = () => stopTimer(window.stopMusic);
+  window.previewRound = () => previewRound(setBtnsPreview, window.stopMusic);
+  window.openAnswering = () => openAnswering(setBtnsAnswering, window.UsevSound?.playMusic);
+  window.publishRound = () => publishRound(setBtnsAnswering, window.UsevSound?.playMusic, window.stopMusic);
+  window.revealAnswer = () => revealAnswer(window.stopMusic, renderNav, renderRound, window.UsevSound?.sfx?.reveal);
+  window.nextRound = () => nextRound(window.stopMusic);
+  
+  window.openAccMgmt = () => openAccMgmt(isAdmin, modUser);
+  window.addAccount = () => addAccount(modUser);
+  window.addOrg = () => addOrg(modUser);
+  window.deleteAccount = (key, user) => deleteAccount(key, user, modUser);
+  window.selectNewRole = (role) => selectNewRole(role);
+  window.toggleResetForm = (key) => toggleResetForm(key);
+  window.resetPassword = (key) => resetPassword(key);
 
-// ── HESAP YÖNETİMİ ──
-let newAccRole='moderator';
+  window.setGameMode = setGameMode;
+  window.generatePin = generatePin;
+  window.clearPin = clearPin;
+  window.toggleTeamMode = toggleTeamMode;
+  window.addTeam = addTeam;
+  window.saveTeams = saveTeams;
+  window.loadModSet = loadModSet;
+  window.sendReactionSignal = sendReactionSignal;
+  
+  window.openAnalytics = openAnalytics;
+  window.closeAnalytics = closeAnalytics;
 
-window.openAccMgmt=async function(){
-  if(!isAdmin){alert('Bu işlem için admin yetkisi gerekli.');return;}
-  document.getElementById('accOverlay').classList.add('visible');
-  document.getElementById('accErr').textContent='';
-  document.getElementById('accOk').textContent='';
-  await loadAccList();
-};
-window.closeAccOverlay=function(){document.getElementById('accOverlay').classList.remove('visible');};
+  window.approveAnswer = async (key, roundIdx) => { const ptsEl = document.getElementById('pts-' + key); const pts = ptsEl ? parseInt(ptsEl.value) || 0 : 0; await fbUpdate(gameRef(`answers/${roundIdx}/${key}`), { approved: true, correct: true, pts }); };
+  window.rejectAnswer = async (key, roundIdx) => { await fbUpdate(gameRef(`answers/${roundIdx}/${key}`), { approved: false, correct: false, pts: 0 }); };
+  window.kickPlayer = async (id, name) => { if (!confirm(`"${name}" adlı oyuncuyu sistemden atmak istiyor musunuz?`)) return; await fbUpdate(gameRef(`connections/${id}`), { kicked: true }); };
+  window.banPlayer = async (id, name, uid) => { if (!confirm(`"${name}" adlı oyuncuyu KALICI OLARAK yasaklamak istediğinize emin misiniz?`)) return; if (uid) await fbSet(gameRef('bannedDevices/' + uid), true); await fbUpdate(gameRef(`connections/${id}`), { kicked: true }); };
 
-async function loadAccList(){
-  const snap=await fbGet(ref(db,'config/moderators'));
-  const mods=snap.val()||{};
-  const list=document.getElementById('accList');
-  list.innerHTML='';
-  if(!Object.keys(mods).length){
-    list.innerHTML='<div style="font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;padding:10px;">Henüz hesap yok</div>';
-    return;
-  }
-  Object.entries(mods).forEach(([key,m])=>{
-    const isYou=m.username===modUser;
-    const row=document.createElement('div');
-    row.className='acc-row'+(isYou?' is-you':'');
-    const avatar=m.role==='admin'?'⭐':'👤';
-    const roleCls=m.role==='admin'?'role-admin':'role-mod';
-    const roleLabel=m.role==='admin'?'Admin':'Moderatör';
-    const since=m.createdAt?new Date(m.createdAt).toLocaleDateString('tr-TR'):'—';
-    row.innerHTML=`
-      <div class="acc-avatar">${avatar}</div>
-      <div class="acc-info">
-        <div class="acc-name">${m.username||'?'}${isYou?' <span style="font-size:.55rem;color:var(--muted);">(sen)</span>':''}</div>
-        <div class="acc-meta">Oluşturulma: ${since}</div>
-      </div>
-      <span class="role-badge ${roleCls}">${roleLabel}</span>
-      <div class="acc-actions">
-        <button class="btn btn-ghost btn-sm" onclick="toggleResetForm('${key}')" style="font-size:.6rem;padding:4px 8px;">🔑</button>
-        ${!isYou?`<button class="btn btn-danger btn-sm" onclick="deleteAccount('${key}','${m.username}')" style="font-size:.6rem;padding:4px 8px;">✕</button>`:''}
-      </div>`;
-    // Reset pw form (hidden initially)
-    const resetDiv=document.createElement('div');
-    resetDiv.className='reset-form';resetDiv.id=`reset-${key}`;
-    resetDiv.innerHTML=`
-      <div style="display:flex;gap:6px;align-items:center;">
-        <input class="acc-inp" id="rpw-${key}" type="password" placeholder="Yeni parola..." style="flex:1;">
-        <button class="btn btn-primary btn-sm" onclick="resetPassword('${key}')" style="white-space:nowrap;">Sıfırla</button>
-      </div>
-      <div id="rpw-err-${key}" style="font-family:var(--mono);font-size:.6rem;color:var(--accent2);margin-top:4px;min-height:14px;"></div>`;
-    const wrapper=document.createElement('div');
-    wrapper.appendChild(row);wrapper.appendChild(resetDiv);
-    list.appendChild(wrapper);
-  });
-}
-
-window.toggleResetForm=function(key){
-  const f=document.getElementById(`reset-${key}`);
-  f.classList.toggle('visible');
-  if(f.classList.contains('visible'))document.getElementById(`rpw-${key}`).focus();
-};
-
-window.resetPassword=async function(key){
-  const inp=document.getElementById(`rpw-${key}`);
-  const errEl=document.getElementById(`rpw-err-${key}`);
-  const pw=inp.value.trim();
-  if(!pw||pw.length<4){errEl.textContent='En az 4 karakter olmalı.';return;}
-  const hash=await sha256(pw);
-  await set(ref(db,`config/moderators/${key}/passwordHash`),hash);
-  inp.value='';errEl.textContent='';
-  document.getElementById(`reset-${key}`).classList.remove('visible');
-  document.getElementById('accOk').textContent='✅ Parola sıfırlandı!';
-  setTimeout(()=>document.getElementById('accOk').textContent='',2500);
-};
-
-window.deleteAccount=async function(key,username){
-  if(!confirm(`"${username}" hesabını silmek istediğinize emin misiniz?`))return;
-  await remove(ref(db,`config/moderators/${key}`));
-  document.getElementById('accOk').textContent='🗑 Hesap silindi.';
-  setTimeout(()=>document.getElementById('accOk').textContent='',2000);
-  await loadAccList();
-};
-
-window.selectNewRole=function(role){
-  newAccRole=role;
-  document.querySelectorAll('.acc-role-btn').forEach(b=>{
-    b.className='acc-role-btn'+(b.dataset.role===role?(role==='admin'?' sel-admin':' sel-mod'):'');
-  });
-};
-
-window.addAccount=async function(){
-  const user=document.getElementById('newAccUser').value.trim();
-  const pass=document.getElementById('newAccPass').value;
-  const errEl=document.getElementById('accErr');const okEl=document.getElementById('accOk');
-  errEl.textContent='';okEl.textContent='';
-  if(!user||!pass){errEl.textContent='Kullanıcı adı ve parola zorunlu.';return;}
-  if(user.length<3){errEl.textContent='Kullanıcı adı en az 3 karakter.';return;}
-  if(pass.length<4){errEl.textContent='Parola en az 4 karakter.';return;}
-  // Kullanıcı adı zaten var mı?
-  const snap=await fbGet(ref(db,'config/moderators'));
-  const mods=snap.val()||{};
-  const exists=Object.values(mods).some(m=>m.username===user);
-  if(exists){errEl.textContent='Bu kullanıcı adı zaten kullanılıyor.';return;}
-  const hash=await sha256(pass);
-  const key=user.replace(/[^a-zA-Z0-9_]/g,'_')+'_'+Date.now();
-  await set(ref(db,`config/moderators/${key}`),{
-    username:user,passwordHash:hash,role:newAccRole,createdAt:Date.now()
-  });
-  document.getElementById('newAccUser').value='';
-  document.getElementById('newAccPass').value='';
-  okEl.textContent=`✅ "${user}" hesabı oluşturuldu!`;
-  setTimeout(()=>okEl.textContent='',2500);
-  await loadAccList();
-};
-const COLORS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316'];
-const SHAPES=['▲','◆','●','■','★','♥'];
-const DIFF={easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🟣 ÇOK ZOR'};
-const MUSIC=[{id:'01',name:'Müzik 1',icon:'🎵'},{id:'02',name:'Müzik 2',icon:'🎸'},{id:'03',name:'Müzik 3',icon:'🎹'},{id:'04',name:'Müzik 4',icon:'🥁'},{id:'05',name:'Müzik 5',icon:'🎺'},{id:'06',name:'Müzik 6',icon:'🎻'}];
-let questions=[],curRound=0,timerVal=90,timerInt=null,timerRunning=false,roundDone=[];
-let selMusic='01',curAudio=null,roundMusicMap={},isGame=false,knownConns=new Set();
-let autoAdvInt=null;
-let activeCatsMod=new Set(['__all__']); // '__all__' means all selected
-let filteredQuestions=[];
-
-function getCatColorMod(cat){
-  const COLS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316','#ec4899','#14b8a6'];
-  if(!cat)return'#555';let h=0;for(let i=0;i<cat.length;i++)h=(h*31+cat.charCodeAt(i))&0xfffff;return COLS[h%COLS.length];
-}
-
-function buildFilteredQuestions(){
-  if(activeCatsMod.has('__all__')){filteredQuestions=[...questions];}
-  else{filteredQuestions=questions.filter(q=>activeCatsMod.has(q.category||''));}
-  roundDone=Array(filteredQuestions.length).fill(false);
-  // Reset curRound if out of bounds
-  if(curRound>=filteredQuestions.length)curRound=0;
-}
-
-function renderCatFilterMod(){
-  const wrap=document.getElementById('catFilterMod');
-  const cats=[...new Set(questions.map(q=>q.category||'').filter(Boolean))].sort();
-  if(!cats.length){wrap.innerHTML='';return;}
-  wrap.innerHTML='';
-  // "Tümü" button
-  const allBtn=document.createElement('button');
-  allBtn.className='rbtn'+(activeCatsMod.has('__all__')?' active':'');
-  allBtn.textContent='🏷 Tümü';
-  allBtn.onclick=()=>{activeCatsMod=new Set(['__all__']);renderCatFilterMod();buildFilteredQuestions();renderNav();if(filteredQuestions.length)renderRound();};
-  wrap.appendChild(allBtn);
-  // Per-category toggles
-  cats.forEach(cat=>{
-    const isActive=!activeCatsMod.has('__all__')&&activeCatsMod.has(cat);
-    const btn=document.createElement('button');
-    btn.className='rbtn'+(isActive?' active':'');
-    const col=getCatColorMod(cat);
-    if(isActive){btn.style.borderColor=col;btn.style.color=col;}
-    btn.innerHTML=`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${col};margin-right:4px;vertical-align:middle;"></span>${cat}`;
-    btn.onclick=()=>{
-      activeCatsMod.delete('__all__');
-      if(activeCatsMod.has(cat))activeCatsMod.delete(cat);
-      else activeCatsMod.add(cat);
-      if(!activeCatsMod.size)activeCatsMod.add('__all__');
-      renderCatFilterMod();buildFilteredQuestions();renderNav();
-      if(filteredQuestions.length&&curRound<filteredQuestions.length)renderRound();
-    };
-    wrap.appendChild(btn);
-  });
-  // Count display
-  const cnt=document.getElementById('filteredCount');
-  if(activeCatsMod.has('__all__'))cnt.textContent='';
-  else cnt.textContent=`Seçili: ${filteredQuestions.length} soru oynanacak`;
-}
-
-function rk(el){if(window.renderMathInElement)renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}
-
-onValue(ref(db,'questions'),snap=>{
-  const data=snap.val()||{};
-  questions=Object.entries(data).map(([id,q])=>({id,...q})).sort((a,b)=>(a.order||0)-(b.order||0));
-  buildFilteredQuestions();
-  renderCatFilterMod();
-  renderNav();
-  if(filteredQuestions.length&&curRound<filteredQuestions.length)renderRound();
-  document.getElementById('noQMsg').style.display=questions.length?'none':'block';
-  document.getElementById('publishBtn').disabled=filteredQuestions.length===0;
-});
-
-// ── TAKIM MODU ──
-const DEFAULT_TEAMS=[
-  {name:'Kırmızı Takım',color:'#e84040'},
-  {name:'Mavi Takım',color:'#3b82f6'},
-  {name:'Yeşil Takım',color:'#3dd68c'},
-  {name:'Sarı Takım',color:'#f5c518'},
-];
-let teamModeActive=false;
-let localTeams=[...DEFAULT_TEAMS];
-
-window.toggleTeamMode=function(){
-  teamModeActive=document.getElementById('teamModeChk').checked;
-  document.getElementById('teamSetup').style.display=teamModeActive?'block':'none';
-  if(teamModeActive){
-    renderTeamsList();
-    set(ref(db,'game/teamMode'),{active:true,teams:localTeams});
-  } else {
-    set(ref(db,'game/teamMode'),{active:false,teams:[]});
-    document.getElementById('teamScoreSection').style.display='none';
-  }
-};
-
-function renderTeamsList(){
-  const list=document.getElementById('teamsList');list.innerHTML='';
-  localTeams.forEach((t,i)=>{
-    const row=document.createElement('div');row.className='team-row';
-    row.innerHTML=`
-      <div class="team-color-dot" style="background:${t.color};" title="Renk seç" onclick="cycleTeamColor(${i})"></div>
-      <input class="team-name-inp" value="${t.name}" oninput="localTeams[${i}].name=this.value">
-      <button class="team-del" onclick="removeTeam(${i})">✕</button>`;
-    list.appendChild(row);
-  });
-}
-
-const TEAM_COLORS=['#e84040','#3b82f6','#3dd68c','#f5c518','#a855f7','#f97316','#ec4899','#14b8a6'];
-window.cycleTeamColor=function(i){
-  const cur=TEAM_COLORS.indexOf(localTeams[i].color);
-  localTeams[i].color=TEAM_COLORS[(cur+1)%TEAM_COLORS.length];
-  renderTeamsList();
-};
-window.addTeam=function(){
-  if(localTeams.length>=8){alert('Maksimum 8 takım.');return;}
-  localTeams.push({name:'Yeni Takım',color:TEAM_COLORS[localTeams.length%TEAM_COLORS.length]});
-  renderTeamsList();
-};
-window.removeTeam=function(i){
-  if(localTeams.length<=2){alert('En az 2 takım olmalı.');return;}
-  localTeams.splice(i,1);renderTeamsList();
-};
-window.saveTeams=async function(){
-  await set(ref(db,'game/teamMode'),{active:true,teams:localTeams});
-  document.getElementById('teamSaveStatus').textContent='✅ Kaydedildi!';
-  setTimeout(()=>document.getElementById('teamSaveStatus').textContent='',2000);
-};
-
-// Load team mode state from Firebase on init
-onValue(ref(db,'game/teamMode'),snap=>{
-  const d=snap.val();
-  if(d&&d.active){
-    teamModeActive=true;
-    localTeams=d.teams||DEFAULT_TEAMS;
-    document.getElementById('teamModeChk').checked=true;
-    document.getElementById('teamSetup').style.display='block';
-    renderTeamsList();
-  }
-},{onlyOnce:true});
-
-// Team scores in liveSection
-function renderTeamScores(all){
-  if(!teamModeActive)return;
-  const teamScores={};
-  localTeams.forEach(t=>teamScores[t.name]={name:t.name,color:t.color,score:0,correct:0,total:0});
-  // Map player→team from connections
-  onValue(ref(db,'game/connections'),snap2=>{
-    const conns=snap2.val()||{};
-    const playerTeam={};
-    Object.values(conns).forEach(c=>{if(c.team)playerTeam[c.name]=c.team;});
-    Object.values(all).forEach(ra=>Object.values(ra||{}).forEach(e=>{
-      const team=playerTeam[e.name];
-      if(team&&teamScores[team]){
-        teamScores[team].total++;
-        if(e.correct){teamScores[team].correct++;teamScores[team].score+=e.pts;}
-      }
-    }));
-    const sorted=Object.values(teamScores).sort((a,b)=>b.score-a.score);
-    const sec=document.getElementById('teamScoreSection');
-    sec.style.display='block';
-    const list=document.getElementById('teamScoreList');list.innerHTML='';
-    sorted.forEach((t,i)=>{
-      const row=document.createElement('div');
-      row.className='team-score-row';
-      row.style.borderColor=t.color;
-      row.style.background=t.color+'11';
-      row.innerHTML=`<span style="width:10px;height:10px;border-radius:50%;background:${t.color};flex-shrink:0;display:inline-block;"></span><span class="team-score-name">${t.name}</span><span class="team-score-pts" style="color:${t.color};">${t.score}</span><span style="font-family:var(--mono);font-size:.55rem;color:var(--muted);">${t.correct}/${t.total}</span>`;
-      list.appendChild(row);
-    });
-  },{onlyOnce:true});
-}
-
-window.generatePin=function(){const p=String(Math.floor(1000+Math.random()*9000));document.getElementById('pinDisplay').textContent=p;document.getElementById('pinStatus').textContent='✅ Aktif.';set(ref(db,'game/pin'),p);};
-window.clearPin=function(){document.getElementById('pinDisplay').textContent='——';document.getElementById('pinStatus').textContent='Parola yok.';set(ref(db,'game/pin'),null);};
-onValue(ref(db,'game/pin'),snap=>{const p=snap.val();if(p){document.getElementById('pinDisplay').textContent=p;document.getElementById('pinStatus').textContent='✅ Aktif.';}},{onlyOnce:true});
-
-window.confirmReset=function(){document.getElementById('confirmOverlay').classList.add('visible');};
-window.closeConfirm=function(){document.getElementById('confirmOverlay').classList.remove('visible');};
-window.doReset=async function(){
-  closeConfirm();stopTimer();stopMusic();
-  await remove(ref(db,'game/answers'));await remove(ref(db,'game/currentRound'));
-  await remove(ref(db,'game/connections'));await remove(ref(db,'game/timer'));
-  await set(ref(db,'game/phase'),'lobby');
-  curRound=0;roundDone=Array(filteredQuestions.length).fill(false);knownConns=new Set();
-  setLobby();if(filteredQuestions.length)renderRound();
-  document.getElementById('lobbyPlayers').innerHTML='<div class="empty">Kimse katılmadı</div>';
-  document.getElementById('lobbyCount2').textContent='0 katılımcı';
-  document.getElementById('statusMsg').textContent='Lobi sıfırlandı.';
-};
-
-window.confirmFinish=function(){document.getElementById('finishOverlay').classList.add('visible');};
-window.doFinish=async function(){
-  document.getElementById('finishOverlay').classList.remove('visible');
-  stopTimer();stopMusic();
-  // Compute final stats for projeksiyon
-  const answersSnap=await fbGet(ref(db,'game/answers'));
-  const all=answersSnap.val()||{};
-  const scores={};
-  Object.entries(all).forEach(([rIdx,ra])=>{
-    Object.values(ra||{}).forEach(e=>{
-      if(!scores[e.name])scores[e.name]={name:e.name,score:0,correct:0,total:0};
-      scores[e.name].total++;
-      if(e.correct){scores[e.name].correct++;scores[e.name].score+=e.pts;}
-    });
-  });
-  const podium=Object.values(scores).sort((a,b)=>b.score-a.score).slice(0,3);
-  // Hardest question
-  const qStats={};
-  Object.entries(all).forEach(([rIdx,ra])=>{
-    const entries=Object.values(ra||{});const total=entries.length;
-    const correct=entries.filter(e=>e.correct).length;
-    qStats[rIdx]={index:parseInt(rIdx),total,correct,rate:total>0?correct/total:0};
-  });
-  const hardest=Object.values(qStats).sort((a,b)=>a.rate-b.rate)[0];
-  const hardestQ=hardest&&filteredQuestions[hardest.index]?filteredQuestions[hardest.index].title:'—';
-  await set(ref(db,'game/phase'),'finished');
-  await set(ref(db,'game/podium'),{
-    players:podium,
-    hardest:{title:hardestQ,rate:hardest?Math.round(hardest.rate*100):0}
-  });
-  setFinished();
-};
-
-function setLobby(){
-  isGame=false;
-  document.getElementById('phaseVal').textContent='⏳ LOBİ';
-  document.getElementById('phaseVal').className='phase-val lobby';
-  document.getElementById('gameControls').classList.add('locked');
-  document.getElementById('startBtn').disabled=false;
-  document.getElementById('finishBtn').style.display='none';
-  document.getElementById('replayBtn').style.display='none';
-  document.getElementById('exportBtn').style.display='none';
-  document.getElementById('liveSection').style.display='none';
-}
-function setGame(){
-  isGame=true;
-  document.getElementById('phaseVal').textContent='🎮 YARIŞMA';
-  document.getElementById('phaseVal').className='phase-val game';
-  document.getElementById('gameControls').classList.remove('locked');
-  document.getElementById('startBtn').disabled=true;
-  document.getElementById('finishBtn').style.display='block';
-  document.getElementById('replayBtn').style.display='none';
-  document.getElementById('exportBtn').style.display='none';
-  document.getElementById('liveSection').style.display='block';
-  document.getElementById('statusMsg').textContent='Soruyu yayınlayın — süre otomatik başlar.';
-}
-function setFinished(){
-  isGame=false;
-  document.getElementById('phaseVal').textContent='🏁 BİTTİ';
-  document.getElementById('phaseVal').className='phase-val game';
-  document.getElementById('gameControls').classList.add('locked');
-  document.getElementById('finishBtn').style.display='none';
-  document.getElementById('replayBtn').style.display='block';
-  document.getElementById('exportBtn').style.display='block';
-  document.getElementById('statusMsg').textContent='Oyun bitti! Sonuçları indirin veya yeniden oynayın.';
-}
-
-window.startGame=async function(){await set(ref(db,'game/phase'),'game');setGame();};
-onValue(ref(db,'game/phase'),snap=>{
-  const p=snap.val();
-  if(p==='game')setGame();
-  else if(p==='finished')setFinished();
-  else setLobby();
-});
-
-// ── YENİDEN OYNA ──
-window.confirmReplay=function(){
-  document.getElementById('replayOverlay').classList.add('visible');
-};
-window.doReplay=async function(){
-  document.getElementById('replayOverlay').classList.remove('visible');
-  stopTimer();stopMusic();
-  clearInterval(autoAdvInt);
-  document.getElementById('autoAdvanceCountdown').style.display='none';
-  // Sadece oyun verilerini sil — connections KORUNUR
-  await remove(ref(db,'game/answers'));
-  await remove(ref(db,'game/currentRound'));
-  await remove(ref(db,'game/podium'));
-  await remove(ref(db,'game/timer'));
-  await remove(ref(db,'game/autoAdvance'));
-  await set(ref(db,'game/phase'),'lobby');
-  // Soru navigasyonunu sıfırla
-  curRound=0;
-  roundDone=Array(filteredQuestions.length).fill(false);
-  setLobby();
-  if(filteredQuestions.length)renderRound();
-  document.getElementById('statusMsg').textContent='🔄 Yeniden oynamaya hazır! Katılımcılar hâlâ bağlı.';
-  // Bağlı katılımcı sayısını göster
-  const connSnap=await fbGet(ref(db,'game/connections'));
-  const connCount=Object.keys(connSnap.val()||{}).length;
-  if(connCount>0){
-    document.getElementById('statusMsg').textContent=`🔄 Hazır! ${connCount} katılımcı bağlı, yeniden başlatın.`;
-  }
-};
-
-// ── EXPORT CSV ──
-window.exportResults=async function(){
-  const snap=await fbGet(ref(db,'game/answers'));
-  const all=snap.val()||{};
-  const rows=[['İsim','Toplam Puan','Doğru','Toplam Soru','Çarpan Puanı','Seri Bonusu']];
-  const totals={};
-  Object.entries(all).sort(([a],[b])=>parseInt(a)-parseInt(b)).forEach(([rIdx,ra])=>{
-    Object.values(ra||{}).forEach(e=>{
-      if(!totals[e.name])totals[e.name]={name:e.name,score:0,correct:0,total:0,bonusCount:0};
-      totals[e.name].total++;
-      if(e.correct){totals[e.name].correct++;totals[e.name].score+=e.pts;if(e.streakBonus)totals[e.name].bonusCount++;}
-    });
-  });
-  Object.values(totals).sort((a,b)=>b.score-a.score).forEach((p,i)=>{
-    rows.push([`${i+1}. ${p.name}`,p.score,p.correct,p.total,p.score,p.bonusCount]);
-  });
-  // Per question breakdown
-  rows.push([]);
-  rows.push(['--- SORU DETAYLARI ---']);
-  rows.push(['Soru','Doğru Sayısı','Toplam Cevap','Doğru %']);
-  Object.entries(all).sort(([a],[b])=>parseInt(a)-parseInt(b)).forEach(([rIdx,ra])=>{
-    const entries=Object.values(ra||{});
-    const correct=entries.filter(e=>e.correct).length;
-    const total=entries.length;
-    const qTitle=filteredQuestions[parseInt(rIdx)]?.title||`Soru ${parseInt(rIdx)+1}`;
-    rows.push([qTitle,correct,total,total>0?Math.round(correct/total*100)+'%':'—']);
-  });
-  const csv='\uFEFF'+rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  const date=new Date().toLocaleDateString('tr-TR').replace(/\./g,'-');
-  a.download=`usev-sonuclar-${date}.csv`;a.click();
-};
-
-onValue(ref(db,'game/connections'),snap=>{
-  const conns=snap.val()||{};const ids=Object.keys(conns);
-  document.getElementById('connCount').textContent=ids.length;
-  document.getElementById('lobbyCount2').textContent=ids.length+' katılımcı';
-  document.getElementById('startBtn').disabled=ids.length===0&&!isGame;
-  const list=document.getElementById('lobbyPlayers');
-  ids.forEach(id=>{
-    if(!knownConns.has(id)){knownConns.add(id);
-      list.querySelectorAll('.lp-new').forEach(b=>b.remove());list.querySelectorAll('.lp-row').forEach(r=>r.classList.remove('newest'));
-      if(list.querySelector('.empty'))list.innerHTML='';
-      const row=document.createElement('div');row.className='lp-row newest';row.id='lp-'+id;
-      const avs=['🧑‍💻','👨‍🎓','👩‍🎓','🧑‍🏫'];const av=avs[Math.floor(Math.random()*avs.length)];
-      row.innerHTML=`<span>${av}</span><span class="lp-name">${conns[id].name||'?'}</span><span class="lp-new">YENİ</span>`;
-      list.appendChild(row);setTimeout(()=>{row.classList.remove('newest');const b=row.querySelector('.lp-new');if(b)b.remove();},3000);
+  // Init Modules
+  initGameListeners();
+  initListeners({
+    onQuestionsLoaded: () => {
+      renderCatFilterMod(renderNav, renderRound);
+      renderNav();
+      if (gameStore.filteredQuestions.length && gameStore.curRound < gameStore.filteredQuestions.length) renderRound();
+      document.getElementById('noQMsg').style.display = gameStore.questions.length ? 'none' : 'block';
+      document.getElementById('publishBtn').disabled = gameStore.filteredQuestions.length === 0;
+    },
+    onConnectionsUpdated: (conns, knownConns) => {
+      updateConnectionsList(conns, knownConns, window.kickPlayer, window.banPlayer);
+    },
+    onAnswersUpdated: (all) => {
+      updateLiveAnswers(all);
     }
   });
-  knownConns.forEach(id=>{if(!conns[id]){knownConns.delete(id);const el=document.getElementById('lp-'+id);if(el)el.remove();}});
-  if(!list.children.length)list.innerHTML='<div class="empty">Kimse katılmadı</div>';
-});
 
-function renderMusicGrid(){const g=document.getElementById('musicGrid');g.innerHTML='';MUSIC.forEach(m=>{const c=document.createElement('div');c.className='music-card'+(selMusic===m.id?' selected':'');c.id='mc-'+m.id;c.innerHTML=`<span class="music-icon">${m.icon}</span><div style="flex:1;min-width:0;"><span class="music-name">${m.name}</span><span class="music-file">${m.id}.mp3</span></div><span class="music-status" id="ms-${m.id}"></span>`;c.onclick=()=>selectMusic(m.id);g.appendChild(c);});}
-function selectMusic(id){selMusic=id;roundMusicMap[curRound]=id;document.querySelectorAll('.music-card').forEach(c=>c.classList.remove('selected'));const el=document.getElementById('mc-'+id);if(el)el.classList.add('selected');}
-window.selectNoMusic=function(){selMusic=null;roundMusicMap[curRound]=null;document.querySelectorAll('.music-card').forEach(c=>c.classList.remove('selected'));};
-window.previewMusic=function(){if(!selMusic)return;stopMusic();curAudio=new Audio(selMusic+'.mp3');curAudio.loop=true;curAudio.volume=0.5;curAudio.play().catch(()=>{});const mc=document.getElementById('mc-'+selMusic);if(mc)mc.classList.add('playing');const ms=document.getElementById('ms-'+selMusic);if(ms)ms.textContent='▶';};
-window.stopMusic=function(){if(curAudio){curAudio.pause();curAudio.currentTime=0;curAudio=null;}document.querySelectorAll('.music-card').forEach(c=>c.classList.remove('playing'));document.querySelectorAll('[id^="ms-"]').forEach(e=>e.textContent='');};
-
-function renderRound(){
-  if(!filteredQuestions.length)return;
-  const r=filteredQuestions[curRound];if(!r)return;
-  const MULT_MOD={easy:'×1',mid:'×1.5',hard:'×2',vhard:'×3'};
-  // Category badge + diff
-  const catHtml=r.category?` <span style="font-family:var(--mono);font-size:.52rem;padding:2px 6px;border-radius:3px;background:${getCatColorMod(r.category)}22;color:${getCatColorMod(r.category)};border:1px solid ${getCatColorMod(r.category)}44;">${r.category}</span>`:'';
-  document.getElementById('qDiff').innerHTML=`${DIFF[r.diff]||''} <span style="font-family:var(--display);font-size:.95rem;color:var(--accent);letter-spacing:1px;">${MULT_MOD[r.diff]||'×1'}</span>${catHtml}`;
-  const qt=document.getElementById('qTitle');qt.textContent=r.title||'';
-  const qx=document.getElementById('qText');qx.textContent=r.q||'';
-  document.getElementById('timerDisp').textContent=r.duration||60;
-  setTimeout(()=>{rk(qt);rk(qx);},100);
-  const og=document.getElementById('optsGrid');og.innerHTML='';
-  const opts=r.options||[];const cols=opts.length>4?3:2;og.style.gridTemplateColumns=`repeat(${cols},1fr)`;
-  opts.forEach((o,i)=>{
-    const bg=COLORS[i]||'#888';const sh=SHAPES[i]||String(i+1);
-    const d=document.createElement('div');d.className='opt-card';d.style.background=bg;
-    d.innerHTML=`<div class="opt-shape">${sh}</div><div class="opt-math" style="color:#fff;">${o.text||'—'}</div>${o.isCorrect?'<span class="opt-correct-tag">✓ DOĞRU</span>':''}`;
-    og.appendChild(d);setTimeout(()=>rk(d),100);
+  initShortcuts({
+    sendReactionSignal: async () => {
+      window.UsevSound?.sfx?.reaction?.();
+      const btn = document.getElementById('reactionSignalBtn');
+      if (btn) { btn.disabled = true; btn.textContent = '⚡ SİNYAL GÖNDERİLDİ!'; }
+      await fbUpdate(gameRef('currentRound'), { reactionSignalTs: Date.now(), answerOpen: true });
+      const rb = document.getElementById('revealBtn'); if (rb) rb.disabled = false;
+      const sm = document.getElementById('statusMsg'); if (sm) sm.textContent = '⚡ Sinyal verildi! Oyuncular yarışıyor...';
+    }
   });
-  const ais=document.getElementById('aiSummary');
-  if(r.aiModel){
-    ais.style.display='block';
-    const aiWrongTxt=r.aiWrong>=0&&opts[r.aiWrong]?`${SHAPES[r.aiWrong]} ${String.fromCharCode(65+r.aiWrong)} şıkkı`:'—';
-    document.getElementById('aiSummaryContent').innerHTML=`<span>Model:</span> <span>${r.aiModel} (${r.aiYear||'?'})</span> · <span>Yanlış Seçim:</span> <span>${aiWrongTxt}</span>`;
-  } else ais.style.display='none';
-  document.getElementById('previewBtn').disabled=false;
-  document.getElementById('publishBtn').disabled=false;
-  document.getElementById('revealBtn').disabled=true;
-  document.getElementById('openAnswerBtn').style.display='none';
-  document.getElementById('openAnswerBtn').disabled=true;
-  if(roundMusicMap[curRound]!==undefined){selMusic=roundMusicMap[curRound];renderMusicGrid();}
-  renderNav();
-}
 
-function setBtnsPreview(){
-  document.getElementById('previewBtn').disabled=true;
-  document.getElementById('publishBtn').disabled=true;
-  document.getElementById('openAnswerBtn').style.display='inline-flex';
-  document.getElementById('openAnswerBtn').disabled=false;
-  document.getElementById('revealBtn').disabled=true;
-}
-function setBtnsAnswering(){
-  document.getElementById('previewBtn').disabled=true;
-  document.getElementById('publishBtn').disabled=true;
-  document.getElementById('openAnswerBtn').style.display='none';
-  document.getElementById('revealBtn').disabled=false;
-}
-
-function renderNav(){
-  const nav=document.getElementById('roundNav');nav.innerHTML='';
-  filteredQuestions.forEach((r,i)=>{
-    const d=r.diff==='easy'?'🟢':r.diff==='mid'?'🟡':r.diff==='hard'?'🔴':'🟣';
-    const b=document.createElement('button');b.className='rbtn'+(i===curRound?' active':'')+(roundDone[i]?' done':'');
-    b.textContent=`${d} ${i+1}`;b.onclick=()=>{stopTimer();curRound=i;renderRound();};nav.appendChild(b);
-  });
-}
-
-function startTimer(dur){
-  timerVal=dur||60;document.getElementById('timerDisp').textContent=timerVal;
-  timerRunning=true;const el=document.getElementById('timerDisp');el.className='timer-big running';
-  document.getElementById('stopBtn').style.display='block';
-  set(ref(db,'game/timer'),{value:timerVal,running:true,ts:Date.now()});
-  timerInt=setInterval(()=>{
-    timerVal--;el.textContent=timerVal;
-    if(timerVal<=10)el.className='timer-big urgent';
-    set(ref(db,'game/timer'),{value:timerVal,running:timerVal>0,ts:Date.now()});
-    if(timerVal<=0){clearInterval(timerInt);timerRunning=false;el.className='timer-big';document.getElementById('stopBtn').style.display='none';stopMusic();}
-  },1000);
-}
-window.stopTimer=function(){clearInterval(timerInt);timerRunning=false;document.getElementById('timerDisp').className='timer-big';document.getElementById('stopBtn').style.display='none';set(ref(db,'game/timer'),{value:timerVal,running:false,ts:Date.now()});stopMusic();};
-
-// ── ÖNCE GÖSTER (Preview) ──
-window.previewRound=async function(){
-  if(!isGame||!filteredQuestions.length)return;
-  const r=filteredQuestions[curRound];const dur=r.duration||60;
-  stopTimer();stopMusic();
-  await set(ref(db,'game/currentRound'),{
-    index:curRound,title:r.title,q:r.q,options:r.options,diff:r.diff,
-    revealed:false,answerOpen:false,
-    timerStart:null,duration:dur,hint:r.hint,
-    totalRounds:filteredQuestions.length,
-    correctIndex:r.options?r.options.findIndex(o=>o.isCorrect):0,
-    aiModel:r.aiModel||'',aiYear:r.aiYear||'',aiWrong:r.aiWrong??-1,aiReason:r.aiReason||'',
-    category:r.category||'',
-    image:r.image||null,
-    qType:r.qType||'multiple',
-    numericAnswer:r.numericAnswer??null,
-    numericUnit:r.numericUnit||''
-  });
-  await remove(ref(db,'game/answers/'+curRound));
-  setBtnsPreview();
-  document.getElementById('statusMsg').textContent='📖 Önizleme modu — katılımcılar soruyu okuyor...';
-};
-
-// ── CEVAPLAMAYA BAŞLA ──
-window.openAnswering=async function(){
-  if(!isGame||!filteredQuestions.length)return;
-  const r=filteredQuestions[curRound];const dur=r.duration||60;
-  await set(ref(db,'game/currentRound/answerOpen'),true);
-  await set(ref(db,'game/currentRound/timerStart'),Date.now());
-  setBtnsAnswering();
-  document.getElementById('statusMsg').textContent=`▶ Cevaplama başladı! Soru ${curRound+1}`;
-  startTimer(dur);
-  if(selMusic){curAudio=new Audio(selMusic+'.mp3');curAudio.loop=true;curAudio.volume=0.5;curAudio.play().catch(()=>{});const mc=document.getElementById('mc-'+selMusic);if(mc)mc.classList.add('playing');const ms=document.getElementById('ms-'+selMusic);if(ms)ms.textContent='▶';}
-};
-
-window.publishRound=async function(){
-  if(!isGame||!filteredQuestions.length)return;
-  const r=filteredQuestions[curRound];const dur=r.duration||60;
-  stopTimer();stopMusic();
-  await set(ref(db,'game/currentRound'),{
-    index:curRound,title:r.title,q:r.q,options:r.options,diff:r.diff,
-    revealed:false,answerOpen:true,
-    timerStart:Date.now(),duration:dur,hint:r.hint,
-    totalRounds:filteredQuestions.length,
-    correctIndex:r.options?r.options.findIndex(o=>o.isCorrect):0,
-    aiModel:r.aiModel||'',aiYear:r.aiYear||'',aiWrong:r.aiWrong??-1,aiReason:r.aiReason||'',
-    category:r.category||'',
-    image:r.image||null,
-    qType:r.qType||'multiple',
-    numericAnswer:r.numericAnswer??null,
-    numericUnit:r.numericUnit||''
-  });
-  await remove(ref(db,'game/answers/'+curRound));
-  setBtnsAnswering();
-  document.getElementById('statusMsg').textContent=`✅ Soru ${curRound+1} yayınlandı!`;
-  startTimer(dur);
-  if(selMusic){curAudio=new Audio(selMusic+'.mp3');curAudio.loop=true;curAudio.volume=0.5;curAudio.play().catch(()=>{});const mc=document.getElementById('mc-'+selMusic);if(mc)mc.classList.add('playing');const ms=document.getElementById('ms-'+selMusic);if(ms)ms.textContent='▶';}
-};
-
-window.revealAnswer=async function(){
-  const r=filteredQuestions[curRound];stopTimer();stopMusic();
-  const correctIndex=r.options?r.options.findIndex(o=>o.isCorrect):0;
-  await update(ref(db,'game/currentRound'),{revealed:true,correctIndex,explain:r.explain,aiModel:r.aiModel||'',aiYear:r.aiYear||'',aiWrong:r.aiWrong??-1,aiReason:r.aiReason||''});
-  roundDone[curRound]=true;renderNav();
-  document.getElementById('revealBtn').disabled=true;
-  document.getElementById('openAnswerBtn').style.display='none';
-  document.getElementById('statusMsg').textContent='✅ Cevap gösterildi!';
-  const secs=parseInt(document.getElementById('autoAdvanceSel').value)||0;
-  if(secs>0&&curRound<filteredQuestions.length-1){
-    set(ref(db,'game/autoAdvance'),{active:true,seconds:secs,ts:Date.now()});
-    let rem=secs;
-    const cdEl=document.getElementById('autoAdvanceCountdown');
-    cdEl.style.display='block';cdEl.textContent=`⏩ ${rem}s`;
-    autoAdvInt=setInterval(()=>{
-      rem--;cdEl.textContent=`⏩ ${rem}s`;
-      if(rem<=0){
-        clearInterval(autoAdvInt);cdEl.style.display='none';
-        set(ref(db,'game/autoAdvance'),{active:false,seconds:0,ts:Date.now()});
-        stopTimer();curRound++;renderRound();
-        setTimeout(()=>publishRound(),200);
-      }
-    },1000);
-  }
-};
-window.nextRound=function(){
-  clearInterval(autoAdvInt);
-  document.getElementById('autoAdvanceCountdown').style.display='none';
-  set(ref(db,'game/autoAdvance'),{active:false,seconds:0,ts:Date.now()});
-  if(curRound<filteredQuestions.length-1){stopTimer();curRound++;renderRound();}
-};
-
-onValue(ref(db,'game/answers'),snap=>{
-  const all=snap.val()||{};const cur=all[curRound]||{};const entries=Object.values(cur);
-  const total=entries.length,correct=entries.filter(e=>e.correct).length;
-  document.getElementById('sCevap').textContent=total;document.getElementById('sDoğru').textContent=correct;
-  document.getElementById('sOran').textContent=total?Math.round(correct/total*100)+'%':'—';
-  const al=document.getElementById('answersLive');
-  if(!total){al.innerHTML='<div class="empty">Henüz cevap yok</div>';}
-  else{al.innerHTML='';[...entries].sort((a,b)=>b.pts-a.pts).forEach(e=>{const d=document.createElement('div');d.className='ans-row '+(e.correct?'ok':'fail');d.innerHTML=`<span class="ans-name">${e.name}</span><span class="ans-pts">${e.pts>0?'+'+e.pts:0}</span><span>${e.correct?'✅':'❌'}</span>`;al.appendChild(d);});}
-  const scores={};Object.values(all).forEach(ra=>Object.values(ra||{}).forEach(e=>{if(!scores[e.name])scores[e.name]={name:e.name,score:0,c:0,t:0};scores[e.name].t++;if(e.correct){scores[e.name].c++;scores[e.name].score+=e.pts;}}));
-  const lb=Object.values(scores).sort((a,b)=>b.score-a.score);
-  const lbEl=document.getElementById('lbList');
-  if(!lb.length){lbEl.innerHTML='<div class="empty">—</div>';return;}
-  lbEl.innerHTML='';lb.forEach((p,i)=>{const row=document.createElement('div');row.className='lb-row'+(i===0?' r1':i===1?' r2':i===2?' r3':'');row.innerHTML=`<div class="lb-rank">${i===0?'👑':i+1}</div><div class="lb-name">${p.name}</div><div class="lb-score">${p.score}</div><div class="lb-detail">${p.c}/${p.t}</div>`;lbEl.appendChild(row);});
-  // Takım skorları
-  if(teamModeActive)renderTeamScores(all);
-});
-
-renderMusicGrid();setLobby();
+  // Set Lobby Initially
+  setLobby();
+  initPinListener();
 </script>
-</body>
-</html>
+
+<!-- v2.19: Klavye Kısayol Pill -->
+<button class="shortcut-pill" onclick="document.querySelector('.shortcut-overlay').classList.toggle('visible')">⌨ Kısayollar</button>
+<div class="shortcut-overlay">
+  <div class="sc-title">⌨ KISAYOLLAR</div>
+  <div class="sc-row"><span class="sc-key">Space</span><span class="sc-lbl">Yayınla (Publish)</span></div>
+  <div class="sc-row"><span class="sc-key">A</span><span class="sc-lbl">Cevaplamayı Başlat</span></div>
+  <div class="sc-row"><span class="sc-key">R</span><span class="sc-lbl">Cevabı Göster</span></div>
+  <div class="sc-row"><span class="sc-key">S</span><span class="sc-lbl">Sinyal Gönder</span></div>
+  <div class="sc-row"><span class="sc-key">Enter</span><span class="sc-lbl">Sonraki Soru</span></div>
+  <div class="sc-row"><span class="sc-key">Esc / H</span><span class="sc-lbl">Aç / Kapat</span></div>
+  <div style="margin-top:9px;font-family:var(--mono);font-size:.52rem;color:var(--muted);">Input alanı odaklıyken devre dışı</div>
+</div>
+
+

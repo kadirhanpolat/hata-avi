@@ -1,0 +1,78 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "config": {
+      "orgs": {
+        ".read": "auth != null",
+        ".write": "auth != null && root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin'"
+      },
+      "moderators": {
+        "$moderatorId": {
+          ".read": "auth != null && (root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin' || root.child('config/moderatorsByUid').child(auth.uid).val() === $moderatorId)",
+          ".write": "auth != null && root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin'"
+        }
+      },
+      "moderatorsByUid": {
+        "$uid": {
+          ".read": "auth != null && (auth.uid === $uid || root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin')",
+          ".write": "auth != null && root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin'"
+        }
+      }
+    },
+    "orgs": {
+      "$orgId": {
+        ".read": "auth != null && (root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin' || root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('orgIds').child($orgId).exists() || root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('orgIds').child('*').exists())",
+        ".write": "auth != null && (root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin' || root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('orgIds').child($orgId).exists() || root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('orgIds').child('*').exists())"
+      }
+    },
+    "rooms": {
+      "$roomId": {
+        "game": {
+          ".read": true,
+          "pin": {
+            ".write": "auth != null"
+          },
+          "phase": {
+            ".write": "auth != null"
+          },
+          "currentRound": {
+            ".write": "auth != null"
+          },
+          "timer": {
+            ".write": "auth != null"
+          },
+          "teamMode": {
+            ".write": "auth != null"
+          },
+          "connections": {
+            "$connectionId": {
+              ".write": true,
+              ".validate": "newData.hasChildren(['name','joinedAt'])"
+            }
+          },
+          "answers": {
+            "$roundId": {
+              "$playerKey": {
+                ".write": true,
+                ".validate": "newData.hasChildren(['name'])"
+              }
+            }
+          },
+          "reactions": {
+            "$reactionId": {
+              ".write": true,
+              ".validate": "newData.hasChildren(['emoji','ts'])"
+            }
+          },
+          "podium": {
+            ".write": "auth != null"
+          },
+          "soundConfig": {
+            ".write": "auth != null"
+          }
+        }
+      }
+    }
+  }
+}

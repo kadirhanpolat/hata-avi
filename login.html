@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Usev — Giriş</title>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f5c518">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Usev">
+<link rel="apple-touch-icon" href="icon-apple.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
 :root{--bg:#0d0d0d;--surface:#141414;--card:#1a1a1a;--border:#2a2a2a;--accent:#f5c518;--accent2:#e84040;--accent3:#3dd68c;--text:#f0f0f0;--muted:#666;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;}
@@ -40,6 +49,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .hint{font-family:var(--mono);font-size:.58rem;color:var(--border);text-align:center;margin-top:20px;line-height:1.8;}
 .hint span{color:var(--muted);}
 </style>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
+}
+</script>
 </head>
 <body>
 
@@ -74,122 +90,75 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   </div>
 
   <div class="card">
-    <div class="card-title">MODERATÖRGİRİŞİ</div>
+    <div class="card-title">MODERATÖR GİRİŞİ</div>
     <div class="card-sub">Etkinliği yönetmek için giriş yapın.</div>
 
     <div class="field">
-      <label class="field-label">Kullanıcı Adı</label>
-      <input class="inp" id="username" type="text" placeholder="admin" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('password').focus()">
+      <label class="field-label">Kullanıcı Adı veya E-posta</label>
+      <input class="inp" id="username" type="text" placeholder="admin veya admin@example.com" autocomplete="username">
     </div>
 
     <div class="field">
       <label class="field-label">Parola</label>
-      <input class="inp" id="password" type="password" placeholder="••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <input class="inp" id="password" type="password" placeholder="••••••" autocomplete="current-password">
     </div>
 
     <div class="error-msg" id="errMsg"></div>
-    <button class="btn-login" id="loginBtn" onclick="doLogin()">GİRİŞ YAP →</button>
+    <button class="btn-login" id="loginBtn">GİRİŞ YAP →</button>
     <div class="spinner" id="spinner">Doğrulanıyor...</div>
   </div>
 
   <div class="hint">
-    Varsayılan: <span>admin</span> / <span>nimda</span><br>
-    Parolayı moderatör panelinden değiştirebilirsiniz.
+    Geçiş modu: e-posta ile Firebase Auth, kullanıcı adı ile eski sistem.<br>
+    Varsayılan eski hesap: <span>admin</span> / <span>nimda</span>
   </div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { auth } from "./js/core/firebase.js";
+  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { roomUrl } from "./js/core/paths.js";
+  import { ensureDefaults, doLogin } from "./js/auth/login.js";
 
-const FC={apiKey:"AIzaSyAPbvuN7IA6e78-fym8nF6m5gW1fUPf7lw",authDomain:"hata-avi.firebaseapp.com",databaseURL:"https://hata-avi-default-rtdb.europe-west1.firebasedatabase.app",projectId:"hata-avi",storageBucket:"hata-avi.firebasestorage.app",messagingSenderId:"725079545594",appId:"1:725079545594:web:040eb5d99bf55567a81b43"};
-const app=initializeApp(FC);
-const db=getDatabase(app);
+  ensureDefaults();
 
-// SHA-256 hash
-async function sha256(str){
-  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-
-// Default admin credentials
-const DEFAULT_USER='admin';
-const DEFAULT_PASS_HASH=await sha256('nimda');
-
-// Initialize: admin hesabı yoksa oluştur
-async function ensureDefaults(){
-  const snap=await get(ref(db,'config/moderators'));
-  if(!snap.val()){
-    const adminKey='admin';
-    await set(ref(db,`config/moderators/${adminKey}`),{
-      username:DEFAULT_USER,
-      passwordHash:DEFAULT_PASS_HASH,
-      role:'admin',
-      createdAt:Date.now(),
-    });
-  }
-}
-ensureDefaults();
-
-// Zaten giriş yaptıysa yönlendir
-if(sessionStorage.getItem('modAuth')==='1'){
-  window.location.href='moderator.html';
-}
-
-window.doLogin=async function(){
-  const user=document.getElementById('username').value.trim();
-  const pass=document.getElementById('password').value;
-  const errEl=document.getElementById('errMsg');
-  const btn=document.getElementById('loginBtn');
-  const spinner=document.getElementById('spinner');
-
-  if(!user||!pass){errEl.textContent='Kullanıcı adı ve parola zorunlu.';return;}
-  errEl.textContent='';btn.disabled=true;spinner.style.display='block';
-
-  try{
-    const hash=await sha256(pass);
-    // Tüm moderatörleri tara
-    const snap=await get(ref(db,'config/moderators'));
-    const mods=snap.val()||{};
-    let matched=null;
-
-    // Önce yeni çok-hesaplı yapıda ara
-    Object.values(mods).forEach(m=>{
-      if(m.username===user&&m.passwordHash===hash)matched=m;
-    });
-
-    // Eski tek-hesaplı yapıda ara (geriye dönük uyumluluk)
-    if(!matched){
-      const oldSnap=await get(ref(db,'config/adminAuth'));
-      const old=oldSnap.val();
-      if(old&&old.username===user&&old.passwordHash===hash){
-        matched={username:user,role:'admin'};
-      }
-    }
-
-    // Hiç config yoksa default'u kabul et
-    if(!matched&&Object.keys(mods).length===0){
-      if(user===DEFAULT_USER&&hash===DEFAULT_PASS_HASH){
-        matched={username:user,role:'admin'};
-      }
-    }
-
-    if(matched){
-      sessionStorage.setItem('modAuth','1');
-      sessionStorage.setItem('modUser',matched.username);
-      sessionStorage.setItem('modRole',matched.role||'moderator');
-      window.location.href='moderator.html';
+  // Redirect if already logged in
+  if (sessionStorage.getItem('modAuth') === '1') {
+    if (sessionStorage.getItem('modAuthProvider') === 'firebase') {
+      onAuthStateChanged(auth, async (user) => {
+        const expectedUid = sessionStorage.getItem('modAuthUid');
+        if (user && (!expectedUid || user.uid === expectedUid)) {
+          window.location.href = roomUrl('moderator.html');
+        } else {
+          sessionStorage.clear();
+          await signOut(auth).catch(() => {});
+        }
+      });
     } else {
-      errEl.textContent='❌ Kullanıcı adı veya parola hatalı.';
-      document.getElementById('password').classList.add('error');
-      setTimeout(()=>document.getElementById('password').classList.remove('error'),1500);
+      window.location.href = roomUrl('moderator.html');
     }
-  }catch(e){
-    errEl.textContent='Bağlantı hatası. Tekrar deneyin.';
-    console.error(e);
   }
-  btn.disabled=false;spinner.style.display='none';
-};
+
+  // Bind event listeners directly
+  const loginBtn = document.getElementById('loginBtn');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', doLogin);
+  }
+  
+  const pwInput = document.getElementById('password');
+  if (pwInput) {
+    pwInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doLogin();
+    });
+  }
+  const usrInput = document.getElementById('username');
+  if (usrInput) {
+    usrInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') pwInput.focus();
+    });
+  }
 </script>
+
 </body>
 </html>
+

@@ -1,0 +1,48 @@
+{
+  "name": "Usev — Düşün, yarış, kazan.",
+  "short_name": "Usev",
+  "description": "Gerçek zamanlı canlı yarışma platformu",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070709",
+  "theme_color": "#f5c518",
+  "lang": "tr",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-apple.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Yarışmaya Katıl",
+      "short_name": "Katıl",
+      "description": "Bir yarışmaya katılın",
+      "url": "./index.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Moderatör Paneli",
+      "short_name": "Moderatör",
+      "description": "Yarışmayı yönetin",
+      "url": "./login.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "categories": ["education", "games", "entertainment"]
+}
