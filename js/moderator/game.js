@@ -605,7 +605,7 @@ export async function sendReactionSignal() {
   const rb = document.getElementById('revealBtn');
   if (rb) rb.disabled = false;
   const sm = document.getElementById('statusMsg');
-  if (sm) sm.textContent = 'âš¡ Sinyal verildi! Oyuncular yarÃ„Â±Ã…ÅŸÃ„Â±yor...';
+  if (sm) sm.textContent = 'âš¡ Sinyal verildi! Oyuncular yarÃ„Â±Ã…şÃ„Â±yor...';
 }
 
 /**
@@ -655,7 +655,7 @@ export async function saveTeams() {
   await fbUpdate(gameRef('teamMode'), { teams });
   const status = document.getElementById('teamSaveStatus');
   if (status) {
-    status.textContent = 'âœ… Kaydedildi!';
+    status.textContent = '✅ Kaydedildi!';
     setTimeout(() => status.textContent = '', 2000);
   }
 }

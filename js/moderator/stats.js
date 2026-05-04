@@ -139,7 +139,7 @@ export function updateLiveAnswers(all) {
     [...entries].sort((a, b) => b.pts - a.pts).forEach(e => {
       const d = document.createElement('div');
       d.className = 'ans-row ' + (e.correct ? 'ok' : 'fail');
-      const hintIcon = e.hintUsed ? '<span title="İpucu kullandı (−5 PT)" style="font-size:.75rem;margin-right:2px;">ğŸ’¡</span>' : '';
+      const hintIcon = e.hintUsed ? '<span title="İpucu kullandı (−5 PT)" style="font-size:.75rem;margin-right:2px;">💡</span>' : '';
       d.innerHTML = `<span class="ans-name">${hintIcon}${e.name}</span><span class="ans-pts">${e.pts > 0 ? '+' + e.pts : 0}</span><span>${e.correct ? '✅' : 'â Œ'}</span>`;
       al.appendChild(d);
     });

@@ -12,27 +12,19 @@ async function getAdminHash() {
 }
 
 export async function ensureDefaults() {
-  const snap = await fbGet(ref(db, 'config/moderators'));
-  if (!snap.val()) {
-    const adminKey = 'admin';
-    const hash = await getAdminHash();
-    await fbSet(ref(db, `config/moderators/${adminKey}`), {
-      username: DEFAULT_USER,
-      passwordHash: hash,
-      role: 'admin',
-      orgIds: { '*': true },
-      createdAt: Date.now(),
-    });
-  }
-  const orgSnap = await fbGet(ref(db, 'config/orgs/main'));
-  if (!orgSnap.val()) {
-    await fbSet(ref(db, 'config/orgs/main'), {
-      id: 'main',
-      name: 'Ana Organizasyon',
-      status: 'active',
-      createdAt: Date.now(),
-      createdBy: 'system'
-    });
+  try {
+    const orgSnap = await fbGet(ref(db, 'config/orgs/main'));
+    if (!orgSnap.val()) {
+      await fbSet(ref(db, 'config/orgs/main'), {
+        id: 'main',
+        name: 'Ana Organizasyon',
+        status: 'active',
+        createdAt: Date.now(),
+        createdBy: 'system'
+      });
+    }
+  } catch (e) {
+    console.log("Database rules active, ensureDefaults skipped.");
   }
 }
 

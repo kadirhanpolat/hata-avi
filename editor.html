@@ -321,8 +321,8 @@ if('serviceWorker' in navigator){
   </div>
   <div class="hactions">
     <span id="syncStatus" style="font-family:var(--mono);font-size:.6rem;color:var(--muted);"></span>
-    <button class="btn btn-ghost btn-sm" onclick="openCsvImport()">ğŸ“¥ CSV AKTAR</button>
-    <button class="btn btn-ghost btn-sm" onclick="downloadTemplate()">â¬‡ ÅABLON İNDİR</button>
+    <button class="btn btn-ghost btn-sm" onclick="openCsvImport()">📥 CSV AKTAR</button>
+    <button class="btn btn-ghost btn-sm" onclick="downloadTemplate()">⬇ ÅABLON İNDİR</button>
     <button class="btn btn-ghost btn-sm" onclick="goRoom('moderator.html')">â† MODERATÖR</button>
     <div class="ai-settings-btn" onclick="openSoundSettings()" title="Ses Ayarları" style="margin-right:5px;">ğŸµ</div>
     <div class="ai-settings-btn" onclick="openAiSettings()" title="YZ Ayarları">âš™ï¸</div>
@@ -368,7 +368,7 @@ if('serviceWorker' in navigator){
       </div>
       <div style="padding:8px;border-top:1px solid var(--border);">
         <label class="set-import-btn" style="cursor:pointer; display:block; margin-bottom:6px;">
-          ğŸ“¥ JSON'dan İçe Aktar
+          📥 JSON'dan İçe Aktar
           <input type="file" accept=".json" id="setImportInput" style="display:none;" onchange="importSetJson(event)">
         </label>
         <button class="set-import-btn" style="width:100%;" onclick="openCloudImport()">â˜ï¸ Kod ile İçe Aktar</button>
@@ -597,7 +597,7 @@ if('serviceWorker' in navigator){
       </div>
 
       <div class="save-bar">
-        <button class="btn btn-primary" onclick="saveQuestion()">ğŸ’¾ KAYDET</button>
+        <button class="btn btn-primary" onclick="saveQuestion()">💾 KAYDET</button>
         <button class="btn btn-ghost" onclick="saveAsDraft()" title="Yerel taslak olarak kaydet (Çevrimdışı için)">ğŸ“ TASLAK</button>
         <button class="btn btn-danger btn-sm" onclick="confirmDelete()">ğŸ—‘ SİL</button>
         <span class="save-status" id="saveStatus"></span>
@@ -656,7 +656,7 @@ if('serviceWorker' in navigator){
 <!-- SET OLUÅTUR / DÜZENLE OVERLAY -->
 <div class="overlay" id="setOverlay">
   <div class="set-ov-box">
-    <div class="set-ov-title" id="setOvTitle">ğŸ“¦ YENİ SET OLUÅTUR</div>
+    <div class="set-ov-title" id="setOvTitle">📦 YENİ SET OLUÅTUR</div>
     <div class="fg">
       <div class="flbl">Set Adı <span class="freq">*</span></div>
       <input class="inp" id="setNameInp" placeholder="Örn: YZ Soruları, Matematik Finals..." maxlength="60">
@@ -667,7 +667,7 @@ if('serviceWorker' in navigator){
     <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-bottom:14px;" id="setSelCount">0 soru seçildi</div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
       <button class="btn btn-ghost" onclick="closeSetOverlay()">İPTAL</button>
-      <button class="btn btn-primary" onclick="saveSet()" id="saveSetBtn">ğŸ’¾ KAYDET</button>
+      <button class="btn btn-primary" onclick="saveSet()" id="saveSetBtn">💾 KAYDET</button>
     </div>
   </div>
 </div>
@@ -693,11 +693,11 @@ if('serviceWorker' in navigator){
 
 <div class="overlay" id="csvOverlay">
   <div class="ov-box" style="max-width:500px;">
-    <div class="ov-icon">ğŸ“¥</div>
+    <div class="ov-icon">📥</div>
     <div class="ov-title">CSV AKTAR</div>
     <div class="ov-msg">Åablona uygun CSV dosyasını sürükleyin veya seçin.</div>
     <div class="csv-zone" id="csvZone" onclick="document.getElementById('csvFileInput').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleCsvDrop(event)">
-      <div class="csv-zone-txt">ğŸ“„ CSV dosyasını buraya sürükleyin<br>veya tıklayarak seçin<br><br><span style="color:var(--border);">Desteklenen: UTF-8 CSV</span></div>
+      <div class="csv-zone-txt">📄 CSV dosyasını buraya sürükleyin<br>veya tıklayarak seçin<br><br><span style="color:var(--border);">Desteklenen: UTF-8 CSV</span></div>
     </div>
     <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="handleCsvFile(this.files[0])">
     <div id="csvStatus" style="font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-top:10px;min-height:18px;text-align:center;"></div>
@@ -1218,7 +1218,7 @@ window.handleImgFile=function(file){
     }
     curImage={type:'base64',data:b64};
     showImgPreview(b64);
-    document.getElementById('imgSizeInfo').textContent=`ğŸ“¦ ${sizeKB}KB`;
+    document.getElementById('imgSizeInfo').textContent=`📦 ${sizeKB}KB`;
     onFC();
   };
   reader.readAsDataURL(file);
@@ -1577,8 +1577,8 @@ function renderSetsList() {
         <button class="set-btn${isActive?' active':''}" onclick="toggleLoadSet('${s.id}')">${isActive?'✓ AKTİF':'â–¶ YÜKLE'}</button>
         <button class="set-btn" onclick="editSet('${s.id}')">âœï¸ DÜZENLE</button>
         <button class="set-btn" onclick="uploadSetCloud('${s.id}')">â˜ï¸ BULUTA YÜKLE</button>
-        <button class="set-btn" onclick="exportSetJson('${s.id}')">â¬‡ JSON</button>
-        <button class="set-btn" onclick="exportSetCsv('${s.id}')">â¬‡ CSV</button>
+        <button class="set-btn" onclick="exportSetJson('${s.id}')">⬇ JSON</button>
+        <button class="set-btn" onclick="exportSetCsv('${s.id}')">⬇ CSV</button>
         <button class="set-btn danger" onclick="deleteSet('${s.id}')">ğŸ—‘ SİL</button>
       </div>`;
     el.appendChild(d);
@@ -1598,7 +1598,7 @@ window.toggleLoadSet = function(id) {
     const ids = new Set(s.questionIds || []);
     // Filter qList to only set questions
     activeCatFilter = '__set__';
-    document.getElementById('activeSetBadge').textContent = 'ğŸ“¦ ' + s.name;
+    document.getElementById('activeSetBadge').textContent = '📦 ' + s.name;
     document.getElementById('activeSetBadge').style.display = 'inline-block';
     renderList();
     showToast('â–¶ ' + s.name + ' yüklendi (' + ids.size + ' soru)');
@@ -1659,7 +1659,7 @@ window.renderList = function() {
 window.openCreateSet = function() {
   editingSetId = null;
   setSelChecked = new Set();
-  document.getElementById('setOvTitle').textContent = 'ğŸ“¦ YENİ SET OLUÅTUR';
+  document.getElementById('setOvTitle').textContent = '📦 YENİ SET OLUÅTUR';
   document.getElementById('setNameInp').value = '';
   renderSetQList();
   document.getElementById('setOverlay').classList.add('visible');
@@ -1928,7 +1928,7 @@ window.handleCsvFile=function(file){
   reader.onload=e=>{
     try{
       const rows=parseCsv(e.target.result);
-      if(rows.length<2){document.getElementById('csvStatus').textContent='âš ï¸ Geçerli veri bulunamadı.';return;}
+      if(rows.length<2){document.getElementById('csvStatus').textContent='⚠️ Geçerli veri bulunamadı.';return;}
       const headers=rows[0].map(h=>h.trim().toLowerCase().replace(/[^a-z0-9_]/g,''));
       let imported=0;
       const promises=rows.slice(1).map((row,ri)=>{
@@ -1942,7 +1942,7 @@ window.handleCsvFile=function(file){
         const getAny=(...hs)=>{for(const h of hs){const v=get(h);if(v)return v;}return '';}
         const optRaw=get('secenekler')||'';
         const opts=optRaw.split(/\|\|/).map(t=>t.trim()).filter(t=>t.length>0).map(t=>({text:t,isCorrect:false}));
-        if(opts.length<2){document.getElementById('csvStatus').textContent=`âš ï¸ Satır ${ri+2}: Åıklar || ile ayrılmalı.`;return Promise.resolve();}
+        if(opts.length<2){document.getElementById('csvStatus').textContent=`⚠️ Satır ${ri+2}: Åıklar || ile ayrılmalı.`;return Promise.resolve();}
         const correctIdx=parseInt(get('dogru_index'));
         if(!isNaN(correctIdx)&&opts[correctIdx])opts[correctIdx].isCorrect=true;
         const aiWrongIdx=parseInt(get('yz_yanlis_index'));
@@ -2000,7 +2000,7 @@ window.downloadTemplate=function(){
   ];
   const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hata_avi_soru_sablonu.csv';a.click();
-  showToast('ğŸ“„ Åablon indirildi!');
+  showToast('📄 Åablon indirildi!');
 };
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('visible');setTimeout(()=>t.classList.remove('visible'),2500);}
@@ -2275,7 +2275,7 @@ document.body.insertAdjacentHTML('beforeend', `
     </div>
 
     <div style="display:flex;justify-content:center;gap:10px;margin-top:20px;">
-      <button class="btn btn-primary" onclick="saveSoundConfig()">ğŸ’¾ KAYDET</button>
+      <button class="btn btn-primary" onclick="saveSoundConfig()">💾 KAYDET</button>
       <button class="btn btn-ghost" onclick="closeSoundSettings()">İPTAL</button>
     </div>
   </div>

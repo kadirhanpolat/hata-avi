@@ -116,9 +116,9 @@ export async function loadAccList(modUser) {
     
     let authStatusHtml = '';
     if (m.authUid) {
-      authStatusHtml = '<span class="role-badge" style="background:rgba(61,214,140,.1);color:var(--accent3);border:1px solid rgba(61,214,140,.3);font-size:.45rem;">âœ… LINKED</span>';
+      authStatusHtml = '<span class="role-badge" style="background:rgba(61,214,140,.1);color:var(--accent3);border:1px solid rgba(61,214,140,.3);font-size:.45rem;">✅ LINKED</span>';
     } else if (m.email) {
-      authStatusHtml = '<span class="role-badge" style="background:rgba(245,197,24,.1);color:var(--accent);border:1px solid rgba(245,197,24,.3);font-size:.45rem;">âš ï¸  WAITING AUTH</span>';
+      authStatusHtml = '<span class="role-badge" style="background:rgba(245,197,24,.1);color:var(--accent);border:1px solid rgba(245,197,24,.3);font-size:.45rem;">⚠️ WAITING AUTH</span>';
     } else {
       authStatusHtml = '<span class="role-badge" style="background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border);font-size:.45rem;">LEGACY</span>';
     }
@@ -131,13 +131,13 @@ export async function loadAccList(modUser) {
           ${authStatusHtml}
         </div>
         <div class="acc-meta">
-          ${m.email ? `<span style="color:var(--accent);cursor:pointer;" onclick="navigator.clipboard.writeText('${m.email}');alert('Kopyalandı: ${m.email}')" title="Kopyalamak için tıklayın">${m.email} ğŸ“‹</span> Â· ` : ''}
+          ${m.email ? `<span style="color:var(--accent);cursor:pointer;" onclick="navigator.clipboard.writeText('${m.email}');alert('Kopyalandı: ${m.email}')" title="Kopyalamak için tıklayın">${m.email} 📋</span> Â· ` : ''}
           Org: ${orgLabel} Â· ${since}
         </div>
       </div>
       <span class="role-badge ${roleCls}">${roleLabel}</span>
       <div class="acc-actions">
-        <button class="btn btn-ghost btn-sm" onclick="toggleResetForm('${key}')" style="font-size:.6rem;padding:4px 8px;" title="Parola Sıfırla">ğŸ”‘</button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleResetForm('${key}')" style="font-size:.6rem;padding:4px 8px;" title="Parola Sıfırla">🔑</button>
         ${!isYou ? `<button class="btn btn-danger btn-sm" onclick="deleteAccount('${key}','${m.username}')" style="font-size:.6rem;padding:4px 8px;">✕</button>` : ''}
       </div>`;
       

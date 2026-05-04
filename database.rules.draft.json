@@ -8,6 +8,7 @@
         ".write": "auth != null && root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin'"
       },
       "moderators": {
+        ".read": "auth != null",
         "$moderatorId": {
           ".read": "auth != null && (root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin' || root.child('config/moderatorsByUid').child(auth.uid).val() === $moderatorId)",
           ".write": "auth != null && root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin'"
