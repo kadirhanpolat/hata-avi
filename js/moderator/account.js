@@ -139,10 +139,9 @@ export async function loadAccList(modUser) {
       <div class="acc-actions">
         <button class="btn btn-ghost btn-sm" onclick="toggleResetForm('${key}')" style="font-size:.6rem;padding:4px 8px;" title="Parola Sıfırla">ğŸ”‘</button>
         ${!isYou ? `<button class="btn btn-danger btn-sm" onclick="deleteAccount('${key}','${m.username}')" style="font-size:.6rem;padding:4px 8px;">✕</button>` : ''}
-      </div>\`;
+      </div>`;
       
     const resetDiv = document.createElement('div');
-    // ... (rest of function unchanged)
     resetDiv.className = 'reset-form';
     resetDiv.id = `reset-${key}`;
     resetDiv.innerHTML = `
