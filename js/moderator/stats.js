@@ -82,11 +82,11 @@ export function updateLiveAnswers(all) {
   const sOran = document.getElementById('sOran');
 
   if (isPoll) {
-    if (sDogru) sDogru.textContent = '—';
-    if (sOran) sOran.textContent = '—';
+    if (sDogru) sDogru.textContent = '-';
+    if (sOran) sOran.textContent = '-';
   } else {
     if (sDogru) sDogru.textContent = correct;
-    if (sOran) sOran.textContent = total ? Math.round(correct / total * 100) + '%' : '—';
+    if (sOran) sOran.textContent = total ? Math.round(correct / total * 100) + '%' : '-';
   }
 
   const rate = total ? Math.round(correct / total * 100) : 0;
@@ -113,8 +113,8 @@ export function updateLiveAnswers(all) {
       const approved = e.approved;
       const d = document.createElement('div');
       d.className = 'ans-row ans-open-row ' + (approved === true ? 'ok' : approved === false ? 'fail' : 'pending');
-      const statusIcon = approved === true ? '✅' : approved === false ? 'â Œ' : '⌛';
-      d.innerHTML = `<div class="ans-open-ctrl"><span class="ans-name" style="font-weight:600;">${statusIcon} ${e.name}</span><span class="ans-pts" style="margin-left:auto;">${approved === true ? (e.pts > 0 ? '+' + e.pts + ' PT' : '0 PT') : '—'}</span></div><div class="ans-open-text">${e.textAnswer || '(boş)'}</div><div class="ans-open-ctrl" style="gap:5px;"><button class="oe-approve" onclick="approveAnswer('${key}',${gameStore.curRound})">✅ Onayla</button><button class="oe-reject" onclick="rejectAnswer('${key}',${gameStore.curRound})">â Œ Reddet</button><span class="oe-pts-lbl">Puan:</span><input class="oe-pts-inp" id="pts-${key}" type="number" placeholder="${maxPts}" min="0" max="${maxPts}" value="${e.approved === true && e.pts != null ? e.pts : maxPts}"></div>`;
+      const statusIcon = approved === true ? '✅' : approved === false ? '❌' : '⌛';
+      d.innerHTML = `<div class="ans-open-ctrl"><span class="ans-name" style="font-weight:600;">${statusIcon} ${e.name}</span><span class="ans-pts" style="margin-left:auto;">${approved === true ? (e.pts > 0 ? '+' + e.pts + ' PT' : '0 PT') : '-'}</span></div><div class="ans-open-text">${e.textAnswer || '(boş)'}</div><div class="ans-open-ctrl" style="gap:5px;"><button class="oe-approve" onclick="approveAnswer('${key}',${gameStore.curRound})">✅ Onayla</button><button class="oe-reject" onclick="rejectAnswer('${key}',${gameStore.curRound})">❌ Reddet</button><span class="oe-pts-lbl">Puan:</span><input class="oe-pts-inp" id="pts-${key}" type="number" placeholder="${maxPts}" min="0" max="${maxPts}" value="${e.approved === true && e.pts != null ? e.pts : maxPts}"></div>`;
       al.appendChild(d);
     });
   } else if ((curQ && curQ.qType) === 'reaction') {
@@ -140,7 +140,7 @@ export function updateLiveAnswers(all) {
       const d = document.createElement('div');
       d.className = 'ans-row ' + (e.correct ? 'ok' : 'fail');
       const hintIcon = e.hintUsed ? '<span title="İpucu kullandı (−5 PT)" style="font-size:.75rem;margin-right:2px;">💡</span>' : '';
-      d.innerHTML = `<span class="ans-name">${hintIcon}${e.name}</span><span class="ans-pts">${e.pts > 0 ? '+' + e.pts : 0}</span><span>${e.correct ? '✅' : 'â Œ'}</span>`;
+      d.innerHTML = `<span class="ans-name">${hintIcon}${e.name}</span><span class="ans-pts">${e.pts > 0 ? '+' + e.pts : 0}</span><span>${e.correct ? '✅' : '❌'}</span>`;
       al.appendChild(d);
     });
   }

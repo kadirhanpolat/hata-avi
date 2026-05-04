@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Usev — Moderatör</title>
+<title>Usev - Moderatör</title>
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#f5c518">
@@ -59,6 +59,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .hdr-timer.running{border-color:var(--accent3);background:rgba(61,214,140,.07);color:var(--accent3);}
 .hdr-timer.urgent{border-color:var(--accent2);background:rgba(232,64,64,.12);color:var(--accent2);animation:htp .45s infinite alternate;}
 @keyframes htp{from{transform:scale(1);}to{transform:scale(1.05);}}
+
+.header-conn{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;}
 .conn-badge{
   display:flex;align-items:center;gap:5px;
   font-family:var(--mono);font-size:.62rem;
@@ -68,18 +70,34 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 }
 .dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);animation:blink 1.5s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.15;}}
+
 .user-badge{
   font-family:var(--mono);font-size:.62rem;padding:4px 10px;border-radius:20px;
   background:rgba(245,197,24,.07);border:1px solid rgba(245,197,24,.18);
   color:var(--accent);cursor:pointer;flex-shrink:0;transition:background .15s;
+  white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis;
 }
 .user-badge:hover{background:rgba(245,197,24,.14);}
+
 .hdr-btn{
   font-family:var(--mono);font-size:.6rem;padding:5px 11px;
   border:1px solid var(--border);background:var(--card);color:var(--muted);
   border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap;
+  display:flex;align-items:center;gap:4px;
 }
 .hdr-btn:hover{border-color:var(--accent);color:var(--accent);}
+.hdr-btn span{display:inline;}
+
+@media (max-width: 1100px) {
+  .hdr-btn span { display: none; }
+  .user-badge { max-width: 80px; }
+  .header-logo span { display: none; }
+}
+@media (max-width: 850px) {
+  .mode-selector { transform: scale(0.85); }
+  .header-conn { gap: 4px; }
+  .hdr-btn { padding: 5px 8px; }
+}
 
 /* Phase actions bar */
 .phase-bar{
@@ -198,16 +216,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
         <button class="mode-btn" data-mode="turbo" onclick="setGameMode('turbo')">🚀 TURBO</button>
       </div>
     </div>
-    <div class="header-conn" style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;">
+    <div class="header-conn">
       <div class="phase-pill lobby" id="phaseVal" style="font-size:0.8rem;padding:3px 10px;">LOBİ</div>
       <div class="hdr-timer" id="timerDisp" style="font-size:1.2rem;min-width:50px;">--</div>
       <div class="hdr-divider"></div>
       <div class="conn-badge" style="white-space:nowrap;"><div class="dot"></div><span id="connCount">0</span></div>
-      <span class="user-badge" id="userBadge" onclick="openChangePw()" style="white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis;">👤 admin</span>
-      <button class="hdr-btn" onclick="goRoom('editor.html')">📝 Editör</button>
-      <button class="hdr-btn" onclick="goRoom('istatistik.html')">📊 İstatistik</button>
-      <button class="hdr-btn" id="accMgmtBtn" onclick="openAccMgmt()" style="display:none;">👥 Hesaplar</button>
-      <button class="hdr-btn" onclick="doLogout()">Çıkış</button>
+      <span class="user-badge" id="userBadge" onclick="openChangePw()">👤 admin</span>
+      <button class="hdr-btn" onclick="goRoom('editor.html')">📝 <span>Editör</span></button>
+      <button class="hdr-btn" onclick="goRoom('istatistik.html')">📊 <span>İstatistik</span></button>
+      <button class="hdr-btn" id="accMgmtBtn" onclick="openAccMgmt()" style="display:none;">👥 <span>Hesaplar</span></button>
+      <button class="hdr-btn" onclick="doLogout()">🚪 <span>Çıkış</span></button>
     </div>
   </div>
 </div>
@@ -224,7 +242,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
     <div>
       <div class="slbl">🔑 Giriş Parolası</div>
       <div class="pin-card">
-        <div class="pin-val" id="pinDisplay">——</div>
+        <div class="pin-val" id="pinDisplay">--</div>
         <div class="pin-actions">
           <button class="btn btn-primary btn-sm" onclick="generatePin()" style="flex:1;">🎲 Yeni</button>
           <button class="btn btn-ghost btn-sm" onclick="clearPin()" style="flex:1;">🗑️ Sil</button>
@@ -254,7 +272,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
     </div>
     <div class="qcard">
       <div class="qcard-top">
-        <div class="qtitle" id="qTitle">—</div>
+        <div class="qtitle" id="qTitle">-</div>
         <div class="qtext" id="qText">Soru seçin.</div>
       </div>
       <div class="qcard-body">
@@ -293,7 +311,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   document.getElementById('userBadge').textContent = `👤 ${modUser}${isAdmin ? ' ⭐' : ''}`;
   if (isAdmin) document.getElementById('accMgmtBtn').style.display = 'block';
 
-  // Connection Status Check
   onValue(ref(db, '.info/connected'), (snap) => {
     const sm = document.getElementById('statusMsg');
     if (snap.val() === true) {

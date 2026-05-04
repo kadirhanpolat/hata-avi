@@ -58,7 +58,7 @@ async function loadAccList() {
     
     const roleCls = m.role === 'admin' ? 'role-admin' : 'role-mod';
     const roleLabel = m.role === 'admin' ? 'Admin' : 'Moderatör';
-    const since = m.createdAt ? new Date(m.createdAt).toLocaleDateString('tr-TR') : '—';
+    const since = m.createdAt ? new Date(m.createdAt).toLocaleDateString('tr-TR') : '-';
     
     let authStatusHtml = '';
     if (m.authUid) {

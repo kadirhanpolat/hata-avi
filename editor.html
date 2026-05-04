@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Usev — Soru Editörü</title>
+<title>Usev - Soru Editörü</title>
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#f5c518">
@@ -343,7 +343,7 @@ if('serviceWorker' in navigator){
       <div class="panel-hdr" style="border-top:none;">
         <span id="qCount" style="font-family:var(--mono);font-size:.63rem;color:var(--muted);">0 soru</span>
         <div style="display:flex;gap:8px;align-items:center;">
-          <button class="btn btn-purple btn-sm" onclick="openAiGen()" title="YZ ile Soru Üret">ğŸª„ ÜRET</button>
+          <button class="btn btn-purple btn-sm" onclick="openAiGen()" title="YZ ile Soru Üret">🪄 ÜRET</button>
           <span id="activeSetBadge" style="display:none;font-family:var(--mono);font-size:.55rem;padding:2px 7px;border-radius:10px;background:rgba(245,197,24,.12);color:var(--accent);border:1px solid rgba(245,197,24,.3);">SET AKTİF</span>
         </div>
       </div>
@@ -393,7 +393,7 @@ if('serviceWorker' in navigator){
       <!-- Title -->
       <div class="fg">
         <div class="flbl">Soru Başlığı <span class="freq">*</span></div>
-        <input class="inp" id="fTitle" placeholder="Örn: â­ Türev — GPT-4 Hatası" oninput="onFC()">
+        <input class="inp" id="fTitle" placeholder="Örn: â­ Türev - GPT-4 Hatası" oninput="onFC()">
       </div>
 
       <!-- SORU TİPİ -->
@@ -401,8 +401,8 @@ if('serviceWorker' in navigator){
         <div class="flbl">Soru Tipi</div>
         <div style="display:flex;gap:7px;flex-wrap:wrap;">
           <button class="dbtn s-easy" id="typeMultiple" onclick="setQType('multiple')">ğŸ”˜ Çoktan Seçmeli</button>
-          <button class="dbtn" id="typeNumeric" onclick="setQType('numeric')">ğŸ”¢ Sayısal Tahmin</button>
-          <button class="dbtn" id="typeOrdering" onclick="setQType('ordering')">ğŸ”€ Sıralama</button>
+          <button class="dbtn" id="typeNumeric" onclick="setQType('numeric')">🔢 Sayısal Tahmin</button>
+          <button class="dbtn" id="typeOrdering" onclick="setQType('ordering')">🔄 Sıralama</button>
           <button class="dbtn" id="typeOpenEnded" onclick="setQType('open_ended')">âœï¸ Açık Uçlu</button>
           <button class="dbtn" id="typeReaction" onclick="setQType('reaction')">⚡ Tepki Hızı</button>
           <button class="dbtn" id="typePoll" onclick="setQType('poll')">📊 Anket</button>
@@ -413,7 +413,7 @@ if('serviceWorker' in navigator){
       <!-- SAYISAL CEVAP (sadece numeric tipte görünür) -->
       <div class="fg" id="numericFields" style="display:none;">
         <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;">
-          <div style="font-family:var(--display);font-size:.9rem;letter-spacing:1px;color:#3b82f6;margin-bottom:10px;">ğŸ”¢ SAYISAL TAHMİN AYARLARI</div>
+          <div style="font-family:var(--display);font-size:.9rem;letter-spacing:1px;color:#3b82f6;margin-bottom:10px;">🔢 SAYISAL TAHMİN AYARLARI</div>
           <div class="inp-row">
             <div>
               <div class="flbl">Doğru Değer <span class="freq">*</span></div>
@@ -490,10 +490,10 @@ if('serviceWorker' in navigator){
         <div class="fg" style="margin-bottom:0;">
           <div class="flbl">Zorluk</div>
           <div class="diff-sel" id="diffSel">
-            <button class="dbtn" data-d="easy" onclick="setDiff('easy')">ğŸŸ¢ KOLAY</button>
-            <button class="dbtn" data-d="mid" onclick="setDiff('mid')">ğŸŸ¡ ORTA</button>
-            <button class="dbtn" data-d="hard" onclick="setDiff('hard')">ğŸ”´ ZOR</button>
-            <button class="dbtn" data-d="vhard" onclick="setDiff('vhard')">ğŸŸ£ ÇOK ZOR</button>
+            <button class="dbtn" data-d="easy" onclick="setDiff('easy')">🟢 KOLAY</button>
+            <button class="dbtn" data-d="mid" onclick="setDiff('mid')">🟡 ORTA</button>
+            <button class="dbtn" data-d="hard" onclick="setDiff('hard')">🔴 ZOR</button>
+            <button class="dbtn" data-d="vhard" onclick="setDiff('vhard')">🟣 ÇOK ZOR</button>
           </div>
         </div>
         <div class="fg" style="margin-bottom:0;">
@@ -505,7 +505,7 @@ if('serviceWorker' in navigator){
       <!-- Options -->
       <div class="fg">
         <div class="flbl">Åıklar <span class="freq">*</span>
-          <span class="fhint">(2â€“6 arası · yeşil = doğru cevap)</span>
+          <span class="fhint">(2–6 arası · yeşil = doğru cevap)</span>
         </div>
         <div class="opts-list" id="optsList"></div>
         <div style="display:flex;gap:7px;margin-top:8px;">
@@ -531,7 +531,7 @@ if('serviceWorker' in navigator){
         <div class="flbl">Soru Görseli <span class="fhint">(isteğe bağlı · URL veya dosya yükle)</span></div>
         <div class="img-field-wrap">
           <div class="img-tabs">
-            <button class="img-tab active" id="imgTabUrl" onclick="switchImgTab('url')">ğŸ”— URL</button>
+            <button class="img-tab active" id="imgTabUrl" onclick="switchImgTab('url')">ğŸ”- URL</button>
             <button class="img-tab" id="imgTabFile" onclick="switchImgTab('file')">📝 Dosya</button>
             <button class="img-tab" id="imgTabAi" onclick="switchImgTab('ai')">🤖 AI Üret</button>
             <button class="img-tab img-tab-clear" id="imgTabClear" onclick="clearImage()" style="display:none;">✕ Sil</button>
@@ -552,7 +552,7 @@ if('serviceWorker' in navigator){
           <div id="imgPanelAi" style="display:none;">
             <div style="display:flex;gap:5px;margin-bottom:5px;">
               <input class="inp inp-sm" id="aiImgPrompt" placeholder="Örn: Uzayda voleybol oynayan kedi..." style="flex:1;">
-              <button class="btn btn-primary btn-xs" onclick="generateAiImage()" id="aiGenBtn">ğŸª„ ÜRET</button>
+              <button class="btn btn-primary btn-xs" onclick="generateAiImage()" id="aiGenBtn">🪄 ÜRET</button>
             </div>
             <div id="aiGenStatus" style="font-family:var(--mono);font-size:.55rem;color:var(--muted);min-height:14px;"></div>
           </div>
@@ -579,7 +579,7 @@ if('serviceWorker' in navigator){
           <div class="fg" style="margin-bottom:0;">
             <div class="flbl">YZ'nin Seçtiği Åık</div>
             <select class="inp inp-sm" id="fAiWrong" onchange="onFC()">
-              <option value="">— seçin —</option>
+              <option value="">- seçin -</option>
             </select>
           </div>
         </div>
@@ -590,7 +590,7 @@ if('serviceWorker' in navigator){
         <div class="fg" style="margin-bottom:0;">
           <div class="flbl" style="display:flex;justify-content:space-between;align-items:center;">
             <span>YZ İlginç Bilgi (Fun Fact)</span>
-            <button class="btn btn-ghost btn-xs" onclick="generateAiFact()" id="aiFactBtn">ğŸª„ Üret</button>
+            <button class="btn btn-ghost btn-xs" onclick="generateAiFact()" id="aiFactBtn">🪄 Üret</button>
           </div>
           <textarea class="inp" id="fAiFact" rows="2" placeholder="Soruyla ilgili ilginç bir bilgi..." oninput="onFC()"></textarea>
         </div>
@@ -599,7 +599,7 @@ if('serviceWorker' in navigator){
       <div class="save-bar">
         <button class="btn btn-primary" onclick="saveQuestion()">💾 KAYDET</button>
         <button class="btn btn-ghost" onclick="saveAsDraft()" title="Yerel taslak olarak kaydet (Çevrimdışı için)">📝 TASLAK</button>
-        <button class="btn btn-danger btn-sm" onclick="confirmDelete()">ğŸ—‘ SİL</button>
+        <button class="btn btn-danger btn-sm" onclick="confirmDelete()">🗑️ SİL</button>
         <span class="save-status" id="saveStatus"></span>
       </div>
     </div>
@@ -625,7 +625,7 @@ if('serviceWorker' in navigator){
       <div class="prev-sec-lbl" style="margin-top:10px;">📝± Telefon</div>
       <div class="phone-frame">
         <div class="phone-hdr">
-          <div class="phone-q-lbl" id="pvPhoneQ">SORU —</div>
+          <div class="phone-q-lbl" id="pvPhoneQ">SORU -</div>
           <div class="phone-timer" id="pvPhoneT">60</div>
         </div>
         <div class="phone-grid" id="pvPhoneGrid"></div>
@@ -634,18 +634,18 @@ if('serviceWorker' in navigator){
       <!-- AI info -->
       <div class="prev-sec-lbl" style="margin-top:10px;">🤖 YZ Bilgisi (Cevap Açıklandığında)</div>
       <div class="ai-info-card">
-        <div class="ai-info-row"><span style="color:var(--muted);">Model</span><span class="ai-info-val" id="pvAiModel">—</span></div>
-        <div class="ai-info-row"><span style="color:var(--muted);">Yıl</span><span class="ai-info-val" id="pvAiYear">—</span></div>
-        <div class="ai-info-row"><span style="color:var(--muted);">Yanlış Åık</span><span class="ai-info-val" id="pvAiWrong">—</span></div>
-        <div class="ai-explain-text" id="pvAiReason">—</div>
+        <div class="ai-info-row"><span style="color:var(--muted);">Model</span><span class="ai-info-val" id="pvAiModel">-</span></div>
+        <div class="ai-info-row"><span style="color:var(--muted);">Yıl</span><span class="ai-info-val" id="pvAiYear">-</span></div>
+        <div class="ai-info-row"><span style="color:var(--muted);">Yanlış Åık</span><span class="ai-info-val" id="pvAiWrong">-</span></div>
+        <div class="ai-explain-text" id="pvAiReason">-</div>
       </div>
 
       <!-- Info -->
       <div class="prev-sec-lbl" style="margin-top:10px;">â„¹ï¸ Özet</div>
       <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:5px;">
-        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.63rem;"><span style="color:var(--muted);">Süre</span><span id="pvDur" style="color:var(--accent);">—</span></div>
-        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.63rem;"><span style="color:var(--muted);">Maks. Puan</span><span id="pvMaxPts" style="color:var(--accent3);">—</span></div>
-        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.63rem;"><span style="color:var(--muted);">Åık Sayısı</span><span id="pvOptCount" style="color:var(--text);">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.63rem;"><span style="color:var(--muted);">Süre</span><span id="pvDur" style="color:var(--accent);">-</span></div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.63rem;"><span style="color:var(--muted);">Maks. Puan</span><span id="pvMaxPts" style="color:var(--accent3);">-</span></div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.63rem;"><span style="color:var(--muted);">Åık Sayısı</span><span id="pvOptCount" style="color:var(--text);">-</span></div>
         <div style="font-family:var(--mono);font-size:.62rem;color:var(--muted);border-top:1px solid var(--border);padding-top:5px;"><span>İpucu: </span><span id="pvHint" style="color:var(--text);"></span></div>
       </div>
     </div>
@@ -710,7 +710,7 @@ if('serviceWorker' in navigator){
 <!-- DELETE CONFIRM -->
 <div class="overlay" id="delOverlay">
   <div class="ov-box">
-    <div class="ov-icon">ğŸ—‘</div>
+    <div class="ov-icon">🗑️</div>
     <div class="ov-title">SORUYU SİL?</div>
     <div class="ov-msg">Bu soru kalıcı olarak silinecek.</div>
     <div class="ov-btns">
@@ -757,7 +757,7 @@ if('serviceWorker' in navigator){
 <!-- AI GENERATION OVERLAY -->
 <div class="overlay" id="aiGenOverlay">
   <div class="ai-gen-box" id="aiGenContent">
-    <div class="ai-gen-title">ğŸª„ YZ İLE SORU ÜRET</div>
+    <div class="ai-gen-title">🪄 YZ İLE SORU ÜRET</div>
     
     <div id="aiGenForm">
       <div class="fg">
@@ -781,7 +781,7 @@ if('serviceWorker' in navigator){
       </div>
 
       <div style="display:flex;gap:10px;margin-top:10px;">
-        <button class="btn btn-purple" style="flex:1;" onclick="startAiGeneration()">âœ¨ ÜRETMEYE BAÅLA</button>
+        <button class="btn btn-purple" style="flex:1;" onclick="startAiGeneration()">✨ ÜRETMEYE BAÅLA</button>
         <button class="btn btn-ghost" onclick="closeAiGen()">İPTAL</button>
       </div>
     </div>
@@ -808,8 +808,8 @@ if('serviceWorker' in navigator){
 
   const COLORS = ['#e84040', '#3b82f6', '#f5c518', '#3dd68c', '#a855f7', '#f97316'];
 
-const SHAPES  = ['â–²','â—†','â—','â– ','â˜…','â™¥'];
-const DIFF_LABELS = {easy:'ğŸŸ¢ KOLAY',mid:'ğŸŸ¡ ORTA',hard:'ğŸ”´ ZOR',vhard:'ğŸŸ£ ÇOK ZOR'};
+const SHAPES  = ['â–²','â-†','â-','â– ','â˜…','â™¥'];
+const DIFF_LABELS = {easy:'🟢 KOLAY',mid:'🟡 ORTA',hard:'🔴 ZOR',vhard:'🟣 ÇOK ZOR'};
 const DIFF_CLS    = {easy:'d-easy',mid:'d-mid',hard:'d-hard',vhard:'d-vhard'};
 
 const LATEX_SNIPPETS = [
@@ -962,7 +962,7 @@ function renderList() {
     item.draggable = true; item.dataset.idx = globalIdx;
     const aiTag = q.aiModel ? `<span style="font-family:var(--mono);font-size:.48rem;color:var(--purple);">🤖 ${q.aiModel}</span>` : '';
     const catTag = q.category ? `<span class="cat-badge" style="background:${getCatColor(q.category)}22;color:${getCatColor(q.category)};border:1px solid ${getCatColor(q.category)}44;">${q.category}</span>` : '';
-    item.innerHTML=`<span class="qi-drag">â ¿</span><span class="qi-num">${globalIdx+1}</span><div class="qi-body"><div class="qi-title">${stripLatex(q.title||'(Başlıksız)')}</div><div class="qi-meta"><span class="diff-tag ${DIFF_CLS[q.diff]||'d-mid'}">${DIFF_LABELS[q.diff]||'—'}</span><span class="qi-dur">â±${q.duration||60}s</span>${catTag}${aiTag}</div></div><button class="qi-del" onclick="event.stopPropagation();quickDel('${q.id}')">✕</button>`;
+    item.innerHTML=`<span class="qi-drag">⠿</span><span class="qi-num">${globalIdx+1}</span><div class="qi-body"><div class="qi-title">${stripLatex(q.title||'(Başlıksız)')}</div><div class="qi-meta"><span class="diff-tag ${DIFF_CLS[q.diff]||'d-mid'}">${DIFF_LABELS[q.diff]||'-'}</span><span class="qi-dur">â±${q.duration||60}s</span>${catTag}${aiTag}</div></div><button class="qi-del" onclick="event.stopPropagation();quickDel('${q.id}')">✕</button>`;
     item.onclick = () => openQ(q.id);
     item.addEventListener('dragstart',e=>{dragSrcIdx=globalIdx;item.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
     item.addEventListener('dragend',()=>{item.classList.remove('dragging');document.querySelectorAll('.qitem').forEach(el=>el.classList.remove('drag-over'));});
@@ -1118,7 +1118,7 @@ function renderOpts(){
     row.style.borderLeftColor=COLORS[i]||'#888';
     const orderBadge=isOrd?`<span style="font-family:var(--display);font-size:1rem;color:${COLORS[i]||'#888'};min-width:22px;text-align:center;">${i+1}</span>`:'';
     const correctBtn=(isOrd||isPoll)?'':`<button class="opt-correct-btn ${o.isCorrect?'correct':''}" onclick="setCorrect(${i})">${o.isCorrect?'✅ DOÄRU':'Doğru?'}</button>`;
-    row.innerHTML=`<div class="opt-color" style="background:${COLORS[i]||'#888'};"></div>${isOrd?orderBadge:`<div class="opt-shape">${SHAPES[i]||i+1}</div>`}<input class="opt-inp" placeholder="${isOrd?`${i+1}. sıradaki öğe`:`Åık ${String.fromCharCode(65+i)} — $...$ ile LaTeX`}" oninput="updateOpt(${i},'text',this.value)">${correctBtn}${curOpts.length>2?`<button class="opt-del" onclick="removeOpt(${i})">✕</button>`:''}`;
+    row.innerHTML=`<div class="opt-color" style="background:${COLORS[i]||'#888'};"></div>${isOrd?orderBadge:`<div class="opt-shape">${SHAPES[i]||i+1}</div>`}<input class="opt-inp" placeholder="${isOrd?`${i+1}. sıradaki öğe`:`Åık ${String.fromCharCode(65+i)} - $...$ ile LaTeX`}" oninput="updateOpt(${i},'text',this.value)">${correctBtn}${curOpts.length>2?`<button class="opt-del" onclick="removeOpt(${i})">✕</button>`:''}`;
     const inp=row.querySelector('.opt-inp');
     if(inp)inp.value=o.text||'';
     list.appendChild(row);
@@ -1139,7 +1139,7 @@ window.removeLastOpt=function(){if(curOpts.length<=2){showToast('En az 2 şık o
 window.removeOpt=function(i){if(curOpts.length<=2){showToast('En az 2 şık.');return;}curOpts.splice(i,1);renderOpts();onFC();};
 
 function updateAiWrongSelect(val){
-  const sel=document.getElementById('fAiWrong');sel.innerHTML='<option value="">— YZ nin seçtiği şık —</option>';
+  const sel=document.getElementById('fAiWrong');sel.innerHTML='<option value="">- YZ nin seçtiği şık -</option>';
   curOpts.forEach((o,i)=>{const opt=document.createElement('option');opt.value=i;opt.textContent=`${SHAPES[i]} Åık ${String.fromCharCode(65+i)}: ${stripLatex(o.text)||'(boş)'}`;if(String(val)===String(i))opt.selected=true;sel.appendChild(opt);});
 }
 
@@ -1178,14 +1178,14 @@ window.generateAiImage=async function(){
       curImage = {type:'base64', data:b64};
       showImgPreview(b64);
       const sizeKB = Math.round(b64.length*0.75/1024);
-      document.getElementById('imgSizeInfo').textContent = `ğŸª„ AI Üretimi · ${sizeKB}KB`;
-      btn.disabled=false;btn.textContent='ğŸª„ ÜRET';status.textContent='Görsel başarıyla üretildi!';
+      document.getElementById('imgSizeInfo').textContent = `🪄 AI Üretimi · ${sizeKB}KB`;
+      btn.disabled=false;btn.textContent='🪄 ÜRET';status.textContent='Görsel başarıyla üretildi!';
       onFC();
     };
     reader.readAsDataURL(blob);
   } catch (err) {
     console.error(err);
-    btn.disabled=false;btn.textContent='ğŸª„ ÜRET';status.textContent='Hata: Görsel üretilemedi.';
+    btn.disabled=false;btn.textContent='🪄 ÜRET';status.textContent='Hata: Görsel üretilemedi.';
   }
 };
 
@@ -1206,7 +1206,7 @@ window.handleImgFile=function(file){
     document.getElementById('imgError').textContent='Lütfen geçerli bir görsel seçin.';return;
   }
   if(file.size>1024*1024){
-    document.getElementById('imgError').textContent=`Dosya boyutu ${(file.size/1024).toFixed(0)}KB — max 1MB. Daha küçük bir görsel deneyin.`;return;
+    document.getElementById('imgError').textContent=`Dosya boyutu ${(file.size/1024).toFixed(0)}KB - max 1MB. Daha küçük bir görsel deneyin.`;return;
   }
   document.getElementById('imgError').textContent='';
   const reader=new FileReader();
@@ -1244,7 +1244,7 @@ window.clearImage=function(){
 };
 
 // FIELD CHANGE
-window.onFC=function(){dirty=true;document.getElementById('saveStatus').textContent='â— Kaydedilmemiş';updatePreview();};
+window.onFC=function(){dirty=true;document.getElementById('saveStatus').textContent='â- Kaydedilmemiş';updatePreview();};
 
 // SAVE
 window.saveQuestion=function(){
@@ -1298,14 +1298,14 @@ window.doDelete=function(){
     document.getElementById('editorForm').style.display='none';
     document.getElementById('prevContent').style.display='none';
     document.getElementById('prevEmpty').style.display='block';
-    showToast('ğŸ—‘ Silindi.');
+    showToast('🗑️ Silindi.');
   });
 };
 window.quickDel=function(id){
   if(!confirm('Silinsin mi?'))return;
   remove(orgRef('questions/'+id)).then(()=>{
     if(activeId===id){activeId=null;dirty=false;document.getElementById('editorEmpty').style.display='flex';document.getElementById('editorForm').style.display='none';}
-    showToast('ğŸ—‘ Silindi.');
+    showToast('🗑️ Silindi.');
   });
 };
 
@@ -1348,14 +1348,14 @@ function updatePreview(){
     const bg=COLORS[i]||'#888';const tc='#fff';const sh=SHAPES[i]||String(i+1);
     const d=document.createElement('div');d.className='prev-opt';d.style.background=bg;
     const isCorrect=(o.isCorrect && curQType!=='poll');
-    d.innerHTML=`<div class="prev-opt-shape">${sh}</div><div class="prev-opt-body"><div class="prev-opt-math" style="color:${tc};">${o.text||'—'}</div></div>${isCorrect?'<span class="prev-correct-badge">✓ DOÄRU</span>':''}`;
+    d.innerHTML=`<div class="prev-opt-shape">${sh}</div><div class="prev-opt-body"><div class="prev-opt-math" style="color:${tc};">${o.text||'-'}</div></div>${isCorrect?'<span class="prev-correct-badge">✓ DOÄRU</span>':''}`;
     og.appendChild(d);
     waitKatex(()=>renderKatex(d));
   });
 
   // Phone preview
   const qIdx=questions.findIndex(x=>x.id===activeId);
-  document.getElementById('pvPhoneQ').textContent=`SORU ${qIdx>=0?qIdx+1:'—'}`;
+  document.getElementById('pvPhoneQ').textContent=`SORU ${qIdx>=0?qIdx+1:'-'}`;
   document.getElementById('pvPhoneT').textContent=dur;
   const ppg=document.getElementById('pvPhoneGrid');ppg.innerHTML='';
   const pcols=curOpts.length>4?3:2;ppg.style.gridTemplateColumns=`repeat(${pcols},1fr)`;
@@ -1371,9 +1371,9 @@ function updatePreview(){
   const year=document.getElementById('fAiYear').value;
   const aiWrongVal=document.getElementById('fAiWrong').value;
   const aiReason=document.getElementById('fAiReason').value;
-  document.getElementById('pvAiModel').textContent=model||'—';
-  document.getElementById('pvAiYear').textContent=year||'—';
-  document.getElementById('pvAiWrong').textContent=aiWrongVal!==''?`${SHAPES[parseInt(aiWrongVal)]} Åık ${String.fromCharCode(65+parseInt(aiWrongVal))}`:'—';
+  document.getElementById('pvAiModel').textContent=model||'-';
+  document.getElementById('pvAiYear').textContent=year||'-';
+  document.getElementById('pvAiWrong').textContent=aiWrongVal!==''?`${SHAPES[parseInt(aiWrongVal)]} Åık ${String.fromCharCode(65+parseInt(aiWrongVal))}`:'-';
   // Set aiReason: use innerHTML with text nodes to avoid KaTeX overwrite
   const pvAiR=document.getElementById('pvAiReason');
   pvAiR.textContent=aiReason||'(açıklama eklenmemiş)';
@@ -1392,9 +1392,9 @@ function updatePreview(){
 }
 
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ========================================
 //  SORU SETLERİ
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ========================================
 
 window.switchTab = function(tab) {
   const isSets = tab === 'setler';
@@ -1532,7 +1532,7 @@ window.generateAiFact = async function(){
   const qText = document.getElementById('fQuestion').value.trim();
   if(!qText){showToast('Lütfen önce soru metnini girin.');return;}
   const btn = document.getElementById('aiFactBtn');
-  btn.disabled = true; btn.textContent = 'â³...';
+  btn.disabled = true; btn.textContent = '⏳...';
   
   try {
     // Mock AI Fact Generation
@@ -1545,12 +1545,12 @@ window.generateAiFact = async function(){
     ];
     const fact = facts[Math.floor(Math.random()*facts.length)];
     document.getElementById('fAiFact').value = fact;
-    btn.disabled = false; btn.textContent = 'ğŸª„ Üret';
-    showToast('âœ¨ İlginç bilgi üretildi!');
+    btn.disabled = false; btn.textContent = '🪄 Üret';
+    showToast('✨ İlginç bilgi üretildi!');
     onFC();
   } catch(err){
-    btn.disabled = false; btn.textContent = 'ğŸª„ Üret';
-    showToast('âŒ Üretilemedi.');
+    btn.disabled = false; btn.textContent = '🪄 Üret';
+    showToast('❌ Üretilemedi.');
   }
 };
 
@@ -1572,14 +1572,14 @@ function renderSetsList() {
         <div class="set-name">${s.name}</div>
         <div class="set-count">${qCount} soru</div>
       </div>
-      <div style="font-family:var(--mono);font-size:.52rem;color:var(--muted);margin-bottom:7px;">${date} · ${s.createdBy||'—'}</div>
+      <div style="font-family:var(--mono);font-size:.52rem;color:var(--muted);margin-bottom:7px;">${date} · ${s.createdBy||'-'}</div>
       <div class="set-actions">
-        <button class="set-btn${isActive?' active':''}" onclick="toggleLoadSet('${s.id}')">${isActive?'✓ AKTİF':'â–¶ YÜKLE'}</button>
-        <button class="set-btn" onclick="editSet('${s.id}')">âœï¸ DÜZENLE</button>
-        <button class="set-btn" onclick="uploadSetCloud('${s.id}')">â˜ï¸ BULUTA YÜKLE</button>
+        <button class="set-btn${isActive?' active':''}" onclick="toggleLoadSet('${s.id}')">${isActive?'✓ AKTİF':'▶ YÜKLE'}</button>
+        <button class="set-btn" onclick="editSet('${s.id}')">✍️ DÜZENLE</button>
+        <button class="set-btn" onclick="uploadSetCloud('${s.id}')">☁️ BULUTA YÜKLE</button>
         <button class="set-btn" onclick="exportSetJson('${s.id}')">⬇ JSON</button>
         <button class="set-btn" onclick="exportSetCsv('${s.id}')">⬇ CSV</button>
-        <button class="set-btn danger" onclick="deleteSet('${s.id}')">ğŸ—‘ SİL</button>
+        <button class="set-btn danger" onclick="deleteSet('${s.id}')">🗑️ SİL</button>
       </div>`;
     el.appendChild(d);
   });
@@ -1601,7 +1601,7 @@ window.toggleLoadSet = function(id) {
     document.getElementById('activeSetBadge').textContent = '📦 ' + s.name;
     document.getElementById('activeSetBadge').style.display = 'inline-block';
     renderList();
-    showToast('â–¶ ' + s.name + ' yüklendi (' + ids.size + ' soru)');
+    showToast('▶ ' + s.name + ' yüklendi (' + ids.size + ' soru)');
   }
   renderSetsList();
   switchTab('sorular');
@@ -1643,8 +1643,8 @@ window.renderList = function() {
     const diffCls = {easy:'d-easy',mid:'d-mid',hard:'d-hard',vhard:'d-vhard'}[q.diff]||'d-mid';
     const diffLbl = {easy:'KOLAY',mid:'ORTA',hard:'ZOR',vhard:'ÇOK ZOR'}[q.diff]||'ORTA';
     const catTag = q.category ? `<span class="cat-badge" style="background:${getCatColor(q.category)}22;color:${getCatColor(q.category)};border:1px solid ${getCatColor(q.category)}44;">${q.category}</span>` : '';
-    const typeLbl = q.qType === 'numeric' ? 'ğŸ”¢' : q.qType === 'ordering' ? 'ğŸ”€' : q.qType === 'open_ended' ? 'âœï¸' : q.qType === 'reaction' ? '⚡' : '';
-    item.innerHTML = `<span class="qi-drag">â ¿</span><span class="qi-num">${i+1}</span><div class="qi-body"><div class="qi-title">${typeLbl ? typeLbl+' ' : ''}${q.title||'—'}</div><div class="qi-meta"><span class="diff-tag ${diffCls}">${diffLbl}</span>${catTag}<span class="qi-dur">${q.duration||60}sn</span></div></div><button class="qi-del" onclick="event.stopPropagation();confirmDeleteQ('${q.id}')">✕</button>`;
+    const typeLbl = q.qType === 'numeric' ? '🔢' : q.qType === 'ordering' ? '🔄' : q.qType === 'open_ended' ? '✍️' : q.qType === 'reaction' ? '⚡' : '';
+    item.innerHTML = `<span class="qi-drag">⠿</span><span class="qi-num">${i+1}</span><div class="qi-body"><div class="qi-title">${typeLbl ? typeLbl+' ' : ''}${q.title||'-'}</div><div class="qi-meta"><span class="diff-tag ${diffCls}">${diffLbl}</span>${catTag}<span class="qi-dur">${q.duration||60}sn</span></div></div><button class="qi-del" onclick="event.stopPropagation();confirmDeleteQ('${q.id}')">✕</button>`;
     item.onclick = () => { if(dirty&&!confirm('Kaydedilmemiş değişiklik var. Devam?'))return; openQ(q.id); };
     item.addEventListener('dragstart', e => { dragSrcIdx = questions.indexOf(q); item.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
     item.addEventListener('dragend', () => item.classList.remove('dragging'));
@@ -1659,7 +1659,7 @@ window.renderList = function() {
 window.openCreateSet = function() {
   editingSetId = null;
   setSelChecked = new Set();
-  document.getElementById('setOvTitle').textContent = '📦 YENİ SET OLUÅTUR';
+  document.getElementById('setOvTitle').textContent = '📦 YENİ SET OLUŞTUR';
   document.getElementById('setNameInp').value = '';
   renderSetQList();
   document.getElementById('setOverlay').classList.add('visible');
@@ -1669,7 +1669,7 @@ window.editSet = function(id) {
   const s = sets.find(x => x.id === id); if (!s) return;
   editingSetId = id;
   setSelChecked = new Set(s.questionIds || []);
-  document.getElementById('setOvTitle').textContent = 'âœï¸ SETİ DÜZENLE';
+  document.getElementById('setOvTitle').textContent = '✍️ SETİ DÜZENLE';
   document.getElementById('setNameInp').value = s.name || '';
   renderSetQList();
   document.getElementById('setOverlay').classList.add('visible');
@@ -1685,7 +1685,7 @@ function renderSetQList() {
     d.className = 'set-q-item' + (checked ? ' checked' : '');
     d.dataset.id = q.id;
     const diffCls = {easy:'d-easy',mid:'d-mid',hard:'d-hard',vhard:'d-vhard'}[q.diff]||'d-mid';
-    d.innerHTML = `<div class="set-q-cb">${checked ? '✓' : ''}</div><div class="set-q-title">${q.title || '—'}</div><span class="set-q-diff ${diffCls}">${q.diff?.toUpperCase()||''}</span>`;
+    d.innerHTML = `<div class="set-q-cb">${checked ? '✓' : ''}</div><div class="set-q-title">${q.title || '-'}</div><span class="set-q-diff ${diffCls}">${q.diff?.toUpperCase()||''}</span>`;
     d.onclick = () => {
       if (setSelChecked.has(q.id)) setSelChecked.delete(q.id);
       else setSelChecked.add(q.id);
@@ -1743,7 +1743,7 @@ window.deleteSet = async function(id) {
   if (!confirm('"' + s.name + '" setini silmek istiyor musunuz?')) return;
   await remove(orgRef('sets/' + id));
   if (activeSetId === id) { activeSetId = null; activeCatFilter = 'all'; document.getElementById('activeSetBadge').style.display='none'; renderList(); }
-  showToast('ğŸ—‘ Set silindi.');
+  showToast('🗑️ Set silindi.');
 };
 
 // ── Export ──
@@ -1754,7 +1754,7 @@ window.exportSetJson = function(id) {
   const payload = { setName: s.name, exportedAt: new Date().toISOString(), questions: qs };
   const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = 'usev-set-' + s.name.replace(/[^a-z0-9ğüşıöçA-ZÄÜÅIÖÇ]/gi,'_') + '.json';
+  a.download = 'usev-set-' + s.name.replace(/[^a-z0-9ğüşıöçA-ZÄžÜÅžIÖÇ]/gi,'_') + '.json';
   a.click();
 };
 
@@ -1871,7 +1871,7 @@ window.exportSetCsv = function(id) {
   });
   const blob = new Blob([rows.join('\n')], {type:'text/csv;charset=utf-8;'});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = 'usev-set-' + s.name.replace(/[^a-z0-9ğüşıöçA-ZÄÜÅIÖÇ]/gi,'_') + '.csv';
+  a.download = 'usev-set-' + s.name.replace(/[^a-z0-9ğüşıöçA-ZÄžÜÅžIÖÇ]/gi,'_') + '.csv';
   a.click();
 };
 
@@ -1928,7 +1928,7 @@ window.handleCsvFile=function(file){
   reader.onload=e=>{
     try{
       const rows=parseCsv(e.target.result);
-      if(rows.length<2){document.getElementById('csvStatus').textContent='⚠️ Geçerli veri bulunamadı.';return;}
+      if(rows.length<2){document.getElementById('csvStatus').textContent='⚠️  Geçerli veri bulunamadı.';return;}
       const headers=rows[0].map(h=>h.trim().toLowerCase().replace(/[^a-z0-9_]/g,''));
       let imported=0;
       const promises=rows.slice(1).map((row,ri)=>{
@@ -1942,7 +1942,7 @@ window.handleCsvFile=function(file){
         const getAny=(...hs)=>{for(const h of hs){const v=get(h);if(v)return v;}return '';}
         const optRaw=get('secenekler')||'';
         const opts=optRaw.split(/\|\|/).map(t=>t.trim()).filter(t=>t.length>0).map(t=>({text:t,isCorrect:false}));
-        if(opts.length<2){document.getElementById('csvStatus').textContent=`⚠️ Satır ${ri+2}: Åıklar || ile ayrılmalı.`;return Promise.resolve();}
+        if(opts.length<2){document.getElementById('csvStatus').textContent=`⚠️  Satır ${ri+2}: Şıklar || ile ayrılmalı.`;return Promise.resolve();}
         const correctIdx=parseInt(get('dogru_index'));
         if(!isNaN(correctIdx)&&opts[correctIdx])opts[correctIdx].isCorrect=true;
         const aiWrongIdx=parseInt(get('yz_yanlis_index'));
@@ -1964,7 +1964,7 @@ window.handleCsvFile=function(file){
           category:getAny('kategori','category','konu'),
           order:questions.length+ri,
         };
-        console.log('[CSV IMPORT] Soru '+(ri+1)+' aiReason:', q.aiReason ? q.aiReason.substring(0,60) : '(BOÅ)');
+        console.log('[CSV IMPORT] Soru '+(ri+1)+' aiReason:', q.aiReason ? q.aiReason.substring(0,60) : '(BOŞ)');
         const nr=push(orgRef('questions'));
         imported++;
         return fbSet(nr,q);
@@ -1974,7 +1974,7 @@ window.handleCsvFile=function(file){
         setTimeout(()=>closeCsvOverlay(),2000);
         showToast(`✅ ${imported} soru aktarıldı!`);
       });
-    }catch(err){document.getElementById('csvStatus').textContent='âŒ Hata: '+err.message;}
+    }catch(err){document.getElementById('csvStatus').textContent='❌ Hata: '+err.message;}
   };
   reader.readAsText(file,'UTF-8');
 };
@@ -1995,12 +1995,12 @@ function parseCsv(text){
 window.downloadTemplate=function(){
   const lines=[
     'soru_basligi,soru_metni,secenekler,dogru_index,sure,zorluk,ipucu,aciklama,yz_modeli,yz_yili,yz_yanlis_index,yz_secim_nedeni',
-    '"â­ Temel İntegral","$\\int_0^1 x^2\\,dx$ ifadesinin değeri nedir?","$\\frac{1}{3}$||$\\frac{1}{2}$||$1$||$\\frac{2}{3}$",0,60,easy,"İntegral alma kuralını hatırlayın.","Doğru cevap $\\frac{1}{3}$ tür.","GPT-3.5",2023,1,"GPT-3.5 üst sınırı yerine koymayı unuttu."',
-    '"🧠  Klasik Limit","$\\lim_{x \\to 0} \\frac{\\sin x}{x}$ değeri nedir?","$0$||$1$||$\\infty$||$-1$",1,60,easy,"L\'HÃ´pital veya Taylor serisi düşünün.","Doğru cevap $1$ dir.","PaLM 2",2023,0,"PaLM 2 payı ve paydayı ayrı değerlendirip 0 sonucuna ulaştı."',
+    '"⭐ Temel İntegral","$\\int_0^1 x^2\\,dx$ ifadesinin değeri nedir?","$\\frac{1}{3}$||$\\frac{1}{2}$||$1$||$\\frac{2}{3}$",0,60,easy,"İntegral alma kuralını hatırlayın.","Doğru cevap $\\frac{1}{3}$ tür.","GPT-3.5",2023,1,"GPT-3.5 üst sınırı yerine koymayı unuttu."',
+    '"🧠 Klasik Limit","$\\lim_{x \\to 0} \\frac{\\sin x}{x}$ değeri nedir?","$0$||$1$||$\\infty$||$-1$",1,60,easy,"L\'Hôpital veya Taylor serisi düşünün.","Doğru cevap $1$ dir.","PaLM 2",2023,0,"PaLM 2 payı ve paydayı ayrı değerlendirip 0 sonucuna ulaştı."',
   ];
   const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hata_avi_soru_sablonu.csv';a.click();
-  showToast('📄 Åablon indirildi!');
+  showToast('📄 Şablon indirildi!');
 };
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('visible');setTimeout(()=>t.classList.remove('visible'),2500);}
@@ -2059,7 +2059,7 @@ Soruları şu JSON formatında dönmelisin:
       "diff": "easy"|"mid"|"hard"|"vhard",
       "duration": 60,
       "category": "Kategori",
-      "options": [{"text": "Åık 1"}, {"text": "Åık 2"}, {"text": "Åık 3"}, {"text": "Åık 4"}],
+      "options": [{"text": "Şık 1"}, {"text": "Şık 2"}, {"text": "Şık 3"}, {"text": "Şık 4"}],
       "correctIndex": 0,
       "explain": "Doğru cevabın açıklaması",
       "aiModel": "Model Adı",

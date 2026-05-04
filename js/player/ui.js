@@ -194,7 +194,7 @@ export function showAiReveal(round) {
   ar.className = 'ai-reveal-phone visible';
   const SHAPES = ['▲', '◆', '●', '■', '★', '♥'];
   const opts = round.options || [];
-  const aiWTxt = round.aiWrong >= 0 && opts[round.aiWrong] ? `${SHAPES[round.aiWrong]} Şık ${String.fromCharCode(65 + round.aiWrong)}` : '—';
+  const aiWTxt = round.aiWrong >= 0 && opts[round.aiWrong] ? `${SHAPES[round.aiWrong]} Şık ${String.fromCharCode(65 + round.aiWrong)}` : '-';
   document.getElementById('airBody').innerHTML = `<span>${round.aiModel}</span> (${round.aiYear || '?'}) bu soruyu <span>${aiWTxt}</span> olarak yanlış cevapladı.${round.aiReason ? '<br><br>' + round.aiReason : ''}`;
 }
 
@@ -219,7 +219,7 @@ export function buildMiniPodium(playerName, myScore, playerAvatar) {
       
       const rb = document.getElementById('myRankBadge');
       if (rb && myRank > 0) {
-        rb.textContent = `${medals[myRank - 1] || myRank + '.SIRADA'} ${myRank <= 3 ? '' : '— ' + myRank + '. sırada'}`;
+        rb.textContent = `${medals[myRank - 1] || myRank + '.SIRADA'} ${myRank <= 3 ? '' : '- ' + myRank + '. sırada'}`;
         rb.style.display = 'block';
       }
 
@@ -266,7 +266,7 @@ export function showOrderingReveal(opts, playerSeq) {
     row.innerHTML = `
       <div class="ord-rank" style="color:${isCorrect ? 'var(--accent3)' : 'var(--accent2)'}">${correctIdx + 1}</div>
       <div class="ord-text">${o.text}</div>
-      <span class="ord-badge" style="background:${isCorrect ? 'rgba(61,214,140,.15)' : 'rgba(232,64,64,.15)'};color:${isCorrect ? 'var(--accent3)' : 'var(--accent2)'};">${isCorrect ? '✓' : 'Sen: ' + (playerPos >= 0 ? playerPos + 1 : '—')}</span>`;
+      <span class="ord-badge" style="background:${isCorrect ? 'rgba(61,214,140,.15)' : 'rgba(232,64,64,.15)'};color:${isCorrect ? 'var(--accent3)' : 'var(--accent2)'};">${isCorrect ? '✓' : 'Sen: ' + (playerPos >= 0 ? playerPos + 1 : '-')}</span>`;
     list.appendChild(row);
   });
 }
@@ -283,7 +283,7 @@ export function showNumericResult(correct, myVal, unit) {
     const el = document.getElementById('nrDiff');
     if (el) {
       if (diff === 0) { el.textContent = '✅ Tam isabet!'; el.className = 'nr-diff exact'; }
-      else if (pct <= 10) { el.textContent = `Farkın: ${diff} — Çok yakın!`; el.className = 'nr-diff close'; }
+      else if (pct <= 10) { el.textContent = `Farkın: ${diff} - Çok yakın!`; el.className = 'nr-diff close'; }
       else { el.textContent = `Farkın: ${diff} (%${pct})`; el.className = 'nr-diff far'; }
     }
   }

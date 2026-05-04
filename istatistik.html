@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Usev — İstatistik</title>
+<title>Usev - İstatistik</title>
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#f5c518">
@@ -187,11 +187,11 @@ body{display:flex;flex-direction:column;min-height:100vh;}
   <div class="hdr-title">İSTATİSTİK</div>
   <div class="hdr-spacer"></div>
   <div class="hdr-live"><div class="live-dot"></div>CANLI</div>
-  <a href="moderator.html" class="hdr-back">â† MODERATÖR</a>
+  <a href="moderator.html" class="hdr-back">← MODERATÖR</a>
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('canli')">ğŸ® Canlı Oyun</button>
+  <button class="tab active" onclick="switchTab('canli')">🎮 Canlı Oyun</button>
   <button class="tab" onclick="switchTab('sorular')">📋 Soru Analizi</button>
   <button class="tab" onclick="switchTab('oyuncular')">👥 Oyuncular</button>
   <button class="tab" onclick="switchTab('hiz')">⚡ Hız & Seri</button>
@@ -200,7 +200,7 @@ body{display:flex;flex-direction:column;min-height:100vh;}
 
 <div class="main">
 
-  <!-- â•â•â• CANLI OYUN â•â•â• -->
+  <!-- === CANLI OYUN === -->
   <div class="panel active" id="panel-canli">
     <div class="stat-grid" id="summaryCards">
       <div class="loading">Yükleniyor...</div>
@@ -215,7 +215,7 @@ body{display:flex;flex-direction:column;min-height:100vh;}
     </div>
   </div>
 
-  <!-- â•â•â• SORU ANALİZİ â•â•â• -->
+  <!-- === SORU ANALİZİ === -->
   <div class="panel" id="panel-sorular">
     <div class="gauge-row" id="questionGauges">
       <div class="loading">Yükleniyor...</div>
@@ -230,15 +230,15 @@ body{display:flex;flex-direction:column;min-height:100vh;}
     </div>
   </div>
 
-  <!-- â•â•â• OYUNCULAR â•â•â• -->
+  <!-- === OYUNCULAR === -->
   <div class="panel" id="panel-oyuncular">
     <div class="section-title">SKOR LİDERBOARD</div>
     <div class="table-card" id="playerTable"><div class="loading">Yükleniyor...</div></div>
-    <div class="section-title" style="margin-top:6px;">DOÄRULUK ÅAMPIYONLARI</div>
+    <div class="section-title" style="margin-top:6px;">DOĞRULUK ŞAMPİYONLARI</div>
     <div class="table-card" id="accuracyTable"><div class="loading">Yükleniyor...</div></div>
   </div>
 
-  <!-- â•â•â• HIZ & SERİ â•â•â• -->
+  <!-- === HIZ & SERİ === -->
   <div class="panel" id="panel-hiz">
     <div class="stat-grid" id="speedStats">
       <div class="loading">Yükleniyor...</div>
@@ -253,14 +253,14 @@ body{display:flex;flex-direction:column;min-height:100vh;}
     </div>
   </div>
 
-  <!-- â•â•â• GEÇMİÅ â•â•â• -->
+  <!-- === GEÇMİŞ === -->
   <div class="panel" id="panel-gecmis">
     <div id="historyLoading" class="loading">Geçmiş yükleniyor...</div>
     <div class="history-list" id="historyList"></div>
     <div id="historyDetail" style="display:none;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
         <div class="section-title" id="historyDetailTitle">Oyun Detayı</div>
-        <button onclick="closeHistoryDetail()" style="font-family:var(--mono);font-size:.6rem;padding:4px 10px;border:1px solid var(--border);background:var(--card);color:var(--muted);border-radius:5px;cursor:pointer;">â† Listeye Dön</button>
+        <button onclick="closeHistoryDetail()" style="font-family:var(--mono);font-size:.6rem;padding:4px 10px;border:1px solid var(--border);background:var(--card);color:var(--muted);border-radius:5px;cursor:pointer;">← Listeye Dön</button>
       </div>
       <div class="stat-grid" id="historyDetailStats"></div>
       <div class="chart-card" style="margin-top:10px;">
@@ -276,7 +276,7 @@ body{display:flex;flex-direction:column;min-height:100vh;}
 
 </div><!-- /main -->
 
-<!-- â•â• PLAYER MODAL â•â• -->
+<!-- == PLAYER MODAL == -->
 <div class="modal-overlay" id="playerModal">
   <div class="modal-card">
     <div class="modal-hdr">
@@ -287,7 +287,7 @@ body{display:flex;flex-direction:column;min-height:100vh;}
       <div class="p-score-big" id="pModalScore">0</div>
       <div class="p-score-lbl">TOPLAM PUAN</div>
       <div class="stat-grid" style="grid-template-columns:1fr 1fr;margin-bottom:16px;">
-        <div class="stat-card"><div class="stat-lbl">DOÄRU</div><div class="stat-val" id="pModalCorrect" style="color:var(--accent3)">0</div></div>
+        <div class="stat-card"><div class="stat-lbl">DOĞRU</div><div class="stat-val" id="pModalCorrect" style="color:var(--accent3)">0</div></div>
         <div class="stat-card"><div class="stat-lbl">ORT. SÜRE</div><div class="stat-val" id="pModalTime" style="color:#3b82f6">0s</div></div>
       </div>
       <div class="chart-title">SORU BAZLI KARNE</div>
@@ -297,11 +297,11 @@ body{display:flex;flex-direction:column;min-height:100vh;}
   </div>
 </div>
 
-<!-- â•â• COMPARE MODAL â•â• -->
+<!-- == COMPARE MODAL == -->
 <div class="modal-overlay" id="compareModal">
   <div class="modal-card" style="max-width:700px;">
     <div class="modal-hdr">
-      <div class="modal-title">OYUN KARÅILAÅTIRMA</div>
+      <div class="modal-title">OYUN KARŞILAŞTIRMA</div>
       <button class="modal-close" onclick="closeCompareModal()">×</button>
     </div>
     <div class="modal-body">
@@ -311,7 +311,7 @@ body{display:flex;flex-direction:column;min-height:100vh;}
 </div>
 
 <div class="compare-bar" id="compareBar" onclick="openCompareModal()">
-  <span id="compareCount">0</span> OYUN SEÇİLDİ → KARÅILAÅTIR
+  <span id="compareCount">0</span> OYUN SEÇİLDİ → KARŞILAŞTIR
 </div>
 
 <script type="module">
@@ -323,8 +323,6 @@ body{display:flex;flex-direction:column;min-height:100vh;}
 
   const DIFF_LABEL = { easy: 'KOLAY', mid: 'ORTA', hard: 'ZOR', vhard: 'ÇOK ZOR' };
   const DIFF_COLOR = { easy: 'var(--accent3)', mid: 'var(--accent)', hard: 'var(--accent2)', vhard: 'var(--purple)' };
-
-const DIFF_COLOR={easy:'var(--accent3)',mid:'var(--accent)',hard:'var(--accent2)',vhard:'var(--purple)'};
 
 // ─── STATE ───
 let allAnswers={};   // {roundIdx: {playerKey: {name,correct,pts,elapsed,...}}}
@@ -385,7 +383,7 @@ window.openPlayerModal=function(name){
       row.style.gridTemplateColumns='40px 1fr 60px';
       row.innerHTML=`
         <div class="bar-lbl" style="text-align:left;color:var(--muted);">S${parseInt(rIdx)+1}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%;background:${color}15;color:${color};font-size:.6rem;padding-left:8px;">${correct?'DOÄRU':'YANLIÅ'} · ${ans.elapsed||0}s</div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:${color}15;color:${color};font-size:.6rem;padding-left:8px;">${correct?'DOĞRU':'YANLIŞ'} · ${ans.elapsed||0}s</div></div>
         <div class="bar-pct" style="color:${color};">+${ans.pts||0}</div>
       `;
       list.appendChild(row);
@@ -436,7 +434,7 @@ window.openCompareModal=function(){
     <div class="bar-list">
       ${compareRow('OYUNCU SAYISI', g1.playerCount, g2.playerCount)}
       ${compareRow('SORU SAYISI', g1.questionCount, g2.questionCount)}
-      ${compareRow('ORT. DOÄRULUK %', calcAvgAcc(g1), calcAvgAcc(g2), '%')}
+      ${compareRow('ORT. DOĞRULUK %', calcAvgAcc(g1), calcAvgAcc(g2), '%')}
       ${compareRow('MAX SKOR', Math.max(...(g1.podium||[]).map(p=>p.score),0), Math.max(...(g2.podium||[]).map(p=>p.score),0))}
     </div>
   `;
@@ -581,10 +579,10 @@ function updateSummaryCards(){
   const avgScore=players.length>0?Math.round(players.reduce((s,p)=>s+p.score,0)/players.length):0;
   const connCount=Object.keys(connections).length;
   document.getElementById('summaryCards').innerHTML=
-    makeStatCard('BAÄLI OYUNCU',connCount,'aktif bağlantı','green')+
+    makeStatCard('BAĞLI OYUNCU',connCount,'aktif bağlantı','green')+
     makeStatCard('CEVAP VERDİ',players.length,'farklı oyuncu','blue')+
     makeStatCard('TOPLAM CEVAP',total,'bu oturumda','yellow')+
-    makeStatCard('DOÄRULUK ORANı',rate+'%',correct+' doğru / '+total+' toplam',rate>=60?'green':rate>=40?'yellow':'red')+
+    makeStatCard('DOĞRULUK ORANI',rate+'%',correct+' doğru / '+total+' toplam',rate>=60?'green':rate>=40?'yellow':'red')+
     makeStatCard('ORT. SKOR',avgScore,'oyuncu başına PT','purple')+
     makeStatCard('SORU SAYISI',Object.keys(allAnswers).length,'tamamlanan tur','');
 }
@@ -602,7 +600,7 @@ function renderLiveAnswerChart(){
       const entries=Object.values((allAnswers[curRound?.index])||{});
       el.innerHTML=`<div style="text-align:center;padding:12px;font-family:var(--display);font-size:1.5rem;color:var(--accent);letter-spacing:2px;">${entries.length} TAHMİN GELDİ</div>`;
     } else {
-      el.innerHTML='<div class="empty-state"><div class="empty-icon">â³</div>Soru bekleniyor...</div>';
+      el.innerHTML='<div class="empty-state"><div class="empty-icon">⌛</div>Soru bekleniyor...</div>';
     }
     return;
   }
@@ -610,14 +608,14 @@ function renderLiveAnswerChart(){
   const total=entries.length;
   const counts=curRound.options.map((_,i)=>entries.filter(e=>e.selectedIndex===i).length);
   const COLORS=['#e84040','#3b82f6','#f5c518','#3dd68c','#a855f7','#f97316'];
-  const SHAPES=['â–²','â—†','â—','â– ','â˜…','â™¥'];
+  const SHAPES=['▲','◆','●','■','★','♥'];
   const maxCount=Math.max(...counts,1);
   const frag=document.createDocumentFragment();
   const list=document.createElement('div');list.className='bar-list';
   curRound.options.forEach((opt,i)=>{
     const pct=total>0?Math.round(counts[i]/total*100):0;
     const isCorrect=i===curRound.correctIndex&&curRound.revealed;
-    const label=`${SHAPES[i]} Åık ${String.fromCharCode(65+i)}`;
+    const label=`${SHAPES[i]} Şık ${String.fromCharCode(65+i)}`;
     const row=makeBarRow(label,counts[i],isCorrect?'var(--accent3)':COLORS[i],counts[i]+' kişi ('+pct+'%)',maxCount);
     if(isCorrect)row.style.background='rgba(61,214,140,.04)';
     list.appendChild(row);
@@ -666,7 +664,7 @@ function renderQuestionAnalysis(){
     makeGauge(easiest.rate+'%','En Kolay Soru','var(--accent3)',easiest.rate)+
     makeGauge(totalQ,'Biten Tur','#3b82f6',Math.min(100,totalQ*10));
 
-  // Question bars — sorted by rate asc
+  // Question bars - sorted by rate asc
   const el=document.getElementById('questionAccBars');el.innerHTML='';
   [...qStats].sort((a,b)=>a.rate-b.rate).forEach(q=>{
     const color=DIFF_COLOR[q.diff]||'var(--accent)';
@@ -714,7 +712,7 @@ function renderPlayers(){
   // Score table
   const sorted=[...players].sort((a,b)=>b.score-a.score);
   const cols='28px 1fr 70px 60px 60px';
-  let html=`<div class="table-head" style="grid-template-columns:${cols};"><span>#</span><span>İSİM</span><span>PUAN</span><span>DOÄRU</span><span>ORANı</span></div>`;
+  let html=`<div class="table-head" style="grid-template-columns:${cols};"><span>#</span><span>İSİM</span><span>PUAN</span><span>DOĞRU</span><span>ORANI</span></div>`;
   sorted.forEach((p,i)=>{
     const rate=p.total>0?Math.round(p.correct/p.total*100):0;
     const rankCls=i<3?`rank-${i+1}`:'';
@@ -780,7 +778,7 @@ function renderSpeed(){
   });
 }
 
-// ─── GEÇMİÅ ───
+// ─── GEÇMİŞ ───
 function renderHistory(){
   document.getElementById('historyLoading').style.display='none';
   const el=document.getElementById('historyList');
@@ -798,56 +796,63 @@ function renderHistory(){
     item.innerHTML=`
       <div class="hi-top">
         <input type="checkbox" class="hi-check" onclick="toggleHistorySelect(event, '${h.id}')" ${selectedHistory.has(h.id)?'checked':''}>
-        <div class="hi-date">📝… ${dateStr}</div>
-        <div class="hi-players">👥 ${h.playerCount||0}</div>
-        <div class="hi-questions">📋 ${h.questionCount||0} soru</div>
+        <div class="hi-date">${dateStr}</div>
+        <div class="hi-players">${h.playerCount||0}👤</div>
+        <div class="hi-questions">${h.questionCount||0}❓</div>
       </div>
-      <div class="hi-podium" style="padding-left:30px;">${podiumHtml}</div>
+      <div class="hi-podium">${podiumHtml}</div>
     `;
-    item.onclick=()=>showHistoryDetail(h);
+    item.onclick=()=>openHistoryDetail(h.id);
     el.appendChild(item);
   });
 }
 
-window.closeHistoryDetail=function(){
-  document.getElementById('historyList').style.display='flex';
-  document.getElementById('historyDetail').style.display='none';
+window.openHistoryDetail=function(id){
+  const h=historyData.find(x=>x.id===id);if(!h)return;
+  document.getElementById('historyList').style.display='none';
+  const det=document.getElementById('historyDetail');det.style.display='block';
+  const d=new Date(h.ts);
+  document.getElementById('historyDetailTitle').textContent=`Oyun: ${d.toLocaleDateString('tr-TR')} ${d.toLocaleTimeString('tr-TR')}`;
+  
+  const stats=h.qStats?Object.values(h.qStats):[];
+  const avgAcc=stats.length?Math.round(stats.reduce((s,q)=>s+q.rate,0)/stats.length):0;
+  
+  document.getElementById('historyDetailStats').innerHTML=
+    makeStatCard('OYUNCU',h.playerCount||0,'toplam katılım','blue')+
+    makeStatCard('SORU',h.questionCount||0,'tamamlanan','yellow')+
+    makeStatCard('ORT. DOĞRULUK',avgAcc+'%','genel başarı',avgAcc>=60?'green':avgAcc>=40?'yellow':'red')+
+    makeStatCard('MAX SKOR',(h.podium||[])[0]?.score||0,'birinci puanı','purple');
+    
+  // Podium
+  let podHtml='<div class="table-card">';
+  (h.podium||[]).forEach((p,i)=>{
+    podHtml+=`<div class="table-row" style="grid-template-columns:30px 1fr 80px;">
+      <span class="rank-cell">${['🥇','🥈','🥉'][i]||i+1}</span>
+      <span class="name-cell">${p.name}</span>
+      <span class="pts-cell">${p.score}</span>
+    </div>`;
+  });
+  podHtml+='</div>';
+  document.getElementById('historyDetailPodium').innerHTML=podHtml;
+  
+  // Questions
+  let qHtml='';
+  stats.sort((a,b)=>a.index-b.index).forEach(q=>{
+    const color=DIFF_COLOR[q.diff]||'var(--accent)';
+    const row=makeBarRow(`S${q.index+1} ${q.title||''}`, q.rate, color, q.rate+'%');
+    qHtml+=row.outerHTML;
+  });
+  document.getElementById('historyDetailQuestions').innerHTML=qHtml;
 };
 
-function showHistoryDetail(h){
-  document.getElementById('historyList').style.display='none';
-  const d=new Date(h.ts);
-  const dateStr=d.toLocaleDateString('tr-TR',{day:'2-digit',month:'long',year:'numeric'});
-  document.getElementById('historyDetailTitle').textContent=dateStr+' Oyunu';
-  document.getElementById('historyDetailStats').innerHTML=
-    makeStatCard('OYUNCU',h.playerCount||0,'','green')+
-    makeStatCard('SORU',h.questionCount||0,'','yellow')+
-    makeStatCard('PODİUM',h.podium?h.podium.length:0,'finalist','blue');
+window.closeHistoryDetail=function(){
+  document.getElementById('historyDetail').style.display='none';
+  document.getElementById('historyList').style.display='flex';
+};
 
-  const pod=document.getElementById('historyDetailPodium');
-  pod.innerHTML=(h.podium||[]).map((p,i)=>`
-    <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card2);border-radius:7px;margin-bottom:6px;">
-      <span style="font-size:1.3rem;">${['🥇','🥈','🥉'][i]||'ğŸ…'}</span>
-      <span style="font-family:var(--mono);font-size:.75rem;flex:1;">${p.name}</span>
-      <span style="font-family:var(--display);font-size:1.1rem;color:var(--accent3);">${p.score} PT</span>
-    </div>
-  `).join('');
+// INITIAL RENDER
+renderTab('canli');
 
-  const qel=document.getElementById('historyDetailQuestions');qel.innerHTML='';
-  const qStats=Object.values(h.qStats||{}).sort((a,b)=>a.rate-b.rate);
-  qStats.forEach(q=>{
-    const color=DIFF_COLOR[q.diff]||'var(--accent)';
-    qel.appendChild(makeBarRow(q.title.substring(0,20)||'Soru',q.rate,color,q.rate+'% ('+q.correct+'/'+q.total+')'));
-  });
-  if(!qStats.length)qel.innerHTML='<div class="loading">Soru verisi yok</div>';
-
-  document.getElementById('historyDetail').style.display='block';
-}
-
-// ── Init ──
-renderLive();
 </script>
 </body>
 </html>
-
-

@@ -14,12 +14,10 @@ export const gameStore = {
   autoAdvInt: null,
   selMusic: 'lobby',
   COLORS: ['#e84040', '#3b82f6', '#f5c518', '#3dd68c', '#a855f7', '#f97316'],
-  SHAPES: ['â–²', 'â—†', 'â— ', 'â– ', 'â˜…', 'â™¥'],
+  SHAPES: ['▲', '◆', '●', '■', '★', '♥'],
   activeCatsMod: new Set(['__all__']),
   curGameMode: 'academy'
 };
-
-
 
 export function setLobby() {
   updateFlowStep('idle');
@@ -69,14 +67,14 @@ export function setGame() {
     if (el) el.style.display = 'none';
   });
   const statusMsg = document.getElementById('statusMsg');
-  if (statusMsg) statusMsg.textContent = 'Soruyu yayınlayın — süre otomatik başlar.';
+  if (statusMsg) statusMsg.textContent = 'Soruyu yayınlayın - süre otomatik başlar.';
 }
 
 export function setFinished() {
   gameStore.isGame = false;
   const pv = document.getElementById('phaseVal');
   if (pv) {
-    pv.textContent = 'ğŸ   BİTTİ';
+    pv.textContent = '🏁 BİTTİ';
     pv.className = 'phase-val game';
   }
   const gc = document.getElementById('gameControls');
@@ -115,7 +113,6 @@ export async function doReplay() {
   if (cdEl) cdEl.style.display = 'none';
   clearInterval(gameStore.autoAdvInt);
   
-  // Clear game data - connections KEPTS
   await fbRemove(gameRef('answers'));
   await fbRemove(gameRef('currentRound'));
   await fbRemove(gameRef('podium'));
@@ -131,28 +128,27 @@ export async function doReplay() {
   const connSnap = await fbGet(gameRef('connections'));
   const connCount = Object.keys(connSnap.val() || {}).length;
   if (statusMsg) {
-    if (connCount > 0) statusMsg.textContent = `ğŸ”„ Hazır! ${connCount} katılımcı bağlı, yeniden başlatın.`;
-    else statusMsg.textContent = 'ğŸ”„ Yeniden oynamaya hazır! Katılımcılar hÃ¢lÃ¢ bağlı.';
+    if (connCount > 0) statusMsg.textContent = `🔄 Hazır! ${connCount} katılımcı bağlı, yeniden başlatın.`;
+    else statusMsg.textContent = '🔄 Yeniden oynamaya hazır! Katılımcılar hâlâ bağlı.';
   }
 }
 
 export async function finishGame(renderRoundCallback) {
-  // Compute final stats
   const answersSnap = await fbGet(gameRef('answers'));
   const all = answersSnap.val() || {};
   const scores = {};
   
   Object.entries(all).forEach(([rIdx, ra]) => {
     Object.values(ra || {}).forEach(e => {
-      if (!scores[e.name]) scores[e.name] = { name: e.name, score: 0, correct: 0, total: 0 };
-      scores[e.name].total++;
-      if (e.correct) { scores[e.name].correct++; scores[e.name].score += e.pts; }
+      const pk = e.name.replace(/[.#$/[\]]/g, '_');
+      if (!scores[pk]) scores[pk] = { name: e.name, score: 0, correct: 0, total: 0 };
+      scores[pk].total++;
+      if (e.correct) { scores[pk].correct++; scores[pk].score += e.pts; }
     });
   });
   
   const podium = Object.values(scores).sort((a, b) => b.score - a.score).slice(0, 3);
   
-  // Hardest question
   const qStats = {};
   Object.entries(all).forEach(([rIdx, ra]) => {
     const entries = Object.values(ra || {}); const total = entries.length;
@@ -161,7 +157,7 @@ export async function finishGame(renderRoundCallback) {
   });
   
   const hardest = Object.values(qStats).sort((a, b) => a.rate - b.rate)[0];
-  const hardestQ = hardest && gameStore.filteredQuestions[hardest.index] ? gameStore.filteredQuestions[hardest.index].title : '—';
+  const hardestQ = hardest && gameStore.filteredQuestions[hardest.index] ? gameStore.filteredQuestions[hardest.index].title : '-';
   
   await fbSet(gameRef('phase'), 'finished');
   await fbSet(gameRef('podium'), {
@@ -169,7 +165,6 @@ export async function finishGame(renderRoundCallback) {
     hardest: { title: hardestQ, rate: hardest ? Math.round(hardest.rate * 100) : 0 }
   });
   
-  // Save history
   try {
     const historyEntry = {
       ts: Date.now(),
@@ -202,36 +197,21 @@ export async function finishGame(renderRoundCallback) {
 export async function exportResults() {
   const snap = await fbGet(gameRef('answers'));
   const all = snap.val() || {};
-  const rows = [['Sıra', 'İsim', 'Toplam Puan', 'Doğru', 'Toplam Soru', 'Hız Ort (sn)', 'Seri Bonusu']];
+  const rows = [['Sira', 'Isim', 'Toplam Puan', 'Dogru', 'Toplam Soru', 'Hiz Ort (sn)', 'Seri Bonusu']];
   const totals = {};
   
   Object.entries(all).sort(([a], [b]) => parseInt(a) - parseInt(b)).forEach(([rIdx, ra]) => {
     Object.values(ra || {}).forEach(e => {
-      if (!totals[e.name]) totals[e.name] = { name: e.name, score: 0, correct: 0, total: 0, bonusCount: 0, elapsedSum: 0, elapsedCount: 0 };
-      totals[e.name].total++;
-      if (e.correct) { totals[e.name].correct++; totals[e.name].score += e.pts; if (e.streakBonus) totals[e.name].bonusCount++; }
-      if (e.elapsed > 0) { totals[e.name].elapsedSum += e.elapsed; totals[e.name].elapsedCount++; }
+      const pk = e.name.replace(/[.#$/[\]]/g, '_');
+      if (!totals[pk]) totals[pk] = { name: e.name, score: 0, correct: 0, total: 0, bonusCount: 0, elapsedSum: 0, elapsedCount: 0 };
+      totals[pk].total++;
+      if (e.correct) { totals[pk].correct++; totals[pk].score += e.pts; if (e.streakBonus) totals[pk].bonusCount++; }
+      if (e.elapsed > 0) { totals[pk].elapsedSum += e.elapsed; totals[pk].elapsedCount++; }
     });
   });
   
   Object.values(totals).sort((a, b) => b.score - a.score).forEach((p, i) => {
     rows.push([i + 1, p.name, p.score, p.correct, p.total, p.elapsedCount ? Math.round(p.elapsedSum / p.elapsedCount * 10) / 10 : 0, p.bonusCount]);
-  });
-
-  rows.push([]);
-  rows.push(['--- SORU BAZLI ANALİZ ---']);
-  const headerRow = ['Oyuncu'];
-  gameStore.filteredQuestions.forEach((q, i) => headerRow.push(`S${i + 1}: ${q.title.substring(0, 20)}`));
-  rows.push(headerRow);
-
-  Object.values(totals).sort((a, b) => b.score - a.score).forEach(p => {
-    const pRow = [p.name];
-    gameStore.filteredQuestions.forEach((q, i) => {
-      const ans = (all[i] || {})[p.name.replace(/[.#$/[\]]/g, '_')];
-      if (!ans) pRow.push('—');
-      else pRow.push(ans.correct ? `✅ (${ans.pts})` : `â Œ (${ans.pts})`);
-    });
-    rows.push(pRow);
   });
 
   const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
@@ -300,7 +280,7 @@ export function renderCatFilterMod(renderNavCallback, renderRoundCallback) {
   
   const allBtn = document.createElement('button');
   allBtn.className = 'rbtn' + (gameStore.activeCatsMod.has('__all__') ? ' active' : '');
-  allBtn.textContent = 'ğŸ · Tümü';
+  allBtn.textContent = '🏷️ Tümü';
   allBtn.onclick = () => {
     gameStore.activeCatsMod = new Set(['__all__']);
     renderCatFilterMod(renderNavCallback, renderRoundCallback);
@@ -354,7 +334,7 @@ export async function previewRound(setBtnsPreviewCallback, stopMusicCallback) {
   await fbRemove(gameRef('answers/' + gameStore.curRound));
   if (setBtnsPreviewCallback) setBtnsPreviewCallback();
   const statusMsg = document.getElementById('statusMsg');
-  if (statusMsg) statusMsg.textContent = '📝– Önizleme modu — katılımcılar soruyu okuyor...';
+  if (statusMsg) statusMsg.textContent = '📝 Önizleme modu - katılımcılar soruyu okuyor...';
 }
 
 export async function openAnswering(setBtnsAnsweringCallback, playMusicCallback) {
@@ -365,7 +345,7 @@ export async function openAnswering(setBtnsAnsweringCallback, playMusicCallback)
   await fbSet(gameRef('currentRound/timerStart'), Date.now());
   if (setBtnsAnsweringCallback) setBtnsAnsweringCallback();
   const statusMsg = document.getElementById('statusMsg');
-  if (statusMsg) statusMsg.textContent = `â–¶ Cevaplama başladı! Soru ${gameStore.curRound + 1}`;
+  if (statusMsg) statusMsg.textContent = `▶ Cevaplama başladı! Soru ${gameStore.curRound + 1}`;
   startTimer(dur);
   if (gameStore.selMusic && playMusicCallback) playMusicCallback(gameStore.selMusic);
 }
@@ -422,11 +402,11 @@ export async function revealAnswer(stopMusicCallback, renderNavCallback, renderR
     let rem = secs;
     const cdEl = document.getElementById('autoAdvanceCountdown');
     if (cdEl) {
-      cdEl.style.display = 'block'; cdEl.textContent = `â © ${rem}s`;
+      cdEl.style.display = 'block'; cdEl.textContent = `⌛ ${rem}s`;
     }
     gameStore.autoAdvInt = setInterval(() => {
       rem--;
-      if (cdEl) cdEl.textContent = `â © ${rem}s`;
+      if (cdEl) cdEl.textContent = `⌛ ${rem}s`;
       if (rem <= 0) {
         clearInterval(gameStore.autoAdvInt);
         if (cdEl) cdEl.style.display = 'none';
@@ -439,12 +419,13 @@ export async function revealAnswer(stopMusicCallback, renderNavCallback, renderR
     }, 1000);
   }
 }
+
 export function renderRound() {
   if (!gameStore.filteredQuestions.length) return;
   const r = gameStore.filteredQuestions[gameStore.curRound];
   if (!r) return;
 
-  const DIFF = { easy: 'ğŸŸ¢ KOLAY', mid: 'ğŸŸ¡ ORTA', hard: 'ğŸ”´ ZOR', vhard: 'ğŸŸ£ ÇOK ZOR' };
+  const DIFF = { easy: '🟢 KOLAY', mid: '🟡 ORTA', hard: '🔴 ZOR', vhard: '🟣 ÇOK ZOR' };
   const MODE_MULT = { academy: 1.0, showtime: 1.2, turbo: 1.5 };
   const mMult = MODE_MULT[gameStore.curGameMode] || 1.0;
   const MULT_MOD = {
@@ -470,9 +451,6 @@ export function renderRound() {
     setTimeout(() => rk(qx), 100);
   }
 
-  const td = document.getElementById('timerDisp');
-  if (td) td.textContent = r.duration || 60;
-
   const og = document.getElementById('optsGrid');
   if (og) {
     og.innerHTML = '';
@@ -486,7 +464,7 @@ export function renderRound() {
       </div>`;
     } else if (isOpen) {
       og.innerHTML = `<div style="background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.3);border-radius:8px;padding:10px;grid-column:1/-1;">
-        <div style="font-family:var(--display);font-size:.75rem;letter-spacing:1px;color:var(--purple);margin-bottom:5px;">âœ ï¸  AÇIK UÇLU SORU · MODEL CEVAP</div>
+        <div style="font-family:var(--display);font-size:.75rem;letter-spacing:1px;color:var(--purple);margin-bottom:5px;">✍️ AÇIK UÇLU SORU · MODEL CEVAP</div>
         <div style="font-family:var(--mono);font-size:.7rem;color:var(--text);line-height:1.6;">${r.modelAnswer || '(model cevap girilmemiş)'}</div>
       </div>`;
     } else {
@@ -499,7 +477,7 @@ export function renderRound() {
         const d = document.createElement('div');
         d.className = 'opt-card';
         d.style.background = bg;
-        d.innerHTML = `<div class="opt-shape">${sh}</div><div class="opt-math" style="color:#fff;">${o.text || '—'}</div>${o.isCorrect ? '<span class="opt-correct-tag">✓ DOĞRU</span>' : ''}`;
+        d.innerHTML = `<div class="opt-shape">${sh}</div><div class="opt-math" style="color:#fff;">${o.text || '-'}</div>${o.isCorrect ? '<span class="opt-correct-tag">✓ DOĞRU</span>' : ''}`;
         og.appendChild(d);
         setTimeout(() => rk(d), 100);
       });
@@ -510,7 +488,7 @@ export function renderRound() {
   if (ais) {
     if (r.aiModel) {
       ais.style.display = 'block';
-      const aiWrongTxt = r.aiWrong >= 0 && r.options && r.options[r.aiWrong] ? `${gameStore.SHAPES[r.aiWrong]} ${String.fromCharCode(65 + r.aiWrong)} şıkkı` : '—';
+      const aiWrongTxt = r.aiWrong >= 0 && r.options && r.options[r.aiWrong] ? `${gameStore.SHAPES[r.aiWrong]} ${String.fromCharCode(65 + r.aiWrong)} şıkkı` : '-';
       const aisc = document.getElementById('aiSummaryContent');
       if (aisc) aisc.innerHTML = `<span>Model:</span> <span>${r.aiModel} (${r.aiYear || '?'})</span> · <span>Yanlış Seçim:</span> <span>${aiWrongTxt}</span>`;
     } else {
@@ -524,11 +502,6 @@ export function renderRound() {
   });
   const rb = document.getElementById('revealBtn');
   if (rb) rb.disabled = true;
-  const oab = document.getElementById('openAnswerBtn');
-  if (oab) {
-    oab.style.display = 'none';
-    oab.disabled = true;
-  }
   renderNav();
 }
 
@@ -537,7 +510,7 @@ export function renderNav() {
   if (!nav) return;
   nav.innerHTML = '';
   gameStore.filteredQuestions.forEach((r, i) => {
-    const d = r.diff === 'easy' ? 'ğŸŸ¢' : r.diff === 'mid' ? 'ğŸŸ¡' : r.diff === 'hard' ? 'ğŸ”´' : 'ğŸŸ£';
+    const d = r.diff === 'easy' ? '🟢' : r.diff === 'mid' ? '🟡' : r.diff === 'hard' ? '🔴' : '🟣';
     const b = document.createElement('button');
     b.className = 'rbtn' + (i === gameStore.curRound ? ' active' : '') + (gameStore.roundDone[i] ? ' done' : '');
     b.textContent = `${d} ${i + 1}`;
@@ -562,41 +535,29 @@ export function nextRound(stopMusicCallback) {
   }
 }
 
-/**
- * v3.5: Missing Game Control Functions
- */
-
 export async function setGameMode(mode) {
   gameStore.curGameMode = mode;
   await fbSet(gameRef('mode'), mode);
-  
-  // Update UI selector
   document.querySelectorAll('.mode-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.mode === mode);
   });
-  
-  // Re-render current round to update multipliers if needed
   renderRound();
 }
 
 export async function generatePin() {
   const pin = Math.floor(1000 + Math.random() * 9000);
   await fbSet(gameRef('pin'), pin);
-  const disp = document.getElementById('pinDisplay');
-  if (disp) disp.textContent = pin;
 }
 
 export async function clearPin() {
   await fbRemove(gameRef('pin'));
-  const disp = document.getElementById('pinDisplay');
-  if (disp) disp.textContent = '——';
 }
 
 export async function sendReactionSignal() {
   const btn = document.getElementById('reactionSignalBtn');
   if (btn) {
     btn.disabled = true;
-    btn.textContent = '⚡ SÃ„Â°NYAL GÃƒâ€“NDERÃ„Â°LDÃ„Â°!';
+    btn.textContent = '⚡ SİNYAL GÖNDERİLDİ!';
   }
   await fbUpdate(gameRef('currentRound'), {
     reactionSignalTs: Date.now(),
@@ -605,23 +566,16 @@ export async function sendReactionSignal() {
   const rb = document.getElementById('revealBtn');
   if (rb) rb.disabled = false;
   const sm = document.getElementById('statusMsg');
-  if (sm) sm.textContent = '⚡ Sinyal verildi! Oyuncular yarÃ„Â±Ã…şÃ„Â±yor...';
+  if (sm) sm.textContent = '⚡ Sinyal verildi! Oyuncular yarışıyor...';
 }
 
-/**
- * PIN Listener for initial load
- */
 export function initPinListener() {
   onValue(gameRef('pin'), snap => {
     const p = snap.val();
     const disp = document.getElementById('pinDisplay');
-    if (disp) disp.textContent = p || '——';
+    if (disp) disp.textContent = p || '--';
   });
 }
-
-/**
- * v3.5: Team Management
- */
 
 export async function toggleTeamMode() {
   const chk = document.getElementById('teamModeChk');
@@ -638,8 +592,8 @@ export function addTeam(name = '', color = '') {
   const c = color || gameStore.COLORS[list.children.length % gameStore.COLORS.length];
   row.innerHTML = `
     <div class="team-color-dot" style="background:${c}" onclick="this.style.background=window.cycleTeamColor(this)"></div>
-    <input class="team-name-inp" value="${name}" placeholder="TakÃ„Â±m AdÃ„Â±">
-    <button class="team-del" onclick="this.parentElement.remove()">âœ•</button>
+    <input class="team-name-inp" value="${name}" placeholder="Takım Adı">
+    <button class="team-del" onclick="this.parentElement.remove()">✕</button>
   `;
   list.appendChild(row);
 }
@@ -668,31 +622,18 @@ window.cycleTeamColor = (el) => {
 };
 
 export function loadModSet(setId = null) {
-  // For now, this just updates the active category or set filter
-  // Future: fetch only questions from a specific set
   if (setId === null) {
     gameStore.activeCatsMod = new Set(['__all__']);
-  } else {
-    // Basic implementation: find questions with this setId if it exists
-    // or just use it as a placeholder for now.
   }
   buildFilteredQuestions();
   renderRound();
   renderNav();
 }
 
-
-
-
 export function setBtnsPreview() {
   updateFlowStep('preview');
   const pb = document.getElementById('previewBtn'); if (pb) pb.disabled = true;
   const pub = document.getElementById('publishBtn'); if (pub) pub.disabled = true;
-  const oab = document.getElementById('openAnswerBtn');
-  if (oab) {
-    oab.style.display = 'inline-flex';
-    oab.disabled = false;
-  }
   const rb = document.getElementById('revealBtn'); if (rb) rb.disabled = true;
 }
 
@@ -700,7 +641,6 @@ export function setBtnsAnswering() {
   updateFlowStep('answering');
   const pb = document.getElementById('previewBtn'); if (pb) pb.disabled = true;
   const pub = document.getElementById('publishBtn'); if (pub) pub.disabled = true;
-  const oab = document.getElementById('openAnswerBtn'); if (oab) oab.style.display = 'none';
   const rb = document.getElementById('revealBtn'); if (rb) rb.disabled = false;
 
   const r = gameStore.filteredQuestions[gameStore.curRound];
@@ -712,4 +652,3 @@ export function setBtnsAnswering() {
   }
   if (isReaction && rb) rb.disabled = true;
 }
-

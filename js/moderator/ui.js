@@ -69,8 +69,8 @@ export function updateConnectionsList(conns, knownConns, kickCallback, banCallba
       
       row.innerHTML = `<span style="font-size:1rem;">${av}</span><span class="lp-name" style="flex:1;">${name}</span>
         <div style="display:flex;gap:5px;">
-          <button class="kick-btn" data-id="${id}" data-name="${name}" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:.8rem;" title="At (Kick)">ğŸ‘Ÿ</button>
-          <button class="ban-btn" data-id="${id}" data-name="${name}" data-uid="${uid}" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:.8rem;" title="Yasakla (Ban)">ğŸš«</button>
+          <button class="kick-btn" data-id="${id}" data-name="${name}" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:.8rem;" title="At (Kick)">👢</button>
+          <button class="ban-btn" data-id="${id}" data-name="${name}" data-uid="${uid}" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:.8rem;" title="Yasakla (Ban)">🚫</button>
         </div>
         <span class="lp-new">YENİ</span>`;
       list.appendChild(row);
