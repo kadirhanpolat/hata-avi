@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Usev â€” Moderatör</title>
+<title>Usev — Moderatör</title>
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#f5c518">
@@ -30,9 +30,7 @@
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);overflow:hidden;}
 .katex{font-size:.88em;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• 
-   HEADER
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•  */
+/* HEADER */
 .hdr{
   background:var(--surface);
   border-bottom:2px solid var(--accent);
@@ -40,7 +38,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   display:flex;align-items:center;gap:12px;
   flex-shrink:0;position:relative;z-index:30;
 }
-.hdr-logo{font-family:var(--display);font-size:1.6rem;letter-spacing:4px;color:var(--accent);flex-shrink:0;}
+.header-main{width:100%;display:flex;align-items:center;gap:12px;}
+.header-logo{font-family:var(--display);font-size:1.6rem;letter-spacing:4px;color:var(--accent);flex-shrink:0;cursor:pointer;}
 .hdr-divider{width:1px;height:28px;background:var(--border);flex-shrink:0;}
 .phase-pill{
   font-family:var(--display);font-size:1rem;letter-spacing:3px;
@@ -50,7 +49,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .phase-pill.lobby{background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.25);color:var(--accent3);}
 .phase-pill.game{background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);color:var(--accent);}
 .hdr-spacer{flex:1;}
-/* Timer in header */
 .hdr-timer{
   font-family:var(--display);font-size:1.8rem;letter-spacing:4px;
   min-width:64px;text-align:center;padding:3px 12px;
@@ -61,7 +59,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .hdr-timer.running{border-color:var(--accent3);background:rgba(61,214,140,.07);color:var(--accent3);}
 .hdr-timer.urgent{border-color:var(--accent2);background:rgba(232,64,64,.12);color:var(--accent2);animation:htp .45s infinite alternate;}
 @keyframes htp{from{transform:scale(1);}to{transform:scale(1.05);}}
-/* Conn badge */
 .conn-badge{
   display:flex;align-items:center;gap:5px;
   font-family:var(--mono);font-size:.62rem;
@@ -97,13 +94,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   border-radius:4px;flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• 
-   3-COLUMN LAYOUT
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•  */
+/* 3-COLUMN LAYOUT */
 .workspace{
   display:grid;
   grid-template-columns:var(--col-left) 1fr var(--col-right);
-  height:calc(100vh - 102px);/* hdr 56 + phase-bar 46 */
+  height:calc(100vh - 102px);
   overflow:hidden;
 }
 .col{overflow-y:auto;overflow-x:hidden;}
@@ -111,28 +106,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .col::-webkit-scrollbar-track{background:transparent;}
 .col::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
-/* â”€â”€ LEFT COLUMN â”€â”€ */
 .col-left{
   border-right:1px solid var(--border);
   background:var(--surface);
   padding:14px;display:flex;flex-direction:column;gap:10px;
 }
-/* Section label */
 .slbl{
   font-family:var(--mono);font-size:.55rem;color:var(--muted);
   letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;
   display:flex;align-items:center;gap:6px;
 }
-.slbl-badge{
-  font-size:.5rem;padding:1px 6px;border-radius:10px;
-  background:rgba(245,197,24,.1);color:var(--accent);
-  border:1px solid rgba(245,197,24,.2);
-}
-/* PIN card */
 .pin-card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px;}
 .pin-val{font-family:var(--display);font-size:2.8rem;letter-spacing:12px;color:var(--accent);text-align:center;background:var(--bg);border-radius:6px;padding:6px 0;margin:6px 0;}
 .pin-actions{display:flex;gap:5px;}
-/* Round nav */
 .rnav{display:flex;gap:4px;flex-wrap:wrap;}
 .rbtn{
   font-family:var(--mono);font-size:.58rem;padding:4px 8px;
@@ -141,7 +127,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 }
 .rbtn:hover,.rbtn.active{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.07);}
 .rbtn.done{border-color:var(--accent3);color:var(--accent3);}
-/* Set selector */
 .set-btns{display:flex;gap:4px;flex-wrap:wrap;}
 .mod-set-btn{
   font-family:var(--mono);font-size:.56rem;padding:3px 8px;
@@ -150,20 +135,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 }
 .mod-set-btn:hover{border-color:rgba(245,197,24,.4);color:var(--accent);}
 .mod-set-btn.active{border-color:var(--accent);background:rgba(245,197,24,.08);color:var(--accent);}
-/* Cat filter */
-#catFilterMod{display:flex;flex-wrap:wrap;gap:4px;}
-/* Lobby mini */
 .lobby-mini{max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:3px;}
 .lp-row{
   display:flex;align-items:center;gap:6px;padding:5px 8px;
   background:var(--card);border-radius:5px;border:1px solid var(--border);
   animation:fi .3s ease;
 }
-.lp-row.newest{border-color:var(--accent);background:rgba(245,197,24,.05);}
 .lp-name{font-family:var(--mono);font-size:.65rem;flex:1;}
-.lp-new{font-size:.46rem;padding:1px 4px;background:var(--accent);color:#000;border-radius:3px;}
-@keyframes fi{from{opacity:0;transform:translateX(6px);}to{opacity:1;transform:translateX(0);}}
-/* Sound accordion */
 .accordion{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 .acc-hdr{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;user-select:none;}
 .acc-hdr-lbl{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:1px;flex:1;}
@@ -190,13 +168,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .music-card.playing{border-color:var(--accent3);}
 .music-icon{font-size:.9rem;flex-shrink:0;}
 .music-name{font-family:var(--mono);font-size:.58rem;flex:1;}
-.music-status{font-size:.5rem;font-family:var(--mono);color:var(--accent3);}
-.music-card-desc{display:none;}
 .music-ctrl{display:flex;gap:4px;}
 
-/* â•â• MİNİ PODYUM â•â• */
 .col-mid{padding:16px;display:flex;flex-direction:column;gap:12px;}
-/* Flow steps */
 .flow-steps{
   display:flex;align-items:center;gap:0;background:var(--card);
   border:1px solid var(--border);border-radius:10px;overflow:hidden;flex-shrink:0;
@@ -211,9 +185,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .flow-step.done-step{background:rgba(61,214,140,.04);}
 .flow-step-icon{font-size:1.1rem;margin-bottom:2px;}
 .flow-step-lbl{font-family:var(--mono);font-size:.52rem;color:var(--muted);letter-spacing:.5px;}
-.flow-step.active .flow-step-lbl{color:var(--accent);}
-.flow-step.done-step .flow-step-lbl{color:var(--accent3);}
-/* Control buttons â€” big */
 .ctrl-wrap{
   background:var(--card);border:1px solid var(--border);border-radius:10px;
   padding:14px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;
@@ -223,17 +194,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .btn{font-family:var(--display);letter-spacing:2px;padding:8px 18px;border:none;cursor:pointer;border-radius:6px;transition:all .18s;font-size:.88rem;}
 .btn-primary{background:var(--accent);color:#000;}
 .btn-primary:hover{background:#ffd33a;}
-.btn-primary:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
 .btn-green{background:var(--accent3);color:#000;}
 .btn-green:hover{background:#5bffa8;}
-.btn-green:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
 .btn-danger{background:var(--accent2);color:#fff;}
 .btn-danger:hover{background:#ff5252;}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:.62rem;letter-spacing:1px;padding:7px 13px;}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
 .btn-sm{padding:5px 11px;font-size:.75rem;}
 .btn-signal{background:linear-gradient(135deg,var(--accent),#f97316);color:#000;}
-.btn-signal:hover{filter:brightness(1.1);}
 .auto-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .auto-lbl{font-family:var(--mono);font-size:.57rem;color:var(--muted);}
 .auto-sel{
@@ -241,18 +208,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   font-family:var(--mono);font-size:.65rem;padding:4px 8px;border-radius:5px;
   outline:none;cursor:pointer;
 }
-/* Status msg */
-.status-msg{font-family:var(--mono);font-size:.6rem;color:var(--muted);line-height:1.6;min-height:15px;}
-/* Question card */
 .qcard{
   background:var(--card);border:1px solid var(--border);border-radius:10px;
   overflow:hidden;flex:1;display:flex;flex-direction:column;
 }
 .qcard-top{padding:14px 16px;border-bottom:1px solid var(--border);}
-.qcard-diff-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
-.qdiff{font-family:var(--mono);font-size:.58rem;letter-spacing:1px;}
-.qtype-tag{font-family:var(--mono);font-size:.55rem;padding:2px 8px;border-radius:3px;letter-spacing:.5px;}
-.cat-tag{font-family:var(--mono);font-size:.55rem;padding:2px 8px;border-radius:10px;letter-spacing:.5px;}
 .qtitle{font-family:var(--display);font-size:1.3rem;letter-spacing:1px;margin-bottom:8px;line-height:1.3;}
 .qtext{
   font-family:var(--mono);font-size:.78rem;color:var(--accent);
@@ -263,206 +223,65 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .qcard-body{padding:14px 16px;flex:1;overflow-y:auto;}
 .opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .opt-card{border-radius:8px;padding:10px 13px;display:flex;align-items:center;gap:8px;position:relative;overflow:hidden;}
-.opt-shape{font-size:1.5rem;color:#fff;flex-shrink:0;}
 .opt-math{font-family:var(--mono);font-size:.72rem;line-height:1.35;flex:1;color:#fff;}
-.opt-correct-tag{font-size:.5rem;padding:2px 6px;background:rgba(0,0,0,.3);border-radius:10px;color:#fff;position:absolute;top:6px;right:8px;}
 .ai-summary{background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.18);border-radius:8px;padding:10px 13px;margin-top:10px;}
 .ai-summary-title{font-family:var(--mono);font-size:.56rem;color:var(--purple);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase;}
 .ai-summary-row{font-family:var(--mono);font-size:.63rem;color:var(--muted);line-height:1.65;}
-.ai-summary-row span{color:var(--purple);}
 
-/* â”€â”€ RIGHT COLUMN â”€â”€ */
 .col-right{
   border-left:1px solid var(--border);
   background:var(--surface);
   padding:14px;display:flex;flex-direction:column;gap:10px;
 }
-/* Stats donut cards */
 .live-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
 .ls-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center;}
 .ls-val{font-family:var(--display);font-size:1.6rem;color:var(--accent);letter-spacing:1px;line-height:1;}
 .ls-lbl{font-family:var(--mono);font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
-.ls-card.green .ls-val{color:var(--accent3);}
-.ls-card.red .ls-val{color:var(--accent2);}
-/* Accuracy bar */
-.acc-bar-wrap{margin-top:4px;}
-.acc-bar-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
-.acc-bar-fill{height:100%;border-radius:3px;transition:width .6s ease;}
-/* Answers live */
 .ans-list{display:flex;flex-direction:column;gap:3px;max-height:200px;overflow-y:auto;}
 .ans-row{display:flex;align-items:center;padding:5px 8px;background:var(--card);border-radius:5px;border:1px solid var(--border);animation:fi .3s ease;}
-.ans-row.ok{border-color:var(--accent3);background:rgba(61,214,140,.04);}
-.ans-row.fail{border-color:var(--accent2);background:rgba(232,64,64,.04);}
-.ans-row.pending{border-color:rgba(168,85,247,.35);}
-.ans-name{font-family:var(--mono);font-size:.65rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ans-pts{font-family:var(--display);font-size:.82rem;color:var(--accent3);letter-spacing:1px;margin:0 4px;}
-.ans-open-row{flex-direction:column;align-items:flex-start;gap:4px;padding:6px 8px;}
-.ans-open-text{font-family:var(--sans);font-size:.7rem;color:var(--text);line-height:1.5;word-break:break-word;}
-.ans-open-ctrl{display:flex;align-items:center;gap:5px;width:100%;}
-.oe-approve{border:none;border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:.57rem;cursor:pointer;background:rgba(61,214,140,.13);color:var(--accent3);border:1px solid var(--accent3);}
-.oe-reject{border:none;border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:.57rem;cursor:pointer;background:rgba(232,64,64,.1);color:var(--accent2);border:1px solid var(--accent2);}
-.oe-pts-inp{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.62rem;padding:3px 5px;border-radius:4px;width:50px;outline:none;}
-.oe-pts-lbl{font-family:var(--mono);font-size:.56rem;color:var(--muted);}
-.oe-bulk{display:flex;gap:5px;margin-bottom:5px;}
-.oe-bulk-btn{flex:1;border:none;border-radius:4px;padding:4px 7px;font-family:var(--mono);font-size:.58rem;cursor:pointer;}
-/* Leaderboard */
 .lb-list{display:flex;flex-direction:column;gap:3px;max-height:200px;overflow-y:auto;}
 .lb-row{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--card);border-radius:5px;border:1px solid var(--border);transition:all .3s;animation:fi .3s ease;}
-.lb-row.r1{border-color:var(--accent);background:rgba(245,197,24,.05);}
-.lb-row.r2{border-color:#777;}
-.lb-row.r3{border-color:#b87333;}
 .lb-rank{font-family:var(--display);font-size:.9rem;width:18px;color:var(--muted);flex-shrink:0;}
-.lb-row.r1 .lb-rank{color:var(--accent);}
-.lb-name{flex:1;font-family:var(--mono);font-size:.65rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lb-score{font-family:var(--display);font-size:.95rem;color:var(--accent3);letter-spacing:1px;}
-.lb-detail{font-family:var(--mono);font-size:.52rem;color:var(--muted);margin-left:2px;}
-/* Team scores */
-.team-score-row{display:flex;align-items:center;gap:7px;padding:6px 9px;background:var(--card);border-radius:6px;border:2px solid transparent;animation:fi .3s ease;}
-.team-score-name{flex:1;font-family:var(--mono);font-size:.7rem;}
-.team-score-pts{font-family:var(--display);font-size:1.05rem;letter-spacing:1px;}
-/* game controls locked */
-.game-controls{transition:opacity .3s;}
 .game-controls.locked{opacity:.3;pointer-events:none;}
-/* misc */
 .empty{font-family:var(--mono);font-size:.62rem;color:var(--muted);text-align:center;padding:12px;}
-.no-q{font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;padding:20px;line-height:1.8;}
-.filteredCount-lbl{font-family:var(--mono);font-size:.56rem;color:var(--muted);}
-#autoAdvanceCountdown{font-family:var(--display);font-size:1rem;color:var(--accent3);letter-spacing:1px;display:none;}
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   OVERLAYS (modals)
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
+/* OVERLAYS */
 .overlay-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;align-items:center;justify-content:center;}
 .overlay-bg.visible{display:flex;}
 .overlay-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:28px;max-width:460px;width:93%;max-height:90vh;overflow-y:auto;}
 .overlay-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent);margin-bottom:4px;}
-.overlay-sub{font-family:var(--mono);font-size:.63rem;color:var(--muted);margin-bottom:18px;line-height:1.65;}
-.field{margin-bottom:11px;}
-.field-lbl{font-family:var(--mono);font-size:.57rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block;}
 .field-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;font-family:var(--mono);font-size:.82rem;border-radius:7px;outline:none;transition:border-color .2s;letter-spacing:1px;}
-.field-inp:focus{border-color:var(--accent);}
-.overlay-err{font-family:var(--mono);font-size:.62rem;color:var(--accent2);min-height:15px;margin-top:4px;}
-.overlay-ok{font-family:var(--mono);font-size:.62rem;color:var(--accent3);min-height:15px;margin-top:4px;}
-.overlay-btns{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;}
-/* Confirm overlay */
 .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:250;align-items:center;justify-content:center;}
 .confirm-overlay.visible{display:flex;}
 .confirm-box{background:var(--surface);border:2px solid var(--accent2);border-radius:14px;padding:32px;max-width:380px;width:90%;text-align:center;}
-.confirm-icon{font-size:2.2rem;margin-bottom:10px;}
 .confirm-title{font-family:var(--display);font-size:1.5rem;letter-spacing:2px;color:var(--accent2);margin-bottom:7px;}
-.confirm-msg{font-family:var(--mono);font-size:.68rem;color:var(--muted);line-height:1.7;margin-bottom:20px;}
-.confirm-btns{display:flex;gap:8px;justify-content:center;}
-/* Account management */
 .acc-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:300;align-items:center;justify-content:center;}
 .acc-overlay.visible{display:flex;}
 .acc-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:26px;width:530px;max-width:95vw;max-height:88vh;overflow-y:auto;}
-.acc-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent);margin-bottom:4px;}
-.acc-sub{font-family:var(--mono);font-size:.61rem;color:var(--muted);margin-bottom:16px;line-height:1.6;}
-.acc-list{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
 .acc-row{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--card);border:1px solid var(--border);border-radius:7px;}
-.acc-row.is-you{border-color:var(--accent);background:rgba(245,197,24,.04);}
-.acc-avatar{font-size:1.1rem;flex-shrink:0;}
-.acc-info{flex:1;min-width:0;}
-.acc-name{font-family:var(--mono);font-size:.72rem;}
-.acc-meta{font-family:var(--mono);font-size:.52rem;color:var(--muted);margin-top:1px;}
-.role-badge{font-family:var(--mono);font-size:.5rem;padding:2px 6px;border-radius:3px;letter-spacing:.5px;}
-.role-admin{background:rgba(245,197,24,.1);color:var(--accent);border:1px solid rgba(245,197,24,.22);}
-.role-mod{background:rgba(61,214,140,.08);color:var(--accent3);border:1px solid rgba(61,214,140,.18);}
-.acc-actions{display:flex;gap:4px;flex-shrink:0;}
-.acc-add-form{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px;margin-bottom:10px;}
-.acc-add-title{font-family:var(--display);font-size:.88rem;letter-spacing:1px;color:var(--accent3);margin-bottom:9px;}
-.acc-field{margin-bottom:9px;}
-.acc-lbl{font-family:var(--mono);font-size:.56rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block;}
-.acc-inp{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:var(--mono);font-size:.76rem;border-radius:6px;outline:none;transition:border-color .2s;}
-.acc-inp:focus{border-color:var(--accent);}
-.acc-role-sel{display:flex;gap:5px;}
-.acc-role-btn{font-family:var(--mono);font-size:.63rem;padding:5px 11px;border-radius:4px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .14s;}
-.acc-role-btn.sel-admin{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.07);}
-.acc-role-btn.sel-mod{border-color:var(--accent3);color:var(--accent3);background:rgba(61,214,140,.07);}
-.acc-err{font-family:var(--mono);font-size:.61rem;color:var(--accent2);margin-top:5px;min-height:14px;}
-.acc-ok{font-family:var(--mono);font-size:.61rem;color:var(--accent3);margin-top:5px;min-height:14px;}
-.reset-form{display:none;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px;margin-top:5px;}
-.reset-form.visible{display:block;}
-/* Team toggles */
-.toggle-sw{position:relative;width:36px;height:19px;cursor:pointer;}
-.toggle-sw input{opacity:0;width:0;height:0;}
-.toggle-track{position:absolute;inset:0;background:var(--border);border-radius:20px;transition:.3s;}
-.toggle-sw input:checked+.toggle-track{background:var(--accent3);}
-.toggle-knob{position:absolute;top:2.5px;left:2.5px;width:14px;height:14px;background:#fff;border-radius:50%;transition:.3s;}
-.toggle-sw input:checked~.toggle-knob{transform:translateX(17px);}
-.team-toggle{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;}
-.team-toggle-lbl{font-family:var(--mono);font-size:.66rem;color:var(--text);flex:1;}
-.teams-list{display:flex;flex-direction:column;gap:4px;margin-bottom:7px;}
-.team-row{display:flex;align-items:center;gap:5px;padding:6px 9px;background:var(--card);border:1px solid var(--border);border-radius:6px;}
-.team-color-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:border-color .14s;}
-.team-color-dot:hover{border-color:#fff;}
-.team-name-inp{flex:1;background:transparent;border:none;color:var(--text);font-family:var(--mono);font-size:.7rem;outline:none;}
-.team-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.78rem;padding:2px;}
-.team-del:hover{color:var(--accent2);}
-
-/* pw-overlay alias */
+.acc-inp{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:var(--mono);font-size:.76rem;border-radius:6px;outline:none;}
 .pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:300;align-items:center;justify-content:center;}
 .pw-overlay.visible{display:flex;}
 .pw-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:30px;max-width:400px;width:90%;}
-.pw-title{font-family:var(--display);font-size:1.5rem;letter-spacing:2px;color:var(--accent);margin-bottom:5px;}
-.pw-sub{font-family:var(--mono);font-size:.63rem;color:var(--muted);margin-bottom:18px;line-height:1.6;}
-.pw-field{margin-bottom:11px;}
-.pw-label{font-family:var(--mono);font-size:.56rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block;}
 .pw-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 11px;font-family:var(--mono);font-size:.83rem;border-radius:6px;outline:none;transition:border-color .2s;letter-spacing:1px;}
-.pw-inp:focus{border-color:var(--accent);}
-.pw-err{font-family:var(--mono);font-size:.61rem;color:var(--accent2);margin-top:7px;min-height:15px;}
-.pw-ok{font-family:var(--mono);font-size:.61rem;color:var(--accent3);margin-top:7px;min-height:15px;}
-.pw-btns{display:flex;gap:8px;margin-top:14px;}
-/* set overlay */
 .set-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:220;align-items:center;justify-content:center;}
 .set-overlay.visible{display:flex;}
 .set-ov-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:24px;max-width:520px;width:95%;max-height:85vh;overflow-y:auto;}
 .set-ov-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent);margin-bottom:14px;}
-.set-q-list{display:flex;flex-direction:column;gap:4px;margin:9px 0 14px;max-height:280px;overflow-y:auto;}
-.set-q-item{display:flex;align-items:center;gap:8px;padding:6px 9px;background:var(--card);border-radius:6px;border:1px solid var(--border);cursor:pointer;transition:border-color .14s;}
-.set-q-item:hover{border-color:rgba(245,197,24,.3);}
-.set-q-item.checked{border-color:var(--accent);background:rgba(245,197,24,.04);}
-.set-q-cb{width:14px;height:14px;border-radius:3px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.58rem;transition:all .14s;}
-.set-q-item.checked .set-q-cb{border-color:var(--accent);background:var(--accent);color:#000;}
-.set-q-title{font-family:var(--mono);font-size:.65rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.set-q-diff{font-family:var(--mono);font-size:.48rem;padding:1px 5px;border-radius:3px;flex-shrink:0;}
-.set-sel-all{font-family:var(--mono);font-size:.58rem;color:var(--muted);cursor:pointer;text-decoration:underline;}
-.set-sel-all:hover{color:var(--accent);}
-.set-import-btn{font-family:var(--mono);font-size:.6rem;padding:5px 10px;border-radius:4px;border:1px dashed var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .14s;width:100%;text-align:center;margin-top:3px;}
-.set-import-btn:hover{border-color:var(--accent);color:var(--accent);}
-/* CSV overlay alias */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;align-items:center;justify-content:center;}
-.overlay.visible{display:flex;}
-/* inp alias */
 .inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;font-family:var(--mono);font-size:.82rem;border-radius:7px;outline:none;transition:border-color .2s;letter-spacing:.5px;}
-.inp:focus{border-color:var(--accent);}
-.fg{margin-bottom:10px;}
-.flbl{font-family:var(--mono);font-size:.57rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
-.fhint{font-family:var(--mono);font-size:.5rem;color:var(--muted);}
-/* set item */
-.set-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;transition:border-color .16s;}
-.set-item:hover{border-color:rgba(245,197,24,.35);}
-.set-item.active-set{border-color:var(--accent);background:rgba(245,197,24,.04);}
-.set-item-top{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
-.set-name{font-family:var(--mono);font-size:.7rem;flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.set-count{font-family:var(--display);font-size:.8rem;color:var(--accent);letter-spacing:1px;flex-shrink:0;}
-.set-actions{display:flex;gap:4px;flex-wrap:wrap;}
-.set-btn{font-family:var(--mono);font-size:.54rem;padding:3px 7px;border-radius:4px;border:1px solid var(--border);background:var(--card2);color:var(--muted);cursor:pointer;transition:all .14s;white-space:nowrap;}
-.set-btn:hover{border-color:var(--accent);color:var(--accent);}
-.set-btn.danger:hover{border-color:var(--accent2);color:var(--accent2);}
-.set-btn.active{border-color:var(--accent3);color:var(--accent3);}
-/* cat pills */
-.cat-pill{font-family:var(--mono);font-size:.56rem;padding:3px 8px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .14s;white-space:nowrap;}
-.cat-pill.active-cat{border-color:var(--purple);color:var(--purple);background:rgba(168,85,247,.07);}
-.cat-pill:first-child.active-cat{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.07);}
-/* â”€â”€ Kısayol Pill (v2.19) â”€â”€ */
+
+.mode-selector{display:flex;background:rgba(255,255,255,0.05);padding:3px;border-radius:30px;border:1px solid var(--border);gap:2px;}
+.mode-btn{border:none;background:transparent;color:var(--muted);font-family:var(--mono);font-size:.52rem;padding:6px 14px;border-radius:20px;cursor:pointer;transition:all .3s;letter-spacing:1px;white-space:nowrap;}
+.mode-btn.active{background:var(--accent);color:#000;box-shadow:0 0 15px var(--accent);}
+.mode-btn.active::after{content:' ✓';font-weight:bold;}
+
 .shortcut-pill{
   position:fixed;bottom:18px;right:18px;z-index:100;
   font-family:var(--mono);font-size:.58rem;padding:5px 12px;
   background:var(--card);border:1px solid var(--border);color:var(--muted);
   border-radius:20px;cursor:pointer;transition:all .2s;
 }
-.shortcut-pill:hover{border-color:var(--accent);color:var(--accent);}
 .shortcut-overlay{
   display:none;position:fixed;bottom:52px;right:18px;z-index:101;
   background:var(--surface);border:1px solid var(--border);
@@ -470,115 +289,79 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   box-shadow:0 8px 32px rgba(0,0,0,.6);
   animation:shortcutIn .2s ease;
 }
-@keyframes shortcutIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 .shortcut-overlay.visible{display:block;}
-.sc-title{font-family:var(--display);font-size:.85rem;letter-spacing:2px;color:var(--accent);margin-bottom:9px;}
-.sc-row{display:flex;align-items:center;gap:10px;padding:3px 0;}
-.sc-key{font-family:var(--mono);font-size:.6rem;padding:2px 7px;border-radius:4px;border:1px solid var(--border);background:var(--card);color:var(--accent);min-width:22px;text-align:center;}
-.sc-lbl{font-family:var(--mono);font-size:.62rem;color:var(--muted);}
-/* â”€â”€ MODE SELECTOR â”€â”€ */
-.mode-selector{display:flex;background:rgba(255,255,255,0.05);padding:3px;border-radius:30px;border:1px solid var(--border);gap:2px;}
-.mode-btn{border:none;background:transparent;color:var(--muted);font-family:var(--mono);font-size:.52rem;padding:6px 14px;border-radius:20px;cursor:pointer;transition:all .3s;letter-spacing:1px;white-space:nowrap;}
-.mode-btn:hover{color:var(--text);}
-.mode-btn.active{background:var(--accent);color:#000;box-shadow:0 0 15px var(--accent);}
-.mode-btn.active::after{content:' âœ“';font-weight:bold;}
-.mode-btn[data-mode="academy"].active{background:var(--accent3);box-shadow:0 0 15px var(--accent3);}
-.mode-btn[data-mode="turbo"].active{background:var(--accent2);color:#fff;box-shadow:0 0 15px var(--accent2);}
-
-
-/* Kısayol flash animasyonu */
-.shortcut-flash{animation:kflash .3s ease!important;}
-@keyframes kflash{0%{filter:brightness(1);}50%{filter:brightness(1.5);}100%{filter:brightness(1);}}
+@keyframes shortcutIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fi{from{opacity:0;transform:translateX(6px);}to{opacity:1;transform:translateX(0);}}
 </style>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}</script>
 </head>
 <body>
 
-<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â HEADER Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
 <div class="hdr">
   <div class="header-main">
-    <div class="header-logo" onclick="location.reload()">âš¡ USEV <span>MOD</span></div>
+    <div class="header-logo" onclick="location.reload()">⚡ USEV <span>MOD</span></div>
     <div style="flex:1;display:flex;justify-content:center;">
       <div class="mode-selector" id="modeSelector">
-        <button class="mode-btn active" data-mode="academy" onclick="setGameMode('academy')" title="Eğitim Modu">ğÅ¸Ââ€œ AKADEMİ</button>
-        <button class="mode-btn" data-mode="showtime" onclick="setGameMode('showtime')" title="Etkinlik Modu">Ã¢Å“Â¨ SHOWTIME</button>
-        <button class="mode-btn" data-mode="turbo" onclick="setGameMode('turbo')" title="Eğlence Modu">ğŸš€ TURBO</button>
+        <button class="mode-btn active" data-mode="academy" onclick="setGameMode('academy')" title="Eğitim Modu">🎓 AKADEMİ</button>
+        <button class="mode-btn" data-mode="showtime" onclick="setGameMode('showtime')" title="Etkinlik Modu">✨ SHOWTIME</button>
+        <button class="mode-btn" data-mode="turbo" onclick="setGameMode('turbo')" title="Eğlence Modu">🚀 TURBO</button>
       </div>
     </div>
-    <div id="connStatus" class="conn-status online">
-      <span class="dot"></span> <span id="connStatusText">ONLINE</span>
-    </div>
     <div class="header-conn">
-      <div class="phase-pill lobby" id="phaseVal">Ã¢ÂÂ³ LOBİ</div>
-      <div class="hdr-timer" id="timerDisp">â€”</div>
+      <div class="phase-pill lobby" id="phaseVal">⌛ LOBİ</div>
+      <div class="hdr-timer" id="timerDisp">—</div>
       <div class="hdr-divider"></div>
       <div class="conn-badge"><div class="dot"></div><span id="connCount">0</span> bağlı</div>
-      <span class="user-badge" id="userBadge" onclick="openChangePw()" title="Parolayı değiştir">ğÅ¸â€˜Â¤ admin</span>
-      <button class="hdr-btn" onclick="goRoom('editor.html')">ğÅ¸â€œÂ Editör</button>
-      <button class="hdr-btn" onclick="goRoom('istatistik.html')">ğŸ“Š İstatistik</button>
-      <button class="hdr-btn" id="accMgmtBtn" onclick="openAccMgmt()" style="display:none;">ğŸ‘¥ Hesaplar</button>
-      <button class="hdr-btn" id="modPwaBtn" onclick="modInstallPwa()" style="display:none;" title="Ana ekrana ekle">âš¡ Ekle</button>
-      <button class="hdr-btn" onclick="openAnalytics()" style="background:var(--card);color:var(--accent);">ğŸ“Š Analiz</button>
+      <span class="user-badge" id="userBadge" onclick="openChangePw()" title="Parolayı değiştir">👤 admin</span>
+      <button class="hdr-btn" onclick="goRoom('editor.html')">📝 Editör</button>
+      <button class="hdr-btn" onclick="goRoom('istatistik.html')">📊 İstatistik</button>
+      <button class="hdr-btn" id="accMgmtBtn" onclick="openAccMgmt()" style="display:none;">👥 Hesaplar</button>
+      <button class="hdr-btn" onclick="openAnalytics()" style="background:var(--card);color:var(--accent);">📊 Analiz</button>
       <button class="hdr-btn" onclick="doLogout()">Çıkış</button>
     </div>
   </div>
 </div>
 
-<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â PHASE BAR Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
 <div class="phase-bar">
-  <button class="btn btn-danger btn-sm" onclick="confirmReset()">ğÅ¸â€”â€˜ Sıfırla</button>
-  <button class="btn btn-green btn-sm" id="startBtn" onclick="startGame()" disabled style="letter-spacing:2px;">ğŸš€ YARIÃ…ÂMAYI BAÃ…ÂLAT</button>
-  <button class="btn btn-ghost btn-sm" id="finishBtn" onclick="confirmFinish()" style="display:none;">ğÅ¸ÂÂ Bitir</button>
-  <button class="btn btn-primary btn-sm" id="replayBtn" onclick="confirmReplay()" style="display:none;">ğÅ¸â€â€ Yeniden</button>
+  <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑️ Sıfırla</button>
+  <button class="btn btn-green btn-sm" id="startBtn" onclick="startGame()" disabled style="letter-spacing:2px;">🚀 YARIŞMAYI BAŞLAT</button>
+  <button class="btn btn-ghost btn-sm" id="finishBtn" onclick="confirmFinish()" style="display:none;">🏁 Bitir</button>
+  <button class="btn btn-primary btn-sm" id="replayBtn" onclick="confirmReplay()" style="display:none;">🔄 Yeniden</button>
   <button class="btn btn-ghost btn-sm" id="exportBtn" onclick="exportResults()" style="display:none;">📥 CSV</button>
-  <button class="btn btn-primary btn-sm" id="analyticsBtn" onclick="openAnalytics()" style="display:none;">ğŸ“Š Rapor</button>
+  <button class="btn btn-primary btn-sm" id="analyticsBtn" onclick="openAnalytics()" style="display:none;">📊 Rapor</button>
   <div class="spacer"></div>
   <div class="status-pill" id="statusMsg">Yarışmayı başlatmak için butonu kullanın.</div>
 </div>
 
-<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â WORKSPACE Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
 <div class="workspace">
-
-  <!-- â”€â”€â”€ LEFT COLUMN â”€â”€â”€ -->
   <div class="col col-left">
-
-    <!-- PIN -->
     <div>
-      <div class="slbl">ğÅ¸â€Â Giriş Parolası</div>
+      <div class="slbl">🔑 Giriş Parolası</div>
       <div class="pin-card">
-        <div class="pin-val" id="pinDisplay">â€”â€”</div>
+        <div class="pin-val" id="pinDisplay">——</div>
         <div class="pin-actions">
-          <button class="btn btn-primary btn-sm" onclick="generatePin()" style="flex:1;">ğÅ¸ÂÂ² Yeni</button>
-          <button class="btn btn-ghost btn-sm" onclick="clearPin()" style="flex:1;">ğÅ¸â€”â€˜ Sil</button>
+          <button class="btn btn-primary btn-sm" onclick="generatePin()" style="flex:1;">🎲 Yeni</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearPin()" style="flex:1;">🗑️ Sil</button>
         </div>
         <div style="font-family:var(--mono);font-size:.54rem;color:var(--muted);text-align:center;margin-top:6px;" id="pinStatus">Projeksiyon ekranında gösterilir.</div>
       </div>
     </div>
 
-    <!-- SORU NAVIGASYON -->
     <div class="game-controls locked" id="gameControls">
-      <div class="slbl">
-        📋 Sorular
-        <span id="activeSetModBadge" style="display:none;font-family:var(--mono);font-size:.52rem;padding:1px 6px;border-radius:10px;background:rgba(245,197,24,.1);color:var(--accent);border:1px solid rgba(245,197,24,.25);"></span>
-      </div>
-      <!-- Set selector -->
+      <div class="slbl">📋 Sorular <span id="activeSetModBadge" style="display:none;"></span></div>
       <div id="setSelectorMod">
         <div style="font-family:var(--mono);font-size:.52rem;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">📦 Set</div>
         <div class="set-btns" id="setButtonsMod">
           <button class="mod-set-btn active" id="setAllBtn" onclick="loadModSet(null)">Tümü</button>
         </div>
       </div>
-      <!-- Category filter -->
-      <div id="catFilterMod" style="display:flex;flex-wrap:wrap;gap:4px;"></div>
-      <div class="filteredCount-lbl" id="filteredCount"></div>
-      <!-- Round nav -->
+      <div id="catFilterMod"></div>
       <div class="rnav" id="roundNav"></div>
-      <div id="noQMsg" class="no-q" style="display:none;">Henüz soru yok.<br><a href="editor.html" style="color:var(--accent);">Editörden ekleyin â†’</a></div>
+      <div id="noQMsg" class="no-q" style="display:none;">Henüz soru yok.<br><a href="editor.html" style="color:var(--accent);">Editörden ekleyin →</a></div>
     </div>
 
-    <!-- TAKIM MODU -->
     <div>
-      <div class="slbl">ğŸ‘¥ Takım Modu</div>
+      <div class="slbl">👥 Takım Modu</div>
       <div class="team-toggle">
         <span class="team-toggle-lbl">Takımları aktifleştir</span>
         <label class="toggle-sw">
@@ -587,177 +370,99 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
           <div class="toggle-knob"></div>
         </label>
       </div>
-      <div id="teamSetup" style="display:none;">
-        <div class="teams-list" id="teamsList"></div>
-        <button class="btn btn-ghost btn-sm" onclick="addTeam()" style="width:100%;margin-bottom:5px;">+ Takım Ekle</button>
-        <button class="btn btn-primary btn-sm" onclick="saveTeams()" style="width:100%;">ğÅ¸â€™Â¾ Kaydet</button>
-        <div id="teamSaveStatus" style="font-family:var(--mono);font-size:.58rem;color:var(--accent3);text-align:center;margin-top:5px;min-height:13px;"></div>
-      </div>
-      <div id="teamScoreSection" style="display:none;">
-        <div class="slbl" style="margin-top:6px;">Takım Skorları</div>
-        <div id="teamScoreList" style="display:flex;flex-direction:column;gap:3px;"></div>
-      </div>
     </div>
 
-    <!-- SES & MÜZİK -->
     <div class="accordion">
       <div class="acc-hdr" onclick="toggleAcc(this)">
-        <div class="acc-hdr-lbl">ğÅ¸â€Å  Ses & Müzik</div>
-        <div class="acc-hdr-arrow">Ã¢â€“Â¶</div>
+        <div class="acc-hdr-lbl">🔊 Ses & Müzik</div>
+        <div class="acc-hdr-arrow">▶</div>
       </div>
       <div class="acc-body">
         <div class="sound-toggles">
-          <button class="sound-toggle-btn on" id="sfxToggle" onclick="toggleSfx()">ğÅ¸ÂÂµ SFX</button>
-          <button class="sound-toggle-btn on" id="musicToggle" onclick="toggleMusicEnabled()">ğÅ¸ÂÂ¶ Müzik</button>
+          <button class="sound-toggle-btn on" id="sfxToggle" onclick="toggleSfx()">🎵 SFX</button>
+          <button class="sound-toggle-btn on" id="musicToggle" onclick="toggleMusicEnabled()">🎶 Müzik</button>
         </div>
         <div class="vol-row">
-          <span class="vol-lbl">ğÅ¸â€Å </span>
+          <span class="vol-lbl">🔊</span>
           <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="70" oninput="setVolume(this.value)">
           <span class="vol-val" id="volVal">70%</span>
         </div>
-        <div class="vol-row">
-          <span class="vol-lbl" style="font-size:.55rem;">ğÅ¸ÂÂ¨ TEMA</span>
-          <select class="auto-sel" id="themeSel" onchange="changeTheme(this.value)" style="flex:1;">
-            <option value="classic">Klasik</option>
-            <option value="retro">Retro Arcade</option>
-            <option value="future">Gelecek / Sci-Fi</option>
-          </select>
-        </div>
         <div class="music-grid" id="musicGrid"></div>
         <div class="music-ctrl">
-          <button class="btn btn-ghost btn-sm" onclick="previewMusic()">Ã¢â€“Â¶ Dinle</button>
-          <button class="btn btn-ghost btn-sm" onclick="stopMusic()">Ã¢ÂÂ¹ Dur</button>
-          <button class="btn btn-ghost btn-sm" onclick="selectNoMusic()">ğÅ¸â€â€¡ Yok</button>
+          <button class="btn btn-ghost btn-sm" onclick="previewMusic()">▶ Dinle</button>
+          <button class="btn btn-ghost btn-sm" onclick="stopMusic()">⏹ Dur</button>
         </div>
       </div>
     </div>
 
-    <!-- LOBI -->
     <div>
-      <div class="slbl">ğÅ¸â€˜Â¤ Lobi <span id="lobbyCount2" style="color:var(--accent3);font-family:var(--display);font-size:.8rem;letter-spacing:1px;">0</span></div>
+      <div class="slbl">👤 Lobi <span id="lobbyCount2" style="color:var(--accent3);">0</span></div>
       <div class="lobby-mini lobby-players" id="lobbyPlayers"><div class="empty">Kimse katılmadı</div></div>
     </div>
+  </div>
 
-  </div><!-- /col-left -->
-
-  <!-- â”€â”€â”€ MIDDLE COLUMN â”€â”€â”€ -->
   <div class="col col-mid">
-
-    <!-- Flow indicator -->
     <div class="flow-steps" id="flowSteps">
-      <div class="flow-step" id="fs-show">
-        <div class="flow-step-icon">ğÅ¸â€œâ€“</div>
-        <div class="flow-step-lbl">GÖSTER</div>
-      </div>
-      <div class="flow-step" id="fs-answer">
-        <div class="flow-step-icon">Ã¢â€“Â¶</div>
-        <div class="flow-step-lbl">CEVAPLA</div>
-      </div>
-      <div class="flow-step" id="fs-signal">
-        <div class="flow-step-icon">ğŸš€</div>
-        <div class="flow-step-lbl">SİNYAL</div>
-      </div>
-      <div class="flow-step" id="fs-reveal">
-        <div class="flow-step-icon">✅</div>
-        <div class="flow-step-lbl">CÜ GÖSTER</div>
-      </div>
-      <div class="flow-step" id="fs-next">
-        <div class="flow-step-icon">â†’</div>
-        <div class="flow-step-lbl">SONRAKİ</div>
-      </div>
+      <div class="flow-step" id="fs-show"><div class="flow-step-icon">📖</div><div class="flow-step-lbl">GÖSTER</div></div>
+      <div class="flow-step" id="fs-answer"><div class="flow-step-icon">▶</div><div class="flow-step-lbl">CEVAPLA</div></div>
+      <div class="flow-step" id="fs-signal"><div class="flow-step-icon">🚀</div><div class="flow-step-lbl">SİNYAL</div></div>
+      <div class="flow-step" id="fs-reveal"><div class="flow-step-icon">✅</div><div class="flow-step-lbl">CEVAP</div></div>
+      <div class="flow-step" id="fs-next"><div class="flow-step-icon">→</div><div class="flow-step-lbl">SONRAKİ</div></div>
     </div>
 
-    <!-- Control buttons -->
-    <div class="ctrl-wrap game-controls locked" id="gameControls2" style="pointer-events:none;">
+    <div class="ctrl-wrap game-controls locked" id="gameControls2">
       <div class="ctrl-main">
-        <button class="btn btn-ghost btn-sm" id="previewBtn" onclick="previewRound()" disabled title="Soruyu süre başlamadan göster">ğÅ¸â€œâ€“ GÖSTER</button>
-        <button class="btn btn-primary" id="publishBtn" onclick="publishRound()" disabled>ğÅ¸â€œÂ¡ YAYINLA</button>
-        <button class="btn btn-green btn-sm" id="openAnswerBtn" onclick="openAnswering()" disabled style="display:none;">Ã¢â€“Â¶ BAÃ…ÂLAT</button>
-        <button class="btn btn-signal btn-sm" id="reactionSignalBtn" onclick="sendReactionSignal()" disabled style="display:none;">ğŸš€ SİNYAL!</button>
+        <button class="btn btn-ghost btn-sm" id="previewBtn" onclick="previewRound()" disabled>📖 GÖSTER</button>
+        <button class="btn btn-primary" id="publishBtn" onclick="publishRound()" disabled>📡 YAYINLA</button>
         <button class="btn btn-danger" id="revealBtn" onclick="revealAnswer()" disabled>✅ CEVAP</button>
-        <button class="btn btn-ghost btn-sm" onclick="nextRound()">â†’ SONRAKI</button>
+        <button class="btn btn-ghost btn-sm" onclick="nextRound()">→ SONRAKİ</button>
       </div>
       <div class="ctrl-sub">
         <div class="auto-row">
           <span class="auto-lbl">Oto ilerleme:</span>
           <select class="auto-sel" id="autoAdvanceSel">
             <option value="0">Kapalı</option>
-            <option value="5">5s</option>
             <option value="10" selected>10s</option>
-            <option value="15">15s</option>
-            <option value="20">20s</option>
           </select>
           <div id="autoAdvanceCountdown"></div>
-          <button class="btn btn-ghost btn-sm" id="stopBtn" onclick="stopTimer()" style="display:none;">Ã¢ÂÂ¹</button>
         </div>
       </div>
     </div>
 
-    <!-- Question card -->
     <div class="qcard">
       <div class="qcard-top">
-        <div class="qcard-diff-row">
-          <div class="qdiff" id="qDiff"></div>
-        </div>
-        <div class="qtitle" id="qTitle">â€”</div>
-        <div class="qtext" id="qText">Soru metnini görmek için bir soru seçin.</div>
+        <div class="qtitle" id="qTitle">—</div>
+        <div class="qtext" id="qText">Soru seçin.</div>
       </div>
       <div class="qcard-body">
         <div class="opts-grid" id="optsGrid"></div>
         <div class="ai-summary" id="aiSummary" style="display:none;">
-          <div class="ai-summary-title">ğŸ¤– YZ Bilgisi</div>
+          <div class="ai-summary-title">🤖 YZ Bilgisi</div>
           <div class="ai-summary-row" id="aiSummaryContent"></div>
         </div>
       </div>
     </div>
+  </div>
 
-  </div><!-- /col-mid -->
-
-  <!-- â”€â”€â”€ RIGHT COLUMN â”€â”€â”€ -->
   <div class="col col-right">
-
-    <!-- Live stats -->
     <div id="liveSection" style="display:none;">
-      <div class="slbl">ğŸ“Š Canlı</div>
+      <div class="slbl">📊 Canlı</div>
       <div class="live-stats">
         <div class="ls-card"><div class="ls-val" id="sCevap">0</div><div class="ls-lbl">Cevap</div></div>
-        <div class="ls-card green"><div class="ls-val" id="sDoğru">0</div><div class="ls-lbl">Doğru</div></div>
-        <div class="ls-card"><div class="ls-val" id="sOran">â€”</div><div class="ls-lbl">Oran</div></div>
+        <div class="ls-card"><div class="ls-val" id="sDoğru">0</div><div class="ls-lbl">Doğru</div></div>
       </div>
-      <!-- Accuracy bar -->
-      <div class="acc-bar-wrap" id="accBarWrap">
-        <div class="acc-bar-track">
-          <div class="acc-bar-fill" id="accBarFill" style="width:0%;background:var(--accent3);"></div>
-        </div>
-      </div>
-      <!-- Open ended bulk -->
-      <div id="openEndedBulk" style="display:none;" class="oe-bulk" style="margin-top:6px;">
-        <button class="oe-bulk-btn" style="background:rgba(61,214,140,.13);color:var(--accent3);border:1px solid var(--accent3);" onclick="bulkApprove()">✅ Tümünü Onayla</button>
-        <button class="oe-bulk-btn" style="background:rgba(232,64,64,.1);color:var(--accent2);border:1px solid var(--accent2);" onclick="bulkReject()">Ã¢ÂÅ’ Tümünü Reddet</button>
-      </div>
-      <!-- Answers -->
-      <div class="slbl" style="margin-top:6px;">Bu Tura Cevaplar</div>
-      <div class="ans-list" id="answersLive"><div class="empty">Henüz cevap yok</div></div>
+      <div class="ans-list" id="answersLive"></div>
     </div>
-
-    <!-- Leaderboard -->
     <div>
-      <div class="slbl">ğÅ¸Ââ€  Sıralama</div>
-      <div class="lb-list" id="lbList"><div class="empty">â€”</div></div>
+      <div class="slbl">🏆 Sıralama</div>
+      <div class="lb-list" id="lbList"></div>
     </div>
+  </div>
+</div>
 
-  </div><!-- /col-right -->
-
-</div><!-- /workspace -->
-
-<!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â OVERLAYS Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
-
-<!-- Confirm reset -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
-    <div class="confirm-icon">Ã¢Å¡Â Ã¯Â¸Â</div>
     <div class="confirm-title">SIFIRLA?</div>
-    <div class="confirm-msg">Tüm veriler ve bağlantılar silinecek.</div>
     <div class="confirm-btns">
       <button class="btn btn-danger" onclick="doReset()">EVET</button>
       <button class="btn btn-ghost" onclick="closeConfirm()">İPTAL</button>
@@ -765,314 +470,78 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   </div>
 </div>
 
-<!-- Confirm finish -->
-<div class="confirm-overlay" id="finishOverlay">
-  <div class="confirm-box">
-    <div class="confirm-icon">ğÅ¸ÂÂ</div>
-    <div class="confirm-title">OYUNU BİTİR?</div>
-    <div class="confirm-msg">Podyum ekranı gösterilecek.<br>Tüm sonuçlar kaydedilir.</div>
-    <div class="confirm-btns">
-      <button class="btn btn-primary" onclick="doFinish()">EVET, BİTİR</button>
-      <button class="btn btn-ghost" onclick="document.getElementById('finishOverlay').classList.remove('visible')">İPTAL</button>
-    </div>
-  </div>
-</div>
-
-<!-- Confirm replay -->
-<div class="confirm-overlay" id="replayOverlay">
-  <div class="confirm-box">
-    <div class="confirm-icon">ğÅ¸â€â€</div>
-    <div class="confirm-title">YENİDEN OYNA?</div>
-    <div class="confirm-msg">Mevcut bağlantılar korunacak.<br>Skorlar sıfırlanacak.</div>
-    <div class="confirm-btns">
-      <button class="btn btn-primary" onclick="doReplay()">EVET</button>
-      <button class="btn btn-ghost" onclick="document.getElementById('replayOverlay').classList.remove('visible')">İPTAL</button>
-    </div>
-  </div>
-</div>
-
-<!-- Change password -->
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-box">
-    <div class="pw-title">ğÅ¸â€â€˜ PAROLA DEÃ„ÂİÃ…ÂTİR</div>
-    <div class="pw-sub">Yeni parolanızı belirleyin.<br>Değişiklik anında aktif olur.</div>
-    <div class="pw-field">
-      <label class="pw-label">Mevcut Parola</label>
-      <input class="pw-inp" id="pwCurrent" type="password" placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢" autocomplete="current-password">
-    </div>
-    <div class="pw-field">
-      <label class="pw-label">Yeni Parola</label>
-      <input class="pw-inp" id="pwNew" type="password" placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢" autocomplete="new-password">
-    </div>
-    <div class="pw-field">
-      <label class="pw-label">Yeni Parola (Tekrar)</label>
-      <input class="pw-inp" id="pwConfirm" type="password" placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢" autocomplete="new-password" onkeydown="if(event.key==='Enter')saveNewPw()">
-    </div>
-    <div class="pw-err" id="pwErr"></div>
-    <div class="pw-ok" id="pwOk"></div>
+    <div class="pw-title">🔑 PAROLA DEĞİŞTİR</div>
     <div class="pw-btns">
-      <button class="btn btn-primary" onclick="saveNewPw()">ğÅ¸â€™Â¾ KAYDET</button>
+      <button class="btn btn-primary" onclick="saveNewPw()">💾 KAYDET</button>
       <button class="btn btn-ghost" onclick="closePwOverlay()">İPTAL</button>
     </div>
   </div>
 </div>
 
-<!-- Account management -->
 <div class="acc-overlay" id="accOverlay">
   <div class="acc-box">
-    <div class="acc-title">ğŸ‘¥ HESAP YÖNETİMİ</div>
-    <div class="acc-sub" id="accSub">Moderatör hesaplarını ekle, sil veya şifrelerini sıfırla.<br>Sadece admin rolündeki hesaplar bu panele erişebilir.</div>
-    <div class="acc-add-form" style="margin-bottom:12px;">
-      <div class="acc-add-title">ORGANIZASYONLAR</div>
-      <div class="acc-list" id="orgList" style="margin-bottom:9px;"><div style="font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center;padding:8px;">Yukleniyor...</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
-        <div class="acc-field"><label class="acc-lbl">Org ID</label><input class="acc-inp" id="newOrgId" placeholder="abc-universitesi"></div>
-        <div class="acc-field"><label class="acc-lbl">Ad</label><input class="acc-inp" id="newOrgName" placeholder="ABC Universitesi"></div>
-      </div>
-      <button class="btn btn-green btn-sm" onclick="addOrg()">+ ORG EKLE</button>
-    </div>
-    <div class="acc-list" id="accList"><div style="font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center;padding:12px;">Yükleniyor...</div></div>
-    <div class="acc-add-form">
-      <div class="acc-add-title">+ YENİ HESAP EKLE</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
-        <div class="acc-field"><label class="acc-lbl">Kullanıcı Adı</label><input class="acc-inp" id="newAccUser" placeholder="moderator1"></div>
-        <div class="acc-field"><label class="acc-lbl">Parola</label><input class="acc-inp" id="newAccPass" type="password" placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"></div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
-        <div class="acc-field"><label class="acc-lbl">Firebase Auth E-posta</label><input class="acc-inp" id="newAccEmail" type="email" placeholder="moderator@example.com"></div>
-        <div class="acc-field"><label class="acc-lbl">Firebase Auth UID</label><input class="acc-inp" id="newAccAuthUid" placeholder="Opsiyonel UID"></div>
-      </div>
-      <div class="acc-field">
-        <label class="acc-lbl">Rol</label>
-        <div class="acc-role-sel" id="newAccRoleSel">
-          <button class="acc-role-btn sel-mod" data-role="moderator" onclick="selectNewRole('moderator')">ğÅ¸Ââ€º Moderatör</button>
-          <button class="acc-role-btn" data-role="admin" onclick="selectNewRole('admin')">Ã¢Â­Â Admin</button>
-        </div>
-      </div>
-      <div class="acc-field">
-        <label class="acc-lbl">Organizasyon Yetkileri</label>
-        <select class="acc-inp" id="newAccOrg" multiple size="3" style="height:auto;"></select>
-        <div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);margin-top:4px;">Admin icin tum organizasyonlar secilebilir. Ctrl ile coklu secim.</div>
-      </div>
-      <div class="acc-err" id="accErr"></div>
-      <div class="acc-ok" id="accOk"></div>
-      <div style="display:flex;gap:8px;margin-top:9px;">
-        <button class="btn btn-green btn-sm" onclick="addAccount()">ğÅ¸â€™Â¾ EKLE</button>
-      </div>
-    </div>
-    <div style="display:flex;justify-content:flex-end;margin-top:8px;">
-      <button class="btn btn-ghost" onclick="closeAccOverlay()">KAPAT</button>
-    </div>
+    <div class="acc-title">👥 HESAP YÖNETİMİ</div>
+    <div class="acc-list" id="accList"></div>
+    <button class="btn btn-ghost" onclick="closeAccOverlay()">KAPAT</button>
   </div>
 </div>
 
-<!-- ANALYTICS OVERLAY (v3.3) -->
-<div class="analytics-overlay" id="analyticsOverlay">
-  <div class="analytics-box">
-    <div class="analytics-hdr">
-      <div class="analytics-title">ğŸ“Š ETKİNLİK ANALİZ RAPORU</div>
-      <div id="analyticsMeta" style="font-family:var(--mono);font-size:.65rem;color:var(--muted);"></div>
-    </div>
-    <div class="analytics-body">
-      <div class="analytics-grid">
-        <div class="stat-card">
-          <div class="stat-val" id="stParticipants">0</div>
-          <div class="stat-lbl">Katılımcı</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-val" id="stAvgSuccess">0%</div>
-          <div class="stat-lbl">Başarı Oranı</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-val" id="stAvgTime">0s</div>
-          <div class="stat-lbl">Ort. Cevap Süresi</div>
-        </div>
-      </div>
-
-      <div class="analytics-sec">
-        <div class="analytics-sec-title">ğŸ§ Â± EN ZOR SORU</div>
-        <div class="hardest-q-card">
-          <div class="hqc-icon">ğŸ§ Â±</div>
-          <div class="hqc-body">
-            <div class="hqc-title" id="hqcTitle">Soru yüklenemedi</div>
-            <div class="hqc-text" id="hqcStats">Doğru cevaplanma oranı: 0%</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="analytics-sec">
-        <div class="analytics-sec-title">ğÅ¸Ââ€  SORU BAZLI DETAYLAR</div>
-        <table class="analytics-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Soru</th>
-              <th>Doğru %</th>
-              <th>Yanlış %</th>
-              <th>Ort. Süre</th>
-            </tr>
-          </thead>
-          <tbody id="analyticsTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="analytics-ftr">
-      <button class="btn btn-ghost" onclick="closeAnalytics()">KAPAT</button>
-      <button class="btn btn-primary" onclick="downloadAnalyticsReport()">📥 HTML RAPOR İNDİR</button>
-    </div>
-  </div>
-</div>
-
-<!-- Set overlay (from editor) -->
 <div class="overlay" id="setOverlay">
   <div class="set-ov-box">
-    <div class="set-ov-title" id="setOvTitle">📦 YENİ SET OLUÃ…ÂTUR</div>
-    <div class="fg"><div class="flbl">Set Adı <span style="color:var(--accent2);">*</span></div>
-      <input class="inp" id="setNameInp" placeholder="Örn: YZ Soruları..." maxlength="60">
-    </div>
-    <div class="flbl">Soruları Seç</div>
-    <span class="set-sel-all" onclick="toggleSelectAll()">Tümünü seç / kaldır</span>
-    <div class="set-q-list" id="setQList"></div>
-    <div style="font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-bottom:13px;" id="setSelCount">0 soru seçildi</div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn btn-ghost" onclick="closeSetOverlay()">İPTAL</button>
-      <button class="btn btn-primary" onclick="saveSet()" id="saveSetBtn">ğÅ¸â€™Â¾ KAYDET</button>
-    </div>
-  </div>
-</div>
-
-<!-- CSV Import overlay (from editor) -->
-<div class="overlay" id="csvOverlay">
-  <div class="set-ov-box">
-    <div class="set-ov-title">📥 CSV AKTARIM</div>
-    <div style="font-family:var(--mono);font-size:.63rem;color:var(--muted);line-height:1.7;margin-bottom:14px;">CSV dosyasını seçin. Her satır bir soru.<br>Åablonu indirmek için aşağıdaki butonu kullanın.</div>
-    <label style="cursor:pointer;display:block;background:var(--card);border:1px dashed var(--border);border-radius:8px;padding:16px;text-align:center;font-family:var(--mono);font-size:.65rem;color:var(--muted);transition:border-color .15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-      📄 CSV Dosyası Seç
-      <input type="file" accept=".csv" id="csvFileInput" style="display:none;" onchange="importCsv(event)">
-    </label>
-    <div style="margin-top:8px;display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;">
-      <button class="btn btn-ghost btn-sm" onclick="downloadTemplate()">⬇ Åablon İndir</button>
-      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('csvOverlay').classList.remove('visible')">KAPAT</button>
-    </div>
-    <div id="csvStatus" style="font-family:var(--mono);font-size:.62rem;color:var(--accent3);margin-top:8px;min-height:15px;"></div>
+    <div class="set-ov-title">📦 YENİ SET OLUŞTUR</div>
+    <button class="btn btn-primary" onclick="saveSet()">💾 KAYDET</button>
   </div>
 </div>
 
 <script type="module">
   import { db, ref, fbGet, fbSet, fbUpdate, auth } from "./js/core/firebase.js";
   import { requireModeratorSession, doLogout } from "./js/core/auth.js";
-  import { roomId, orgId, gameRef, orgRef } from "./js/core/paths.js";
-  import { sha256 } from "./js/utils/crypto.js";
+  import { roomId, orgId, gameRef, orgRef, goRoom } from "./js/core/paths.js";
   import { openAccMgmt, addAccount, deleteAccount, toggleResetForm, resetPassword, addOrg, selectNewRole } from "./js/moderator/account.js";
-  import { getCatColorMod, rk, updateFlowStep, updateConnectionsList } from "./js/moderator/ui.js";
-  import { gameStore, setLobby, startGame, initGameListeners, doReplay, finishGame, exportResults, stopTimer, previewRound, openAnswering, publishRound, revealAnswer, renderRound, renderNav, nextRound, setBtnsPreview, setBtnsAnswering, renderCatFilterMod, setGameMode, generatePin, clearPin, initPinListener, toggleTeamMode, addTeam, saveTeams, loadModSet, sendReactionSignal } from "./js/moderator/game.js";
+  import { updateConnectionsList } from "./js/moderator/ui.js";
+  import { gameStore, setLobby, startGame, initGameListeners, doReplay, finishGame, exportResults, stopTimer, previewRound, openAnswering, publishRound, revealAnswer, renderRound, renderNav, nextRound, setGameMode, generatePin, clearPin, initPinListener, toggleTeamMode, addTeam, saveTeams, loadModSet, sendReactionSignal } from "./js/moderator/game.js";
   import { initListeners } from "./js/moderator/listeners.js";
   import { initShortcuts } from "./js/moderator/shortcuts.js";
   import { openAnalytics, closeAnalytics, updateLiveAnswers } from "./js/moderator/stats.js";
 
   if (!(await requireModeratorSession())) throw new Error('Auth required');
-
   const modUser = sessionStorage.getItem('modUser') || 'admin';
   const modRole = sessionStorage.getItem('modRole') || 'moderator';
   const isAdmin = modRole === 'admin';
   
-  document.getElementById('userBadge').textContent = `ğŸ‘¤ ${modUser}${isAdmin ? ' â­ ' : ''} ğŸ¢ Org: ${orgId} ğŸšª Oda: ${roomId}`;
+  document.getElementById('userBadge').textContent = `👤 ${modUser}${isAdmin ? ' ⭐' : ''}`;
   if (isAdmin) document.getElementById('accMgmtBtn').style.display = 'block';
 
-  window.toggleAcc = function(hdr) {
-    hdr.classList.toggle('open');
-    const body = hdr.nextElementSibling;
-    if (body) body.classList.toggle('open');
-  };
-
-  window.openChangePw = () => { ['pwCurrent', 'pwNew', 'pwConfirm'].forEach(id => document.getElementById(id).value = ''); document.getElementById('pwOverlay').classList.add('visible'); };
-  window.closePwOverlay = () => document.getElementById('pwOverlay').classList.remove('visible');
-  window.doLogout = () => doLogout();
-  window.saveNewPw = () => saveNewPw(modUser);
-
-  // Window Mappings for UI
+  window.goRoom = goRoom;
   window.startGame = startGame;
-  window.doReplay = doReplay;
-  window.doFinish = () => finishGame(renderRound);
-  window.exportResults = exportResults;
-  window.stopTimer = () => stopTimer(window.stopMusic);
-  window.previewRound = () => previewRound(setBtnsPreview, window.stopMusic);
-  window.openAnswering = () => openAnswering(setBtnsAnswering, window.UsevSound?.playMusic);
-  window.publishRound = () => publishRound(setBtnsAnswering, window.UsevSound?.playMusic, window.stopMusic);
-  window.revealAnswer = () => revealAnswer(window.stopMusic, renderNav, renderRound, window.UsevSound?.sfx?.reveal);
-  window.nextRound = () => nextRound(window.stopMusic);
-  
+  window.doLogout = doLogout;
   window.openAccMgmt = () => openAccMgmt(isAdmin, modUser);
-  window.addAccount = () => addAccount(modUser);
-  window.addOrg = () => addOrg(modUser);
-  window.deleteAccount = (key, user) => deleteAccount(key, user, modUser);
-  window.selectNewRole = (role) => selectNewRole(role);
-  window.toggleResetForm = (key) => toggleResetForm(key);
-  window.resetPassword = (key) => resetPassword(key);
-
   window.setGameMode = setGameMode;
   window.generatePin = generatePin;
   window.clearPin = clearPin;
-  window.toggleTeamMode = toggleTeamMode;
-  window.addTeam = addTeam;
-  window.saveTeams = saveTeams;
-  window.loadModSet = loadModSet;
-  window.sendReactionSignal = sendReactionSignal;
-  
-  window.openAnalytics = openAnalytics;
-  window.closeAnalytics = closeAnalytics;
+  window.previewRound = previewRound;
+  window.publishRound = publishRound;
+  window.revealAnswer = revealAnswer;
+  window.nextRound = nextRound;
+  window.toggleAcc = (hdr) => { hdr.classList.toggle('open'); hdr.nextElementSibling.classList.toggle('open'); };
 
-  window.approveAnswer = async (key, roundIdx) => { const ptsEl = document.getElementById('pts-' + key); const pts = ptsEl ? parseInt(ptsEl.value) || 0 : 0; await fbUpdate(gameRef(`answers/${roundIdx}/${key}`), { approved: true, correct: true, pts }); };
-  window.rejectAnswer = async (key, roundIdx) => { await fbUpdate(gameRef(`answers/${roundIdx}/${key}`), { approved: false, correct: false, pts: 0 }); };
-  window.kickPlayer = async (id, name) => { if (!confirm(`"${name}" adlı oyuncuyu sistemden atmak istiyor musunuz?`)) return; await fbUpdate(gameRef(`connections/${id}`), { kicked: true }); };
-  window.banPlayer = async (id, name, uid) => { if (!confirm(`"${name}" adlı oyuncuyu KALICI OLARAK yasaklamak istediğinize emin misiniz?`)) return; if (uid) await fbSet(gameRef('bannedDevices/' + uid), true); await fbUpdate(gameRef(`connections/${id}`), { kicked: true }); };
-
-  // Init Modules
   initGameListeners();
   initListeners({
-    onQuestionsLoaded: () => {
-      renderCatFilterMod(renderNav, renderRound);
-      renderNav();
-      if (gameStore.filteredQuestions.length && gameStore.curRound < gameStore.filteredQuestions.length) renderRound();
-      document.getElementById('noQMsg').style.display = gameStore.questions.length ? 'none' : 'block';
-      document.getElementById('publishBtn').disabled = gameStore.filteredQuestions.length === 0;
-    },
-    onConnectionsUpdated: (conns, knownConns) => {
-      updateConnectionsList(conns, knownConns, window.kickPlayer, window.banPlayer);
-    },
-    onAnswersUpdated: (all) => {
-      updateLiveAnswers(all);
-    }
+    onQuestionsLoaded: () => { renderNav(); renderRound(); },
+    onConnectionsUpdated: (c, k) => updateConnectionsList(c, k),
+    onAnswersUpdated: (a) => updateLiveAnswers(a)
   });
-
-  initShortcuts({
-    sendReactionSignal: async () => {
-      window.UsevSound?.sfx?.reaction?.();
-      const btn = document.getElementById('reactionSignalBtn');
-      if (btn) { btn.disabled = true; btn.textContent = 'âš¡ SİNYAL GÖNDERİLDİ!'; }
-      await fbUpdate(gameRef('currentRound'), { reactionSignalTs: Date.now(), answerOpen: true });
-      const rb = document.getElementById('revealBtn'); if (rb) rb.disabled = false;
-      const sm = document.getElementById('statusMsg'); if (sm) sm.textContent = 'âš¡ Sinyal verildi! Oyuncular yarışıyor...';
-    }
-  });
-
-  // Set Lobby Initially
   setLobby();
   initPinListener();
 </script>
 
-<!-- v2.19: Klavye Kısayol Pill -->
-<button class="shortcut-pill" onclick="document.querySelector('.shortcut-overlay').classList.toggle('visible')">âŒ¨ Kısayollar</button>
+<button class="shortcut-pill" onclick="document.querySelector('.shortcut-overlay').classList.toggle('visible')">⌨️ Kısayollar</button>
 <div class="shortcut-overlay">
-  <div class="sc-title">âŒ¨ KISAYOLLAR</div>
-  <div class="sc-row"><span class="sc-key">Space</span><span class="sc-lbl">Yayınla (Publish)</span></div>
-  <div class="sc-row"><span class="sc-key">A</span><span class="sc-lbl">Cevaplamayı Başlat</span></div>
-  <div class="sc-row"><span class="sc-key">R</span><span class="sc-lbl">Cevabı Göster</span></div>
-  <div class="sc-row"><span class="sc-key">S</span><span class="sc-lbl">Sinyal Gönder</span></div>
-  <div class="sc-row"><span class="sc-key">Enter</span><span class="sc-lbl">Sonraki Soru</span></div>
-  <div class="sc-row"><span class="sc-key">Esc / H</span><span class="sc-lbl">Aç / Kapat</span></div>
-  <div style="margin-top:9px;font-family:var(--mono);font-size:.52rem;color:var(--muted);">Input alanı odaklıyken devre dışı</div>
+  <div class="sc-title">⌨️ KISAYOLLAR</div>
+  <div class="sc-row"><span class="sc-key">Space</span><span class="sc-lbl">Yayınla</span></div>
 </div>
 
-
-
+</body>
+</html>
