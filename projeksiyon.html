@@ -677,9 +677,9 @@ setInterval(() => {
 <div id="gameScreen">
   <!-- Preview Overlay -->
   <div id="previewOverlay">
-    <div class="prev-icon">ğŸ“–</div>
+    <div class="prev-icon">📝–</div>
     <div class="prev-title">OKUMA SÜRESİ</div>
-    <div class="prev-sub">Â· katılımcılar soruyu okuyor Â· cevaplama henüz açılmadı Â·</div>
+    <div class="prev-sub">· katılımcılar soruyu okuyor · cevaplama henüz açılmadı ·</div>
   </div>
   <!-- Header -->
   <div class="gh">
@@ -1240,7 +1240,7 @@ function applyAnswerOpenState(answerOpen){
     // Preview modu: şıklar kilitli, banner görünür
     banner.classList.add('visible');
     opts.forEach(o=>o.classList.add('preview-lock'));
-    document.getElementById('gTimer').textContent='ğŸ“–';
+    document.getElementById('gTimer').textContent='📝–';
     document.getElementById('gTimer').className='timer-num';
   } else {
     // Cevaplama açık
@@ -1590,7 +1590,7 @@ function buildPodium(){
       col.innerHTML=`
         <div class="podium-avatar">${medal} ${av}</div>
         <div class="podium-name">${p.name||'—'}</div>
-        <div class="podium-score">${p.score||0} PT Â· ${p.correct||0}/${p.total||0} doğru</div>
+        <div class="podium-score">${p.score||0} PT · ${p.correct||0}/${p.total||0} doğru</div>
         <div class="podium-block">${pIdx+1}</div>
       `;
       stage.appendChild(col);

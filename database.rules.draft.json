@@ -8,7 +8,7 @@
         ".write": "auth != null && root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin'"
       },
       "moderators": {
-        ".read": "auth != null",
+        ".read": "true",
         "$moderatorId": {
           ".read": "auth != null && (root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin' || root.child('config/moderatorsByUid').child(auth.uid).val() === $moderatorId)",
           ".write": "auth != null && root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin'"
@@ -19,6 +19,9 @@
           ".read": "auth != null && (auth.uid === $uid || root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin')",
           ".write": "auth != null && root.child('config/moderators').child(root.child('config/moderatorsByUid').child(auth.uid).val()).child('role').val() === 'admin'"
         }
+      },
+      "adminAuth": {
+        ".read": "true"
       }
     },
     "orgs": {

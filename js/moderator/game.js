@@ -354,7 +354,7 @@ export async function previewRound(setBtnsPreviewCallback, stopMusicCallback) {
   await fbRemove(gameRef('answers/' + gameStore.curRound));
   if (setBtnsPreviewCallback) setBtnsPreviewCallback();
   const statusMsg = document.getElementById('statusMsg');
-  if (statusMsg) statusMsg.textContent = 'ğŸ“– Önizleme modu — katılımcılar soruyu okuyor...';
+  if (statusMsg) statusMsg.textContent = '📝– Önizleme modu — katılımcılar soruyu okuyor...';
 }
 
 export async function openAnswering(setBtnsAnsweringCallback, playMusicCallback) {
@@ -486,7 +486,7 @@ export function renderRound() {
       </div>`;
     } else if (isOpen) {
       og.innerHTML = `<div style="background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.3);border-radius:8px;padding:10px;grid-column:1/-1;">
-        <div style="font-family:var(--display);font-size:.75rem;letter-spacing:1px;color:var(--purple);margin-bottom:5px;">âœ ï¸  AÇIK UÇLU SORU Â· MODEL CEVAP</div>
+        <div style="font-family:var(--display);font-size:.75rem;letter-spacing:1px;color:var(--purple);margin-bottom:5px;">âœ ï¸  AÇIK UÇLU SORU · MODEL CEVAP</div>
         <div style="font-family:var(--mono);font-size:.7rem;color:var(--text);line-height:1.6;">${r.modelAnswer || '(model cevap girilmemiş)'}</div>
       </div>`;
     } else {
@@ -512,7 +512,7 @@ export function renderRound() {
       ais.style.display = 'block';
       const aiWrongTxt = r.aiWrong >= 0 && r.options && r.options[r.aiWrong] ? `${gameStore.SHAPES[r.aiWrong]} ${String.fromCharCode(65 + r.aiWrong)} şıkkı` : '—';
       const aisc = document.getElementById('aiSummaryContent');
-      if (aisc) aisc.innerHTML = `<span>Model:</span> <span>${r.aiModel} (${r.aiYear || '?'})</span> Â· <span>Yanlış Seçim:</span> <span>${aiWrongTxt}</span>`;
+      if (aisc) aisc.innerHTML = `<span>Model:</span> <span>${r.aiModel} (${r.aiYear || '?'})</span> · <span>Yanlış Seçim:</span> <span>${aiWrongTxt}</span>`;
     } else {
       ais.style.display = 'none';
     }
@@ -589,14 +589,14 @@ export async function generatePin() {
 export async function clearPin() {
   await fbRemove(gameRef('pin'));
   const disp = document.getElementById('pinDisplay');
-  if (disp) disp.textContent = 'â€”â€”';
+  if (disp) disp.textContent = '——';
 }
 
 export async function sendReactionSignal() {
   const btn = document.getElementById('reactionSignalBtn');
   if (btn) {
     btn.disabled = true;
-    btn.textContent = 'âš¡ SÃ„Â°NYAL GÃƒâ€“NDERÃ„Â°LDÃ„Â°!';
+    btn.textContent = '⚡ SÃ„Â°NYAL GÃƒâ€“NDERÃ„Â°LDÃ„Â°!';
   }
   await fbUpdate(gameRef('currentRound'), {
     reactionSignalTs: Date.now(),
@@ -605,7 +605,7 @@ export async function sendReactionSignal() {
   const rb = document.getElementById('revealBtn');
   if (rb) rb.disabled = false;
   const sm = document.getElementById('statusMsg');
-  if (sm) sm.textContent = 'âš¡ Sinyal verildi! Oyuncular yarÃ„Â±Ã…şÃ„Â±yor...';
+  if (sm) sm.textContent = '⚡ Sinyal verildi! Oyuncular yarÃ„Â±Ã…şÃ„Â±yor...';
 }
 
 /**
@@ -615,7 +615,7 @@ export function initPinListener() {
   onValue(gameRef('pin'), snap => {
     const p = snap.val();
     const disp = document.getElementById('pinDisplay');
-    if (disp) disp.textContent = p || 'â€”â€”';
+    if (disp) disp.textContent = p || '——';
   });
 }
 

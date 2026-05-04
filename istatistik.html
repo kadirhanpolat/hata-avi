@@ -385,7 +385,7 @@ window.openPlayerModal=function(name){
       row.style.gridTemplateColumns='40px 1fr 60px';
       row.innerHTML=`
         <div class="bar-lbl" style="text-align:left;color:var(--muted);">S${parseInt(rIdx)+1}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%;background:${color}15;color:${color};font-size:.6rem;padding-left:8px;">${correct?'DOÄRU':'YANLIÅ'} Â· ${ans.elapsed||0}s</div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:${color}15;color:${color};font-size:.6rem;padding-left:8px;">${correct?'DOÄRU':'YANLIÅ'} · ${ans.elapsed||0}s</div></div>
         <div class="bar-pct" style="color:${color};">+${ans.pts||0}</div>
       `;
       list.appendChild(row);
@@ -798,7 +798,7 @@ function renderHistory(){
     item.innerHTML=`
       <div class="hi-top">
         <input type="checkbox" class="hi-check" onclick="toggleHistorySelect(event, '${h.id}')" ${selectedHistory.has(h.id)?'checked':''}>
-        <div class="hi-date">ğŸ“… ${dateStr}</div>
+        <div class="hi-date">📝… ${dateStr}</div>
         <div class="hi-players">👥 ${h.playerCount||0}</div>
         <div class="hi-questions">📋 ${h.questionCount||0} soru</div>
       </div>

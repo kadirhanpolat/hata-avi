@@ -1,118 +1,64 @@
-import { db, ref, fbGet, fbSet, fbRemove } from "../core/firebase.js";
-import { orgId } from "../core/paths.js";
-import { sha256 } from "../utils/crypto.js";
+import { db, ref, fbGet, fbSet, fbUpdate, auth } from "../core/firebase.js";
+import { goRoom } from "../core/paths.js";
 
-let newAccRole = 'moderator';
-let availableOrgs = [];
+let currentModUser = '';
 
 export async function openAccMgmt(isAdmin, modUser) {
-  if (!isAdmin) {
-    alert('Bu işlem için admin yetkisi gerekli.');
-    return;
-  }
+  if (!isAdmin) return alert("Bu işlem için admin yetkisi gerekiyor.");
+  currentModUser = modUser;
   document.getElementById('accOverlay').classList.add('visible');
-  document.getElementById('accErr').textContent = '';
-  document.getElementById('accOk').textContent = '';
-  document.getElementById('accSub').innerHTML = `Moderatör hesaplarını yönetin. <a href="https://console.firebase.google.com/project/hata-avi/authentication/users" target="_blank" style="color:var(--accent);text-decoration:underline;">Firebase Console'dan</a> kullanıcıları eklemeyi unutmayın.`;
-  await loadOrgList(modUser);
-  await loadAccList(modUser);
+  loadAccList();
+  loadOrgList();
 }
 
-export async function ensureMainOrg(modUser) {
-  const snap = await fbGet(ref(db, 'config/orgs/main'));
-  if (!snap.val()) {
-    await fbSet(ref(db, 'config/orgs/main'), {
-      id: 'main',
-      name: 'Ana Organizasyon',
-      status: 'active',
-      createdAt: Date.now(),
-      createdBy: modUser
-    });
-  }
+export function closeAccOverlay() {
+  document.getElementById('accOverlay').classList.remove('visible');
 }
 
-export async function loadOrgList(modUser) {
-  await ensureMainOrg(modUser);
+async function loadOrgList() {
+  const list = document.getElementById('orgList');
+  if (!list) return;
   const snap = await fbGet(ref(db, 'config/orgs'));
   const orgs = snap.val() || {};
-  availableOrgs = Object.entries(orgs).map(([id, v]) => ({
-    id,
-    ...v
-  })).sort((a, b) => (a.name || a.id).localeCompare(b.name || b.id));
   
-  const list = document.getElementById('orgList');
-  if (list) {
-    list.innerHTML = '';
-    availableOrgs.forEach(o => {
-      const row = document.createElement('div');
-      row.className = 'acc-row';
-      row.innerHTML = `<div class="acc-avatar">ORG</div><div class="acc-info"><div class="acc-name">${o.name || o.id}</div><div class="acc-meta">${o.id} Â· ${o.status || 'active'}</div></div>`;
-      list.appendChild(row);
-    });
-  }
-  
-  const sel = document.getElementById('newAccOrg');
-  if (sel) {
-    sel.innerHTML = '<option value="*">Tum organizasyonlar</option>' + availableOrgs.map(o => `<option value="${o.id}" ${o.id === orgId ? 'selected' : ''}>${o.name || o.id} (${o.id})</option>`).join('');
-  }
-}
-
-export async function addOrg(modUser) {
-  const idRaw = document.getElementById('newOrgId').value.trim();
-  const name = document.getElementById('newOrgName').value.trim();
-  const id = idRaw.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 40);
-  const errEl = document.getElementById('accErr');
-  const okEl = document.getElementById('accOk');
-  errEl.textContent = '';
-  okEl.textContent = '';
-  
-  if (!id || !name) {
-    errEl.textContent = 'Org ID ve ad zorunlu.';
-    return;
-  }
-  
-  const existing = await fbGet(ref(db, `config/orgs/${id}`));
-  if (existing.val()) {
-    errEl.textContent = 'Bu org ID zaten var.';
-    return;
-  }
-  
-  await fbSet(ref(db, `config/orgs/${id}`), {
-    id,
-    name,
-    status: 'active',
-    createdAt: Date.now(),
-    createdBy: modUser
+  list.innerHTML = '';
+  Object.entries(orgs).forEach(([id, o]) => {
+    const div = document.createElement('div');
+    div.className = 'acc-row';
+    div.innerHTML = `
+      <div style="flex:1;">
+        <div style="font-family:var(--mono);font-size:.7rem;color:var(--text);">${o.name}</div>
+        <div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);">ID: ${id}</div>
+      </div>
+    `;
+    list.appendChild(div);
   });
   
-  document.getElementById('newOrgId').value = '';
-  document.getElementById('newOrgName').value = '';
-  okEl.textContent = 'Organizasyon olusturuldu.';
-  await loadOrgList(modUser);
+  // Populate multi-select for accounts
+  const sel = document.getElementById('newAccOrg');
+  if (sel) {
+    sel.innerHTML = '<option value="*">Tüm Organizasyonlar (*)</option>';
+    Object.entries(orgs).forEach(([id, o]) => {
+      sel.innerHTML += `<option value="${id}">${o.name}</option>`;
+    });
+  }
 }
 
-export async function loadAccList(modUser) {
+async function loadAccList() {
+  const list = document.getElementById('accList');
+  if (!list) return;
   const snap = await fbGet(ref(db, 'config/moderators'));
   const mods = snap.val() || {};
-  const list = document.getElementById('accList');
+  
   list.innerHTML = '';
-  
-  if (!Object.keys(mods).length) {
-    list.innerHTML = '<div style="font-family:var(--mono);font-size:.68rem;color:var(--muted);text-align:center;padding:10px;">Henüz hesap yok</div>';
-    return;
-  }
-  
   Object.entries(mods).forEach(([key, m]) => {
-    const isYou = m.username === modUser;
+    const isYou = m.username === currentModUser;
     const row = document.createElement('div');
-    row.className = 'acc-row' + (isYou ? ' is-you' : '');
-    const avatar = m.role === 'admin' ? 'â­ ' : 'ğŸ‘¤';
+    row.className = `acc-row ${isYou ? 'is-you' : ''}`;
+    
     const roleCls = m.role === 'admin' ? 'role-admin' : 'role-mod';
     const roleLabel = m.role === 'admin' ? 'Admin' : 'Moderatör';
     const since = m.createdAt ? new Date(m.createdAt).toLocaleDateString('tr-TR') : '—';
-    const orgIdsMap = m.orgIds || {};
-    const orgIds = Object.keys(orgIdsMap);
-    const orgLabel = orgIds.includes('*') ? 'Tum orglar' : orgIds.join(', ');
     
     let authStatusHtml = '';
     if (m.authUid) {
@@ -122,17 +68,17 @@ export async function loadAccList(modUser) {
     } else {
       authStatusHtml = '<span class="role-badge" style="background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border);font-size:.45rem;">LEGACY</span>';
     }
-    
+
     row.innerHTML = `
-      <div class="acc-avatar">${avatar}</div>
+      <div class="acc-avatar">👤</div>
       <div class="acc-info">
         <div class="acc-name" style="display:flex;align-items:center;gap:6px;">
           ${m.username || '?'}${isYou ? ' <span style="font-size:.55rem;color:var(--muted);">(sen)</span>' : ''}
           ${authStatusHtml}
         </div>
         <div class="acc-meta">
-          ${m.email ? `<span style="color:var(--accent);cursor:pointer;" onclick="navigator.clipboard.writeText('${m.email}');alert('Kopyalandı: ${m.email}')" title="Kopyalamak için tıklayın">${m.email} 📋</span> Â· ` : ''}
-          Org: ${orgLabel} Â· ${since}
+          ${m.email ? `<span style="color:var(--accent);cursor:pointer;" onclick="navigator.clipboard.writeText('${m.email}');alert('Kopyalandı: ${m.email}')" title="Kopyalamak için tıklayın">${m.email} 📋</span> · ` : ''}
+          Org: ${Object.keys(m.orgIds || {}).join(', ')} · ${since}
         </div>
       </div>
       <span class="role-badge ${roleCls}">${roleLabel}</span>
@@ -143,191 +89,74 @@ export async function loadAccList(modUser) {
       
     const resetDiv = document.createElement('div');
     resetDiv.className = 'reset-form';
+    resetDiv.id = `reset-${resetDiv}`; // wait, should be key
     resetDiv.id = `reset-${key}`;
     resetDiv.innerHTML = `
       <div style="display:flex;gap:6px;align-items:center;">
         <input class="acc-inp" id="rpw-${key}" type="password" placeholder="Yeni parola..." style="flex:1;">
-        <button class="btn btn-primary btn-sm" onclick="resetPassword('${key}')" style="white-space:nowrap;">Sıfırla</button>
-      </div>
-      <div id="rpw-err-${key}" style="font-family:var(--mono);font-size:.6rem;color:var(--accent2);margin-top:4px;min-height:14px;"></div>`;
+        <button class="btn btn-primary btn-sm" onclick="resetPassword('${key}')">Sıfırla</button>
+      </div>`;
       
-    const wrapper = document.createElement('div');
-    wrapper.appendChild(row);
-    wrapper.appendChild(resetDiv);
-    list.appendChild(wrapper);
+    const wrap = document.createElement('div');
+    wrap.appendChild(row);
+    wrap.appendChild(resetDiv);
+    list.appendChild(wrap);
   });
+}
+
+export async function addOrg() {
+  const id = document.getElementById('newOrgId').value.trim();
+  const name = document.getElementById('newOrgName').value.trim();
+  if (!id || !name) return alert("Eksik bilgi!");
+  await fbSet(ref(db, `config/orgs/${id}`), { id, name, createdAt: Date.now() });
+  loadOrgList();
+}
+
+export async function addAccount() {
+  const user = document.getElementById('newAccUser').value.trim();
+  const pass = document.getElementById('newAccPass').value;
+  const email = document.getElementById('newAccEmail').value.trim();
+  const role = document.querySelector('.acc-role-btn.sel-admin') ? 'admin' : 'moderator';
+  const orgSel = document.getElementById('newAccOrg');
+  const orgIds = Array.from(orgSel.selectedOptions).reduce((acc, opt) => { acc[opt.value] = true; return acc; }, {});
+
+  if (!user || (!pass && !email)) return alert("Kullanıcı adı ve parola/e-posta zorunlu!");
+  
+  const key = user.toLowerCase();
+  await fbSet(ref(db, `config/moderators/${key}`), {
+    username: user,
+    passwordHash: pass ? (await (await import("../utils/crypto.js")).sha256(pass)) : '',
+    email: email,
+    role: role,
+    orgIds: orgIds,
+    createdAt: Date.now()
+  });
+  
+  loadAccList();
 }
 
 export function toggleResetForm(key) {
-  const f = document.getElementById(`reset-${key}`);
-  f.classList.toggle('visible');
-  if (f.classList.contains('visible')) document.getElementById(`rpw-${key}`).focus();
+  document.getElementById(`reset-${key}`).classList.toggle('visible');
 }
 
 export async function resetPassword(key) {
-  const inp = document.getElementById(`rpw-${key}`);
-  const errEl = document.getElementById(`rpw-err-${key}`);
-  const pw = inp.value.trim();
-  if (!pw || pw.length < 4) {
-    errEl.textContent = 'En az 4 karakter olmalı.';
-    return;
-  }
-  const hash = await sha256(pw);
-  await fbSet(ref(db, `config/moderators/${key}/passwordHash`), hash);
-  inp.value = '';
-  errEl.textContent = '';
-  document.getElementById(`reset-${key}`).classList.remove('visible');
-  document.getElementById('accOk').textContent = '✅ Parola sıfırlandı!';
-  setTimeout(() => document.getElementById('accOk').textContent = '', 2500);
+  const pw = document.getElementById(`rpw-${key}`).value;
+  if (!pw) return alert("Parola boş olamaz!");
+  const hash = await (await import("../utils/crypto.js")).sha256(pw);
+  await fbUpdate(ref(db, `config/moderators/${key}`), { passwordHash: hash });
+  alert("Parola başarıyla değiştirildi.");
+  loadAccList();
 }
 
-export async function deleteAccount(key, username, modUser) {
-  if (!confirm(`"${username}" hesabını silmek istediğinize emin misiniz?`)) return;
-  const snap = await fbGet(ref(db, `config/moderators/${key}`));
-  const authUid = snap.val()?.authUid;
-  await fbRemove(ref(db, `config/moderators/${key}`));
-  if (authUid) await fbRemove(ref(db, `config/moderatorsByUid/${authUid}`));
-  document.getElementById('accOk').textContent = 'ğŸ—‘ Hesap silindi.';
-  setTimeout(() => document.getElementById('accOk').textContent = '', 2000);
-  await loadAccList(modUser);
+export async function deleteAccount(key, user) {
+  if (!confirm(`"${user}" hesabını silmek istiyor musunuz?`)) return;
+  await fbSet(ref(db, `config/moderators/${key}`), null);
+  loadAccList();
 }
 
 export function selectNewRole(role) {
-  newAccRole = role;
-  document.querySelectorAll('.acc-role-btn').forEach(b => {
-    b.className = 'acc-role-btn' + (b.dataset.role === role ? (role === 'admin' ? ' sel-admin' : ' sel-mod') : '');
-  });
+  const btns = document.querySelectorAll('.acc-role-btn');
+  btns.forEach(b => b.classList.remove('sel-admin', 'sel-mod'));
+  const btn = document.querySelector(`.acc-role-btn[data-role="${role}"]`);
+  btn.classList.add(role === 'admin' ? 'sel-admin' : 'sel-mod');
 }
-
-export async function addAccount(modUser) {
-  const user = document.getElementById('newAccUser').value.trim();
-  const pass = document.getElementById('newAccPass').value;
-  const email = document.getElementById('newAccEmail').value.trim().toLowerCase();
-  const authUid = document.getElementById('newAccAuthUid').value.trim();
-  const orgSelect = document.getElementById('newAccOrg');
-  let orgIds = [...orgSelect.selectedOptions].map(o => o.value);
-  if (orgIds.includes('*')) orgIds = ['*'];
-  const errEl = document.getElementById('accErr');
-  const okEl = document.getElementById('accOk');
-  errEl.textContent = '';
-  okEl.textContent = '';
-  
-  if (!user || !pass) {
-    errEl.textContent = 'Kullanıcı adı ve parola zorunlu.';
-    return;
-  }
-  if (user.length < 3) {
-    errEl.textContent = 'Kullanıcı adı en az 3 karakter.';
-    return;
-  }
-  if (pass.length < 4) {
-    errEl.textContent = 'Parola en az 4 karakter.';
-    return;
-  }
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errEl.textContent = 'Gecerli bir e-posta girin.';
-    return;
-  }
-  if (!orgIds.length) {
-    errEl.textContent = 'En az bir organizasyon secin.';
-    return;
-  }
-  
-  const orgIdsMap = {};
-  orgIds.forEach(id => orgIdsMap[id] = true);
-  
-  const snap = await fbGet(ref(db, 'config/moderators'));
-  const mods = snap.val() || {};
-  const exists = Object.values(mods).some(m => m.username === user);
-  if (exists) {
-    errEl.textContent = 'Bu kullanıcı adı zaten kullanılıyor.';
-    return;
-  }
-  
-  const hash = await sha256(pass);
-  const key = user.replace(/[^a-zA-Z0-9_]/g, '_') + '_' + Date.now();
-  const payload = {
-    username: user,
-    passwordHash: hash,
-    role: newAccRole,
-    orgIds: orgIdsMap,
-    createdAt: Date.now()
-  };
-  
-  if (email) payload.email = email;
-  if (authUid) payload.authUid = authUid;
-  
-  await fbSet(ref(db, `config/moderators/${key}`), payload);
-  if (authUid) await fbSet(ref(db, `config/moderatorsByUid/${authUid}`), key);
-  
-  document.getElementById('newAccUser').value = '';
-  document.getElementById('newAccPass').value = '';
-  document.getElementById('newAccEmail').value = '';
-  document.getElementById('newAccAuthUid').value = '';
-  okEl.textContent = `✅ "${user}" hesabı oluşturuldu!`;
-  setTimeout(() => okEl.textContent = '', 2500);
-  await loadAccList(modUser);
-}
-
-export async function saveNewPw(modUser) {
-  const current = document.getElementById('pwCurrent').value;
-  const nw = document.getElementById('pwNew').value;
-  const confirmPw = document.getElementById('pwConfirm').value;
-  const errEl = document.getElementById('pwErr');
-  const okEl = document.getElementById('pwOk');
-  
-  if (!current || !nw || !confirmPw) {
-    errEl.textContent = 'Tüm alanları doldurun.';
-    return;
-  }
-  if (nw !== confirmPw) {
-    errEl.textContent = 'Yeni parolalar eşleşmiyor.';
-    return;
-  }
-  
-  const currentHash = await sha256(current);
-  const snap = await fbGet(ref(db, 'config/moderators'));
-  const mods = snap.val() || {};
-  let foundKey = null;
-  
-  Object.entries(mods).forEach(([k, m]) => {
-    if (m.username === modUser && m.passwordHash === currentHash) foundKey = k;
-  });
-  
-  if (!foundKey) {
-    const oldSnap = await fbGet(ref(db, 'config/adminAuth'));
-    if (oldSnap.val()?.passwordHash === currentHash) foundKey = '__legacy__';
-  }
-  
-  if (!foundKey) {
-    errEl.textContent = '❌ Mevcut parola hatalı.';
-    return;
-  }
-  
-  const newHash = await sha256(nw);
-  if (foundKey === '__legacy__') {
-    await fbSet(ref(db, `config/moderators/admin`), {
-      username: modUser,
-      passwordHash: newHash,
-      role: 'admin',
-      orgIds: { '*': true },
-      createdAt: Date.now()
-    });
-  } else {
-    await fbSet(ref(db, `config/moderators/${foundKey}/passwordHash`), newHash);
-  }
-  
-  okEl.textContent = '✅ Parola başarıyla değiştirildi!';
-  setTimeout(() => document.getElementById('pwOverlay').classList.remove('visible'), 2000);
-}
-
-// Global exports for HTML onclick
-window.openAccMgmt = (isAdmin, modUser) => openAccMgmt(isAdmin, modUser);
-window.closeAccOverlay = () => document.getElementById('accOverlay').classList.remove('visible');
-window.addOrg = (modUser) => addOrg(modUser);
-window.toggleResetForm = (key) => toggleResetForm(key);
-window.resetPassword = (key) => resetPassword(key);
-window.deleteAccount = (key, username, modUser) => deleteAccount(key, username, modUser);
-window.selectNewRole = (role) => selectNewRole(role);
-window.addAccount = (modUser) => addAccount(modUser);
-window.saveNewPw = (modUser) => saveNewPw(modUser);

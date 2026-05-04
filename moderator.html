@@ -94,7 +94,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   border-radius:4px;flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 
-/* 3-COLUMN LAYOUT */
+/* Workspace */
 .workspace{
   display:grid;
   grid-template-columns:var(--col-left) 1fr var(--col-right);
@@ -119,56 +119,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .pin-card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px;}
 .pin-val{font-family:var(--display);font-size:2.8rem;letter-spacing:12px;color:var(--accent);text-align:center;background:var(--bg);border-radius:6px;padding:6px 0;margin:6px 0;}
 .pin-actions{display:flex;gap:5px;}
-.rnav{display:flex;gap:4px;flex-wrap:wrap;}
-.rbtn{
-  font-family:var(--mono);font-size:.58rem;padding:4px 8px;
-  background:var(--card);border:1px solid var(--border);color:var(--muted);
-  border-radius:5px;cursor:pointer;transition:all .15s;
-}
-.rbtn:hover,.rbtn.active{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,.07);}
-.rbtn.done{border-color:var(--accent3);color:var(--accent3);}
-.set-btns{display:flex;gap:4px;flex-wrap:wrap;}
-.mod-set-btn{
-  font-family:var(--mono);font-size:.56rem;padding:3px 8px;
-  border-radius:4px;border:1px solid var(--border);
-  background:var(--card);color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;
-}
-.mod-set-btn:hover{border-color:rgba(245,197,24,.4);color:var(--accent);}
-.mod-set-btn.active{border-color:var(--accent);background:rgba(245,197,24,.08);color:var(--accent);}
-.lobby-mini{max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:3px;}
-.lp-row{
-  display:flex;align-items:center;gap:6px;padding:5px 8px;
-  background:var(--card);border-radius:5px;border:1px solid var(--border);
-  animation:fi .3s ease;
-}
-.lp-name{font-family:var(--mono);font-size:.65rem;flex:1;}
-.accordion{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
-.acc-hdr{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;user-select:none;}
-.acc-hdr-lbl{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:1px;flex:1;}
-.acc-hdr-arrow{font-size:.65rem;color:var(--muted);transition:transform .2s;}
-.acc-hdr.open .acc-hdr-arrow{transform:rotate(90deg);}
-.acc-body{display:none;padding:10px 12px;border-top:1px solid var(--border);}
-.acc-body.open{display:block;}
-.sound-toggles{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
-.sound-toggle-btn{
-  font-family:var(--mono);font-size:.58rem;padding:3px 9px;border-radius:4px;
-  border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .15s;
-}
-.sound-toggle-btn.on{border-color:var(--accent3);color:var(--accent3);}
-.vol-row{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
-.vol-lbl{font-family:var(--mono);font-size:.58rem;color:var(--muted);flex-shrink:0;}
-.vol-slider{flex:1;height:3px;accent-color:var(--accent);cursor:pointer;}
-.vol-val{font-family:var(--display);font-size:.75rem;color:var(--accent);width:30px;text-align:right;}
-.music-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px;}
-.music-card{
-  background:var(--card2);border:1px solid var(--border);border-radius:5px;
-  padding:6px 8px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;
-}
-.music-card:hover,.music-card.selected{border-color:var(--accent);}
-.music-card.playing{border-color:var(--accent3);}
-.music-icon{font-size:.9rem;flex-shrink:0;}
-.music-name{font-family:var(--mono);font-size:.58rem;flex:1;}
-.music-ctrl{display:flex;gap:4px;}
 
 .col-mid{padding:16px;display:flex;flex-direction:column;gap:12px;}
 .flow-steps{
@@ -185,29 +135,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .flow-step.done-step{background:rgba(61,214,140,.04);}
 .flow-step-icon{font-size:1.1rem;margin-bottom:2px;}
 .flow-step-lbl{font-family:var(--mono);font-size:.52rem;color:var(--muted);letter-spacing:.5px;}
+
 .ctrl-wrap{
   background:var(--card);border:1px solid var(--border);border-radius:10px;
   padding:14px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;
 }
 .ctrl-main{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.ctrl-sub{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
 .btn{font-family:var(--display);letter-spacing:2px;padding:8px 18px;border:none;cursor:pointer;border-radius:6px;transition:all .18s;font-size:.88rem;}
 .btn-primary{background:var(--accent);color:#000;}
-.btn-primary:hover{background:#ffd33a;}
 .btn-green{background:var(--accent3);color:#000;}
-.btn-green:hover{background:#5bffa8;}
 .btn-danger{background:var(--accent2);color:#fff;}
-.btn-danger:hover{background:#ff5252;}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:.62rem;letter-spacing:1px;padding:7px 13px;}
 .btn-sm{padding:5px 11px;font-size:.75rem;}
-.btn-signal{background:linear-gradient(135deg,var(--accent),#f97316);color:#000;}
-.auto-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.auto-lbl{font-family:var(--mono);font-size:.57rem;color:var(--muted);}
-.auto-sel{
-  background:var(--card);border:1px solid var(--border);color:var(--text);
-  font-family:var(--mono);font-size:.65rem;padding:4px 8px;border-radius:5px;
-  outline:none;cursor:pointer;
-}
+
 .qcard{
   background:var(--card);border:1px solid var(--border);border-radius:10px;
   overflow:hidden;flex:1;display:flex;flex-direction:column;
@@ -222,11 +162,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 }
 .qcard-body{padding:14px 16px;flex:1;overflow-y:auto;}
 .opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.opt-card{border-radius:8px;padding:10px 13px;display:flex;align-items:center;gap:8px;position:relative;overflow:hidden;}
-.opt-math{font-family:var(--mono);font-size:.72rem;line-height:1.35;flex:1;color:#fff;}
-.ai-summary{background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.18);border-radius:8px;padding:10px 13px;margin-top:10px;}
-.ai-summary-title{font-family:var(--mono);font-size:.56rem;color:var(--purple);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase;}
-.ai-summary-row{font-family:var(--mono);font-size:.63rem;color:var(--muted);line-height:1.65;}
 
 .col-right{
   border-left:1px solid var(--border);
@@ -236,64 +171,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .live-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
 .ls-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center;}
 .ls-val{font-family:var(--display);font-size:1.6rem;color:var(--accent);letter-spacing:1px;line-height:1;}
-.ls-lbl{font-family:var(--mono);font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
-.ans-list{display:flex;flex-direction:column;gap:3px;max-height:200px;overflow-y:auto;}
-.ans-row{display:flex;align-items:center;padding:5px 8px;background:var(--card);border-radius:5px;border:1px solid var(--border);animation:fi .3s ease;}
 .lb-list{display:flex;flex-direction:column;gap:3px;max-height:200px;overflow-y:auto;}
-.lb-row{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--card);border-radius:5px;border:1px solid var(--border);transition:all .3s;animation:fi .3s ease;}
-.lb-rank{font-family:var(--display);font-size:.9rem;width:18px;color:var(--muted);flex-shrink:0;}
-.lb-score{font-family:var(--display);font-size:.95rem;color:var(--accent3);letter-spacing:1px;}
-.game-controls.locked{opacity:.3;pointer-events:none;}
-.empty{font-family:var(--mono);font-size:.62rem;color:var(--muted);text-align:center;padding:12px;}
 
-/* OVERLAYS */
-.overlay-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;align-items:center;justify-content:center;}
-.overlay-bg.visible{display:flex;}
-.overlay-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:28px;max-width:460px;width:93%;max-height:90vh;overflow-y:auto;}
-.overlay-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent);margin-bottom:4px;}
-.field-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;font-family:var(--mono);font-size:.82rem;border-radius:7px;outline:none;transition:border-color .2s;letter-spacing:1px;}
-.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:250;align-items:center;justify-content:center;}
-.confirm-overlay.visible{display:flex;}
-.confirm-box{background:var(--surface);border:2px solid var(--accent2);border-radius:14px;padding:32px;max-width:380px;width:90%;text-align:center;}
-.confirm-title{font-family:var(--display);font-size:1.5rem;letter-spacing:2px;color:var(--accent2);margin-bottom:7px;}
-.acc-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:300;align-items:center;justify-content:center;}
-.acc-overlay.visible{display:flex;}
-.acc-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:26px;width:530px;max-width:95vw;max-height:88vh;overflow-y:auto;}
-.acc-row{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--card);border:1px solid var(--border);border-radius:7px;}
-.acc-inp{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 10px;font-family:var(--mono);font-size:.76rem;border-radius:6px;outline:none;}
-.pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:300;align-items:center;justify-content:center;}
-.pw-overlay.visible{display:flex;}
-.pw-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:30px;max-width:400px;width:90%;}
-.pw-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 11px;font-family:var(--mono);font-size:.83rem;border-radius:6px;outline:none;transition:border-color .2s;letter-spacing:1px;}
-.set-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:220;align-items:center;justify-content:center;}
-.set-overlay.visible{display:flex;}
-.set-ov-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:24px;max-width:520px;width:95%;max-height:85vh;overflow-y:auto;}
-.set-ov-title{font-family:var(--display);font-size:1.4rem;letter-spacing:2px;color:var(--accent);margin-bottom:14px;}
-.inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;font-family:var(--mono);font-size:.82rem;border-radius:7px;outline:none;transition:border-color .2s;letter-spacing:.5px;}
+/* Overlays */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;align-items:center;justify-content:center;}
+.overlay.visible{display:flex;}
+.overlay-box{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:28px;max-width:460px;width:93%;}
 
 .mode-selector{display:flex;background:rgba(255,255,255,0.05);padding:3px;border-radius:30px;border:1px solid var(--border);gap:2px;}
-.mode-btn{border:none;background:transparent;color:var(--muted);font-family:var(--mono);font-size:.52rem;padding:6px 14px;border-radius:20px;cursor:pointer;transition:all .3s;letter-spacing:1px;white-space:nowrap;}
+.mode-btn{border:none;background:transparent;color:var(--muted);font-family:var(--mono);font-size:.52rem;padding:6px 14px;border-radius:20px;cursor:pointer;transition:all .3s;}
 .mode-btn.active{background:var(--accent);color:#000;box-shadow:0 0 15px var(--accent);}
-.mode-btn.active::after{content:' ✓';font-weight:bold;}
+.mode-btn.active::after{content:' ✓';}
 
-.shortcut-pill{
-  position:fixed;bottom:18px;right:18px;z-index:100;
-  font-family:var(--mono);font-size:.58rem;padding:5px 12px;
-  background:var(--card);border:1px solid var(--border);color:var(--muted);
-  border-radius:20px;cursor:pointer;transition:all .2s;
-}
-.shortcut-overlay{
-  display:none;position:fixed;bottom:52px;right:18px;z-index:101;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:10px;padding:14px 18px;min-width:230px;
-  box-shadow:0 8px 32px rgba(0,0,0,.6);
-  animation:shortcutIn .2s ease;
-}
-.shortcut-overlay.visible{display:block;}
-@keyframes shortcutIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-@keyframes fi{from{opacity:0;transform:translateX(6px);}to{opacity:1;transform:translateX(0);}}
+.shortcut-pill{position:fixed;bottom:18px;right:18px;z-index:100;font-family:var(--mono);font-size:.58rem;padding:5px 12px;background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:20px;cursor:pointer;}
 </style>
-<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}</script>
 </head>
 <body>
 
@@ -302,21 +193,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
     <div class="header-logo" onclick="location.reload()">⚡ USEV <span>MOD</span></div>
     <div style="flex:1;display:flex;justify-content:center;">
       <div class="mode-selector" id="modeSelector">
-        <button class="mode-btn active" data-mode="academy" onclick="setGameMode('academy')" title="Eğitim Modu">🎓 AKADEMİ</button>
-        <button class="mode-btn" data-mode="showtime" onclick="setGameMode('showtime')" title="Etkinlik Modu">✨ SHOWTIME</button>
-        <button class="mode-btn" data-mode="turbo" onclick="setGameMode('turbo')" title="Eğlence Modu">🚀 TURBO</button>
+        <button class="mode-btn active" data-mode="academy" onclick="setGameMode('academy')">🎓 AKADEMİ</button>
+        <button class="mode-btn" data-mode="showtime" onclick="setGameMode('showtime')">✨ SHOWTIME</button>
+        <button class="mode-btn" data-mode="turbo" onclick="setGameMode('turbo')">🚀 TURBO</button>
       </div>
     </div>
-    <div class="header-conn">
-      <div class="phase-pill lobby" id="phaseVal">⌛ LOBİ</div>
-      <div class="hdr-timer" id="timerDisp">—</div>
+    <div class="header-conn" style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;">
+      <div class="phase-pill lobby" id="phaseVal" style="font-size:0.8rem;padding:3px 10px;">LOBİ</div>
+      <div class="hdr-timer" id="timerDisp" style="font-size:1.2rem;min-width:50px;">--</div>
       <div class="hdr-divider"></div>
-      <div class="conn-badge"><div class="dot"></div><span id="connCount">0</span> bağlı</div>
-      <span class="user-badge" id="userBadge" onclick="openChangePw()" title="Parolayı değiştir">👤 admin</span>
+      <div class="conn-badge" style="white-space:nowrap;"><div class="dot"></div><span id="connCount">0</span></div>
+      <span class="user-badge" id="userBadge" onclick="openChangePw()" style="white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis;">👤 admin</span>
       <button class="hdr-btn" onclick="goRoom('editor.html')">📝 Editör</button>
       <button class="hdr-btn" onclick="goRoom('istatistik.html')">📊 İstatistik</button>
       <button class="hdr-btn" id="accMgmtBtn" onclick="openAccMgmt()" style="display:none;">👥 Hesaplar</button>
-      <button class="hdr-btn" onclick="openAnalytics()" style="background:var(--card);color:var(--accent);">📊 Analiz</button>
       <button class="hdr-btn" onclick="doLogout()">Çıkış</button>
     </div>
   </div>
@@ -324,13 +214,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 
 <div class="phase-bar">
   <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑️ Sıfırla</button>
-  <button class="btn btn-green btn-sm" id="startBtn" onclick="startGame()" disabled style="letter-spacing:2px;">🚀 YARIŞMAYI BAŞLAT</button>
-  <button class="btn btn-ghost btn-sm" id="finishBtn" onclick="confirmFinish()" style="display:none;">🏁 Bitir</button>
-  <button class="btn btn-primary btn-sm" id="replayBtn" onclick="confirmReplay()" style="display:none;">🔄 Yeniden</button>
-  <button class="btn btn-ghost btn-sm" id="exportBtn" onclick="exportResults()" style="display:none;">📥 CSV</button>
-  <button class="btn btn-primary btn-sm" id="analyticsBtn" onclick="openAnalytics()" style="display:none;">📊 Rapor</button>
+  <button class="btn btn-green btn-sm" id="startBtn" onclick="startGame()" disabled>🚀 YARIŞMAYI BAŞLAT</button>
   <div class="spacer"></div>
-  <div class="status-pill" id="statusMsg">Yarışmayı başlatmak için butonu kullanın.</div>
+  <div class="status-pill" id="statusMsg">Bağlantı bekleniyor...</div>
 </div>
 
 <div class="workspace">
@@ -343,73 +229,21 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
           <button class="btn btn-primary btn-sm" onclick="generatePin()" style="flex:1;">🎲 Yeni</button>
           <button class="btn btn-ghost btn-sm" onclick="clearPin()" style="flex:1;">🗑️ Sil</button>
         </div>
-        <div style="font-family:var(--mono);font-size:.54rem;color:var(--muted);text-align:center;margin-top:6px;" id="pinStatus">Projeksiyon ekranında gösterilir.</div>
       </div>
     </div>
-
     <div class="game-controls locked" id="gameControls">
-      <div class="slbl">📋 Sorular <span id="activeSetModBadge" style="display:none;"></span></div>
-      <div id="setSelectorMod">
-        <div style="font-family:var(--mono);font-size:.52rem;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">📦 Set</div>
-        <div class="set-btns" id="setButtonsMod">
-          <button class="mod-set-btn active" id="setAllBtn" onclick="loadModSet(null)">Tümü</button>
-        </div>
-      </div>
-      <div id="catFilterMod"></div>
-      <div class="rnav" id="roundNav"></div>
-      <div id="noQMsg" class="no-q" style="display:none;">Henüz soru yok.<br><a href="editor.html" style="color:var(--accent);">Editörden ekleyin →</a></div>
-    </div>
-
-    <div>
-      <div class="slbl">👥 Takım Modu</div>
-      <div class="team-toggle">
-        <span class="team-toggle-lbl">Takımları aktifleştir</span>
-        <label class="toggle-sw">
-          <input type="checkbox" id="teamModeChk" onchange="toggleTeamMode()">
-          <div class="toggle-track"></div>
-          <div class="toggle-knob"></div>
-        </label>
-      </div>
-    </div>
-
-    <div class="accordion">
-      <div class="acc-hdr" onclick="toggleAcc(this)">
-        <div class="acc-hdr-lbl">🔊 Ses & Müzik</div>
-        <div class="acc-hdr-arrow">▶</div>
-      </div>
-      <div class="acc-body">
-        <div class="sound-toggles">
-          <button class="sound-toggle-btn on" id="sfxToggle" onclick="toggleSfx()">🎵 SFX</button>
-          <button class="sound-toggle-btn on" id="musicToggle" onclick="toggleMusicEnabled()">🎶 Müzik</button>
-        </div>
-        <div class="vol-row">
-          <span class="vol-lbl">🔊</span>
-          <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="70" oninput="setVolume(this.value)">
-          <span class="vol-val" id="volVal">70%</span>
-        </div>
-        <div class="music-grid" id="musicGrid"></div>
-        <div class="music-ctrl">
-          <button class="btn btn-ghost btn-sm" onclick="previewMusic()">▶ Dinle</button>
-          <button class="btn btn-ghost btn-sm" onclick="stopMusic()">⏹ Dur</button>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div class="slbl">👤 Lobi <span id="lobbyCount2" style="color:var(--accent3);">0</span></div>
-      <div class="lobby-mini lobby-players" id="lobbyPlayers"><div class="empty">Kimse katılmadı</div></div>
+      <div class="slbl">📋 Sorular</div>
+      <div id="setButtonsMod" class="set-btns"></div>
+      <div id="roundNav" class="rnav"></div>
     </div>
   </div>
 
   <div class="col col-mid">
-    <div class="flow-steps" id="flowSteps">
+    <div class="flow-steps">
       <div class="flow-step" id="fs-show"><div class="flow-step-icon">📖</div><div class="flow-step-lbl">GÖSTER</div></div>
       <div class="flow-step" id="fs-answer"><div class="flow-step-icon">▶</div><div class="flow-step-lbl">CEVAPLA</div></div>
-      <div class="flow-step" id="fs-signal"><div class="flow-step-icon">🚀</div><div class="flow-step-lbl">SİNYAL</div></div>
       <div class="flow-step" id="fs-reveal"><div class="flow-step-icon">✅</div><div class="flow-step-lbl">CEVAP</div></div>
-      <div class="flow-step" id="fs-next"><div class="flow-step-icon">→</div><div class="flow-step-lbl">SONRAKİ</div></div>
     </div>
-
     <div class="ctrl-wrap game-controls locked" id="gameControls2">
       <div class="ctrl-main">
         <button class="btn btn-ghost btn-sm" id="previewBtn" onclick="previewRound()" disabled>📖 GÖSTER</button>
@@ -417,18 +251,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
         <button class="btn btn-danger" id="revealBtn" onclick="revealAnswer()" disabled>✅ CEVAP</button>
         <button class="btn btn-ghost btn-sm" onclick="nextRound()">→ SONRAKİ</button>
       </div>
-      <div class="ctrl-sub">
-        <div class="auto-row">
-          <span class="auto-lbl">Oto ilerleme:</span>
-          <select class="auto-sel" id="autoAdvanceSel">
-            <option value="0">Kapalı</option>
-            <option value="10" selected>10s</option>
-          </select>
-          <div id="autoAdvanceCountdown"></div>
-        </div>
-      </div>
     </div>
-
     <div class="qcard">
       <div class="qcard-top">
         <div class="qtitle" id="qTitle">—</div>
@@ -436,74 +259,30 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
       </div>
       <div class="qcard-body">
         <div class="opts-grid" id="optsGrid"></div>
-        <div class="ai-summary" id="aiSummary" style="display:none;">
-          <div class="ai-summary-title">🤖 YZ Bilgisi</div>
-          <div class="ai-summary-row" id="aiSummaryContent"></div>
-        </div>
       </div>
     </div>
   </div>
 
   <div class="col col-right">
-    <div id="liveSection" style="display:none;">
-      <div class="slbl">📊 Canlı</div>
-      <div class="live-stats">
-        <div class="ls-card"><div class="ls-val" id="sCevap">0</div><div class="ls-lbl">Cevap</div></div>
-        <div class="ls-card"><div class="ls-val" id="sDoğru">0</div><div class="ls-lbl">Doğru</div></div>
-      </div>
-      <div class="ans-list" id="answersLive"></div>
+    <div class="slbl">📊 Canlı</div>
+    <div class="live-stats">
+      <div class="ls-card"><div class="ls-val" id="sCevap">0</div><div class="ls-lbl">Cevap</div></div>
+      <div class="ls-card"><div class="ls-val" id="sDoğru">0</div><div class="ls-lbl">Doğru</div></div>
     </div>
-    <div>
-      <div class="slbl">🏆 Sıralama</div>
-      <div class="lb-list" id="lbList"></div>
-    </div>
-  </div>
-</div>
-
-<div class="confirm-overlay" id="confirmOverlay">
-  <div class="confirm-box">
-    <div class="confirm-title">SIFIRLA?</div>
-    <div class="confirm-btns">
-      <button class="btn btn-danger" onclick="doReset()">EVET</button>
-      <button class="btn btn-ghost" onclick="closeConfirm()">İPTAL</button>
-    </div>
-  </div>
-</div>
-
-<div class="pw-overlay" id="pwOverlay">
-  <div class="pw-box">
-    <div class="pw-title">🔑 PAROLA DEĞİŞTİR</div>
-    <div class="pw-btns">
-      <button class="btn btn-primary" onclick="saveNewPw()">💾 KAYDET</button>
-      <button class="btn btn-ghost" onclick="closePwOverlay()">İPTAL</button>
-    </div>
-  </div>
-</div>
-
-<div class="acc-overlay" id="accOverlay">
-  <div class="acc-box">
-    <div class="acc-title">👥 HESAP YÖNETİMİ</div>
-    <div class="acc-list" id="accList"></div>
-    <button class="btn btn-ghost" onclick="closeAccOverlay()">KAPAT</button>
-  </div>
-</div>
-
-<div class="overlay" id="setOverlay">
-  <div class="set-ov-box">
-    <div class="set-ov-title">📦 YENİ SET OLUŞTUR</div>
-    <button class="btn btn-primary" onclick="saveSet()">💾 KAYDET</button>
+    <div id="answersLive" class="ans-list"></div>
+    <div class="slbl" style="margin-top:12px;">🏆 Sıralama</div>
+    <div id="lbList" class="lb-list"></div>
   </div>
 </div>
 
 <script type="module">
-  import { db, ref, fbGet, fbSet, fbUpdate, auth } from "./js/core/firebase.js";
+  import { db, ref, fbGet, fbSet, fbUpdate, auth, onValue } from "./js/core/firebase.js";
   import { requireModeratorSession, doLogout } from "./js/core/auth.js";
   import { roomId, orgId, gameRef, orgRef, goRoom } from "./js/core/paths.js";
   import { openAccMgmt, addAccount, deleteAccount, toggleResetForm, resetPassword, addOrg, selectNewRole } from "./js/moderator/account.js";
-  import { updateConnectionsList } from "./js/moderator/ui.js";
+  import { updateConnectionsList, updateFlowStep } from "./js/moderator/ui.js";
   import { gameStore, setLobby, startGame, initGameListeners, doReplay, finishGame, exportResults, stopTimer, previewRound, openAnswering, publishRound, revealAnswer, renderRound, renderNav, nextRound, setGameMode, generatePin, clearPin, initPinListener, toggleTeamMode, addTeam, saveTeams, loadModSet, sendReactionSignal } from "./js/moderator/game.js";
   import { initListeners } from "./js/moderator/listeners.js";
-  import { initShortcuts } from "./js/moderator/shortcuts.js";
   import { openAnalytics, closeAnalytics, updateLiveAnswers } from "./js/moderator/stats.js";
 
   if (!(await requireModeratorSession())) throw new Error('Auth required');
@@ -513,6 +292,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   
   document.getElementById('userBadge').textContent = `👤 ${modUser}${isAdmin ? ' ⭐' : ''}`;
   if (isAdmin) document.getElementById('accMgmtBtn').style.display = 'block';
+
+  // Connection Status Check
+  onValue(ref(db, '.info/connected'), (snap) => {
+    const sm = document.getElementById('statusMsg');
+    if (snap.val() === true) {
+      sm.textContent = 'Veritabanına bağlı.';
+    } else {
+      sm.textContent = '❌ Bağlantı kesildi...';
+    }
+  });
 
   window.goRoom = goRoom;
   window.startGame = startGame;
@@ -525,7 +314,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   window.publishRound = publishRound;
   window.revealAnswer = revealAnswer;
   window.nextRound = nextRound;
-  window.toggleAcc = (hdr) => { hdr.classList.toggle('open'); hdr.nextElementSibling.classList.toggle('open'); };
+  window.loadModSet = loadModSet;
 
   initGameListeners();
   initListeners({
@@ -536,12 +325,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   setLobby();
   initPinListener();
 </script>
-
-<button class="shortcut-pill" onclick="document.querySelector('.shortcut-overlay').classList.toggle('visible')">⌨️ Kısayollar</button>
-<div class="shortcut-overlay">
-  <div class="sc-title">⌨️ KISAYOLLAR</div>
-  <div class="sc-row"><span class="sc-key">Space</span><span class="sc-lbl">Yayınla</span></div>
-</div>
 
 </body>
 </html>

@@ -43,7 +43,7 @@ export function openAnalytics() {
     const hqcStats = document.getElementById('hqcStats');
     if (hardest) {
       if (hqcTitle) hqcTitle.textContent = hardest.title;
-      if (hqcStats) hqcStats.textContent = `Doğru cevaplanma oranı: %${hardest.correctPct} Â· Ortalama süre: ${hardest.avgTime}sn`;
+      if (hqcStats) hqcStats.textContent = `Doğru cevaplanma oranı: %${hardest.correctPct} · Ortalama süre: ${hardest.avgTime}sn`;
     }
 
     const tbody = document.getElementById('analyticsTableBody');
